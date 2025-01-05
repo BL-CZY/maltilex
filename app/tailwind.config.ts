@@ -8,5 +8,9 @@ export default {
 		extend: {}
 	},
 
-	plugins: [typography, require('daisyui')]
+	plugins: [typography, require('daisyui')],
+
+	daisyui: {
+		themes: ['autumn']
+	}
 } satisfies Config;
