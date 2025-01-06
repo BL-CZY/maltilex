@@ -6,6 +6,7 @@
 				class="input input-sm input-bordered w-[50%]"
 				placeholder="Search something..."
 				type="text"
+				name="keyword"
 				required
 			/>
 			<input class="btn btn-sm ml-2" type="submit" value="search" />

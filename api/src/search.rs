@@ -100,7 +100,7 @@ pub async fn search(
                         .take(3)
                         .map(|b| b.as_str().unwrap_or("error").to_string())
                         .collect(),
-                    matched: element.0.to_string(),
+                    matched: element.1.to_string(),
                 }
             } else {
                 // error
@@ -109,7 +109,7 @@ pub async fn search(
                     distance: element.0,
                     pos: "error".into(),
                     en: vec![],
-                    matched: element.0.to_string(),
+                    matched: element.1.to_string(),
                 }
             }
         })
@@ -124,7 +124,7 @@ pub async fn search(
     (StatusCode::OK, Json(result))
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Debug)]
 pub struct Query {
     #[serde(default = "default_keyword")]
     keyword: String,
@@ -136,6 +136,7 @@ pub struct Query {
     #[serde(default = "default_limit")]
     limit: usize,
     #[serde(default = "default_max_dis")]
+    #[serde(rename(deserialize = "maxDis"))]
     max_dis: usize,
 }
 
