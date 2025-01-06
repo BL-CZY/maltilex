@@ -57,19 +57,18 @@ async fn get_ids(query: &Query) -> Vec<(usize, &str, &ObjectId)> {
 fn filter_ids<'a>(
     query: &Query,
     ids: &'a mut [(usize, &str, &ObjectId)],
-) -> Vec<(&'a str, &'a ObjectId)> {
+) -> Vec<(usize, &'a str, &'a ObjectId)> {
     ids.par_sort_by(|a, b| a.0.cmp(&b.0));
     ids.iter()
         .skip(query.skip)
         .take(query.limit)
-        .map(|element| (element.1, element.2))
+        .map(|element| (element.0, element.1, element.2))
         .collect()
 }
 
 pub async fn search(
     Json(query): Json<Query>,
 ) -> (StatusCode, Json<Vec<SearchResultEntry>>) {
-    println!("hi");
     let mut ids = get_ids(&query).await;
     let ids = filter_ids(&query, &mut ids);
     let words: Collection<Document> =
@@ -84,11 +83,12 @@ pub async fn search(
             let element = (*element).clone();
 
             // if the word can be found
-            if let Ok(Some(doc)) = words.find_one(doc! {"_id": element.1}).await
+            if let Ok(Some(doc)) = words.find_one(doc! {"_id": element.2}).await
             {
                 SearchResultEntry {
                     // get the word or let it be error
-                    word: doc.get_str("word").unwrap_or("error").to_string(),
+                    word: doc.get_str("surf").unwrap_or("error").to_string(),
+                    distance: element.0,
                     // get the pos or let it be error
                     pos: doc.get_str("pos").unwrap_or("error").to_string(),
                     // get the en array and convert it into an array of strings or errors
@@ -106,6 +106,7 @@ pub async fn search(
                 // error
                 SearchResultEntry {
                     word: "error".into(),
+                    distance: element.0,
                     pos: "error".into(),
                     en: vec![],
                     matched: element.0.to_string(),
@@ -116,7 +117,9 @@ pub async fn search(
         .collect::<Vec<_>>();
 
     // await them
-    let result = join_all(result).await;
+    let mut result = join_all(result).await;
+
+    result.par_sort_by(|a, b| a.distance.cmp(&b.distance));
 
     (StatusCode::OK, Json(result))
 }
@@ -139,6 +142,7 @@ pub struct Query {
 #[derive(Serialize)]
 pub struct SearchResultEntry {
     word: String,
+    distance: usize,
     pos: String,
     en: Vec<String>,
     matched: String,
