@@ -11,6 +11,6 @@ export default {
 	plugins: [typography, require('daisyui')],
 
 	daisyui: {
-		themes: ['autumn']
+		themes: ['cupcake']
 	}
 } satisfies Config;
