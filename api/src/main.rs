@@ -1,7 +1,8 @@
 pub mod db;
 pub mod search;
 
-use axum::{routing::get, Router};
+use axum::{http::Method, routing::get, Router};
+use tower_http::cors::{Any, CorsLayer};
 
 #[tokio::main]
 async fn main() {
@@ -14,7 +15,12 @@ async fn main() {
 
     let app = Router::new()
         .route("/", get(root))
-        .route("/search", get(search::search));
+        .route("/search", get(search::search))
+        .layer(
+            CorsLayer::new()
+                .allow_origin(Any)
+                .allow_methods([Method::GET, Method::POST]),
+        );
 
     let listener = tokio::net::TcpListener::bind("127.0.0.1:3000")
         .await

@@ -4,5 +4,5 @@ import { parseQuery, type Query, type SearchResultEntry } from '$lib/search-type
 export const load = async ({ fetch, url }) => {
     let query = parseQuery(url.searchParams);
 
-    return { query: query, result: await apiSearch(query) };
+    return { query: query, result: await apiSearch(query, fetch) };
 };

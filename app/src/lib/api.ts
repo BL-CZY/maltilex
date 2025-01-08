@@ -1,7 +1,10 @@
 import { PUBLIC_API_URL } from '$env/static/public';
 import type { Query, SearchResultEntry } from './search-types';
 
-export const apiSearch = async (query: Query): Promise<Array<SearchResultEntry>> => {
+export const apiSearch = async (
+    query: Query,
+    fetch: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>
+): Promise<Array<SearchResultEntry>> => {
     try {
         let queryURL = new URL(`${PUBLIC_API_URL}/search`);
 
