@@ -1,22 +1,14 @@
 <script lang="ts">
-    let { form } = $props();
     import SearchEntry from '$lib/search-entry.svelte';
-    import { onMount } from 'svelte';
-    import type { Query, SearchResultEntry } from '$lib/search-types';
+    import { type Query, type SearchResultEntry } from '$lib/search-types';
 
-    let entries: Array<SearchResultEntry> = $state([]);
+    let { data } = $props();
 
-    let query: Query;
+    let entries: Array<SearchResultEntry> = $state(data.result);
 
-    onMount(() => {
-        if (form) {
-            query = form;
-        }
-    });
+    let query: Query = data.query;
 </script>
 
 {#each entries as entry}
     <SearchEntry word={entry.word} pos={entry.pos} matched={entry.matched} en={entry.en} />
 {/each}
-
-<p>askdjask</p>
