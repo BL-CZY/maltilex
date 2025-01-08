@@ -3,7 +3,7 @@ use std::{
     sync::{Arc, Mutex},
 };
 
-use axum::{http::StatusCode, Json};
+use axum::Json;
 use futures::future::join_all;
 use levenshtein::levenshtein;
 use mongodb::{
@@ -40,11 +40,12 @@ async fn search_in_tokens<'a>(
 
 async fn get_ids(query: &Query) -> Vec<(usize, &str, &ObjectId)> {
     let mut result = vec![];
+    let search_map = [query.search_mt, query.search_en];
     let found: Arc<Mutex<HashSet<ObjectId>>> =
         Arc::new(Mutex::new(HashSet::new()));
 
     for (ind, tokens) in TOKENS.get().iter().enumerate() {
-        if query.mode[ind] {
+        if search_map[ind] {
             let res =
                 search_in_tokens(query, found.clone(), &tokens[ind]).await;
             result.extend(res.iter());
@@ -67,8 +68,8 @@ fn filter_ids<'a>(
 }
 
 pub async fn search(
-    Json(query): Json<Query>,
-) -> (StatusCode, Json<Vec<SearchResultEntry>>) {
+    axum::extract::Query(query): axum::extract::Query<Query>,
+) -> Json<Vec<SearchResultEntry>> {
     let mut ids = get_ids(&query).await;
     let ids = filter_ids(&query, &mut ids);
     let words: Collection<Document> =
@@ -121,16 +122,19 @@ pub async fn search(
 
     result.par_sort_by(|a, b| a.distance.cmp(&b.distance));
 
-    (StatusCode::OK, Json(result))
+    Json(result)
 }
 
 #[derive(Deserialize, Debug)]
 pub struct Query {
     #[serde(default = "default_keyword")]
     keyword: String,
-    /// [search Maltese, search English]
     #[serde(default = "default_mode")]
-    mode: [bool; 2],
+    #[serde(rename(deserialize = "searchMt"))]
+    search_mt: bool,
+    #[serde(default = "default_mode")]
+    #[serde(rename(deserialize = "searchEn"))]
+    search_en: bool,
     #[serde(default = "default_skip")]
     skip: usize,
     #[serde(default = "default_limit")]
@@ -153,8 +157,8 @@ fn default_keyword() -> String {
     "".to_string()
 }
 
-fn default_mode() -> [bool; 2] {
-    [true, true]
+fn default_mode() -> bool {
+    true
 }
 
 fn default_skip() -> usize {

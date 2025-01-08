@@ -1,0 +1,3 @@
+Welcome to the Maltilex API!
+
+There is no documentation yet

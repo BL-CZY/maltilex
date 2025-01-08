@@ -16,7 +16,8 @@ export type SearchResultJson =
 
 export type Query = {
     keyword?: string;
-    mode?: [boolean, boolean];
+    searchMt?: boolean;
+    searchEn?: boolean;
     skip?: number;
     limit?: number;
     maxDis?: number;
@@ -26,7 +27,8 @@ export const parseQuery = (data: URLSearchParams): Query => {
     let query: Query = {};
 
     let keyword = data.get('keyword');
-    let mode = data.get('mode');
+    let searchMt = data.get('searchMt');
+    let searchEn = data.get('searchEn');
     let skip = data.get('skip');
     let limit = data.get('limit');
     let maxDis = data.get('maxDis');
@@ -35,17 +37,12 @@ export const parseQuery = (data: URLSearchParams): Query => {
         query.keyword = String(keyword);
     }
 
-    if (mode) {
-        console.log(mode);
-        let arr = JSON.parse(String(mode));
-        if (
-            Array.isArray(arr) &&
-            arr.length === 2 &&
-            typeof arr[0] === 'boolean' &&
-            typeof arr[1] === 'boolean'
-        ) {
-            query.mode = [arr[0], arr[1]];
-        }
+    if (searchMt) {
+        query.searchMt = Boolean(searchMt);
+    }
+
+    if (searchEn) {
+        query.searchEn = Boolean(searchEn);
     }
 
     if (skip) {
