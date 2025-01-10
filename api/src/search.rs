@@ -1,132 +1,96 @@
-use std::{
-    collections::HashSet,
-    sync::{Arc, Mutex},
-};
+use std::{cmp::Ordering, usize::MAX};
 
 use axum::Json;
-use futures::future::join_all;
 use levenshtein::levenshtein;
-use mongodb::{
-    bson::{doc, oid::ObjectId, Bson, Document},
-    Collection,
-};
-use rayon::{
-    iter::{IntoParallelRefIterator, ParallelIterator},
-    slice::ParallelSliceMut,
-};
+use mongodb::bson::doc;
+use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 use serde::{Deserialize, Serialize};
 
-use crate::db::{CLIENT, TOKENS};
+use crate::db::{Word, WORDS};
 
-// TODO: the new search algorithm should go like:
-// TODO: find the form with the least distance
-// TODO: put them into a vector
-
-async fn search_in_tokens<'a>(
+fn get_min_token<'a>(
+    tokens: &'a Vec<String>,
     query: &Query,
-    found: Arc<Mutex<HashSet<ObjectId>>>,
-    tokens: &'a [(String, ObjectId)],
-) -> Vec<(usize, &'a str, &'a ObjectId)> {
+) -> Option<(usize, Option<&'a str>)> {
+    // find the smallest distance in this list
     tokens
         .par_iter()
-        .filter_map(|element| {
-            let mut guard = found.lock().unwrap_or_else(|p| p.into_inner());
-            let dis = levenshtein(&query.keyword, &element.0);
-            if dis <= query.max_dis && !guard.contains(&element.1) {
-                guard.insert(element.1);
-                Some((dis, element.0.as_str(), &element.1))
+        .filter_map(|token| {
+            let dis = levenshtein(&token, &query.keyword);
+            if dis <= query.max_dis {
+                Some((dis, Some(token.as_str())))
             } else {
                 None
             }
         })
-        .collect::<Vec<(usize, &str, &ObjectId)>>()
+        .min_by(|a, b| a.0.cmp(&b.0))
 }
 
-async fn get_ids(query: &Query) -> Vec<(usize, &str, &ObjectId)> {
-    let mut result = vec![];
-    let search_map = [query.search_mt, query.search_en];
-    let found: Arc<Mutex<HashSet<ObjectId>>> =
-        Arc::new(Mutex::new(HashSet::new()));
-
-    for (ind, tokens) in TOKENS.get().iter().enumerate() {
-        if search_map[ind] {
-            let res =
-                search_in_tokens(query, found.clone(), &tokens[ind]).await;
-            result.extend(res.iter());
-        }
-    }
-
-    result
-}
-
-fn filter_ids<'a>(
+fn process_word<'a>(
+    word: &'a Word,
     query: &Query,
-    ids: &'a mut [(usize, &str, &ObjectId)],
-) -> Vec<(usize, &'a str, &'a ObjectId)> {
-    ids.par_sort_by(|a, b| a.0.cmp(&b.0));
-    ids.iter()
-        .skip(query.skip)
-        .take(query.limit)
-        .map(|element| (element.0, element.1, element.2))
+    search_grid: &[bool; 2],
+) -> Option<SearchResultEntry<'a>> {
+    let mut min_res: (usize, Option<&str>) = (MAX, None);
+
+    // loop through the two token lists
+    word.tokens.iter().enumerate().for_each(|(ind, tokens)| {
+        // search this token list if it's toggled
+        if search_grid[ind] {
+            // find the smallest distance in this list
+            let min = get_min_token(tokens, query);
+
+            // see if the smallest distance exists
+            let min = if let Some(num) = min {
+                num
+            } else {
+                return;
+            };
+
+            if let Ordering::Less = min_res.0.cmp(&min.0) {
+                min_res = min.clone();
+            }
+        }
+    });
+
+    // see if a result is found
+    if !min_res.1.is_none() {
+        Some(SearchResultEntry {
+            word: &word.word,
+            distance: min_res.0,
+            pos: &word.pos,
+            en: &word.en_display,
+            matched: min_res.1.unwrap(),
+        })
+    } else {
+        None
+    }
+}
+
+fn search_in_words<'a>(
+    query: &Query,
+    words: &'a Vec<Word>,
+) -> Vec<SearchResultEntry<'a>> {
+    let search_grid = [query.search_mt, query.search_en];
+
+    // parallel computes the lowest distance for each word
+    words
+        .par_iter()
+        .filter_map(|word| process_word(word, query, &search_grid))
         .collect()
 }
 
-pub async fn search(
+pub async fn search<'a>(
     axum::extract::Query(query): axum::extract::Query<Query>,
-) -> Json<Vec<SearchResultEntry>> {
-    let mut ids = get_ids(&query).await;
-    let ids = filter_ids(&query, &mut ids);
-    let words: Collection<Document> =
-        CLIENT.get().unwrap().database("local").collection("words");
-
-    let result = ids
-        // use rayon
-        .par_iter()
-        // map it
-        .map(|element| async {
-            // clone the element so that it doesn't outlive
-            let element = (*element).clone();
-
-            // if the word can be found
-            if let Ok(Some(doc)) = words.find_one(doc! {"_id": element.2}).await
-            {
-                SearchResultEntry {
-                    // get the word or let it be error
-                    word: doc.get_str("surf").unwrap_or("error").to_string(),
-                    distance: element.0,
-                    // get the pos or let it be error
-                    pos: doc.get_str("pos").unwrap_or("error").to_string(),
-                    // get the en array and convert it into an array of strings or errors
-                    en: doc
-                        .get_array("en")
-                        .unwrap_or(&vec![Bson::String("error".to_string())])
-                        .iter()
-                        // only take the first 3
-                        .take(3)
-                        .map(|b| b.as_str().unwrap_or("error").to_string())
-                        .collect(),
-                    matched: element.1.to_string(),
-                }
-            } else {
-                // error
-                SearchResultEntry {
-                    word: "error".into(),
-                    distance: element.0,
-                    pos: "error".into(),
-                    en: vec![],
-                    matched: element.1.to_string(),
-                }
-            }
-        })
-        // collects into a vector of turues as an async closure is used
-        .collect::<Vec<_>>();
-
-    // await them
-    let mut result = join_all(result).await;
-
-    result.par_sort_by(|a, b| a.distance.cmp(&b.distance));
-
-    Json(result)
+) -> Json<Vec<SearchResultEntry<'a>>> {
+    Json(
+        search_in_words(&query, WORDS.get().unwrap())
+            .iter()
+            .skip(query.skip)
+            .take(query.limit)
+            .cloned()
+            .collect::<Vec<SearchResultEntry<'a>>>(),
+    )
 }
 
 #[derive(Deserialize, Debug)]
@@ -148,13 +112,13 @@ pub struct Query {
     max_dis: usize,
 }
 
-#[derive(Serialize)]
-pub struct SearchResultEntry {
-    word: String,
+#[derive(Serialize, Clone)]
+pub struct SearchResultEntry<'a> {
+    word: &'a str,
     distance: usize,
-    pos: String,
-    en: Vec<String>,
-    matched: String,
+    pos: &'a str,
+    en: &'a [String],
+    matched: &'a str,
 }
 
 fn default_keyword() -> String {

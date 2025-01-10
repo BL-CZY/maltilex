@@ -6,11 +6,55 @@ use mongodb::{
 };
 use tokio::sync::OnceCell;
 
+#[derive(Debug)]
+pub struct Word {
+    pub id: ObjectId,
+    pub word: String,
+    pub pos: String,
+    /// [maltese tokens, english tokens]
+    pub tokens: [Vec<String>; 2],
+    pub en_display: Vec<String>,
+}
+
 pub static CLIENT: OnceCell<Client> = OnceCell::const_new();
 // TOKENS[0] is Maltese
 // TOKENS[1] is English
-pub static TOKENS: OnceCell<[Vec<(String, ObjectId)>; 2]> =
-    OnceCell::const_new();
+pub static WORDS: OnceCell<Vec<Word>> = OnceCell::const_new();
+
+fn get_string_vec(arr: &Vec<Bson>) -> Vec<String> {
+    arr.iter()
+        .filter_map(|token| token.as_str())
+        .map(|token| token.to_string())
+        .collect::<Vec<String>>()
+}
+
+fn parse_doc(doc: &Document) -> Result<Word, Box<dyn std::error::Error>> {
+    let id = doc.get_object_id("_id")?;
+    let word = doc.get_str("word")?.to_string();
+    let pos = doc.get_str("pos")?.to_string();
+
+    let mt_tokens = get_string_vec(doc.get_array("mt-tokens")?);
+    let en_tokens = get_string_vec(doc.get_array("en-tokens")?);
+
+    let en_display = get_string_vec(doc.get_array("en-display")?);
+
+    let en_display = if en_display.len() > 3 {
+        let mut res: Vec<String> =
+            en_display.iter().take(3).map(|e| e.to_string()).collect();
+        res.push("...".into());
+        res
+    } else {
+        en_display
+    };
+
+    Ok(Word {
+        id,
+        word,
+        pos,
+        tokens: [mt_tokens, en_tokens],
+        en_display,
+    })
+}
 
 pub async fn init(uri: &str) {
     CLIENT
@@ -18,40 +62,22 @@ pub async fn init(uri: &str) {
         .unwrap();
 
     let db = CLIENT.get().unwrap().database("local");
-    let mt_tokens = db.collection::<Document>("mt-tokens");
-    let mut mt_vec: Vec<(String, ObjectId)> = vec![];
-    let mut mt_cursor = mt_tokens.find(doc! {}).await.unwrap();
+    let words = db.collection::<Document>("words");
+    let mut result: Vec<Word> = vec![];
+    let mut cursor = words.find(doc! {}).await.unwrap();
 
-    println!("Loading Maltese tokens...");
-    let bar = ProgressBar::new(
-        mt_tokens.count_documents(doc! {}).await.unwrap() as u64,
-    );
-    while let Ok(Some(doc)) = mt_cursor.try_next().await {
-        if let Ok(str) = doc.get_str("exact") {
-            if let Some(Bson::ObjectId(id)) = doc.get("word") {
-                mt_vec.push((str.to_string(), *id));
-            }
+    println!("Loading words...");
+    let bar =
+        ProgressBar::new(words.count_documents(doc! {}).await.unwrap() as u64);
+
+    while let Ok(Some(doc)) = cursor.try_next().await {
+        if let Ok(w) = parse_doc(&doc) {
+            result.push(w);
         }
         bar.inc(1);
     }
 
-    let en_tokens = db.collection::<Document>("en-tokens");
-    let mut en_vec: Vec<(String, ObjectId)> = vec![];
-    let mut en_cursor = en_tokens.find(doc! {}).await.unwrap();
+    println!("{:?}", result);
 
-    println!("Loading English tokens...");
-    let bar_en = ProgressBar::new(
-        en_tokens.count_documents(doc! {}).await.unwrap() as u64,
-    );
-    while let Ok(Some(doc)) = en_cursor.try_next().await {
-        if let Ok(str) = doc.get_str("exact") {
-            if let Some(Bson::ObjectId(id)) = doc.get("word") {
-                en_vec.push((str.to_string(), *id));
-            }
-        }
-        bar_en.inc(1);
-    }
-
-    let result = [mt_vec, en_vec];
-    TOKENS.set(result).expect("Failed to initialize the search");
+    WORDS.set(result).expect("Failed to initialize the search");
 }
