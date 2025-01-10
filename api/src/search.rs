@@ -18,6 +18,10 @@ use serde::{Deserialize, Serialize};
 
 use crate::db::{CLIENT, TOKENS};
 
+// TODO: the new search algorithm should go like:
+// TODO: find the form with the least distance
+// TODO: put them into a vector
+
 async fn search_in_tokens<'a>(
     query: &Query,
     found: Arc<Mutex<HashSet<ObjectId>>>,
