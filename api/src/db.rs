@@ -77,7 +77,5 @@ pub async fn init(uri: &str) {
         bar.inc(1);
     }
 
-    println!("{:?}", result);
-
     WORDS.set(result).expect("Failed to initialize the search");
 }

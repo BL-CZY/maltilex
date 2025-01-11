@@ -6,14 +6,18 @@ use mongodb::bson::doc;
 use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 use serde::{Deserialize, Serialize};
 
-use crate::db::{Word, WORDS};
+use crate::{
+    db::{Word, WORDS},
+    utils::{log, QueryLog},
+};
 
 fn get_min_token<'a>(
+    query_id: &u128,
     tokens: &'a Vec<String>,
     query: &Query,
 ) -> Option<(usize, Option<&'a str>)> {
     // find the smallest distance in this list
-    tokens
+    let min = tokens
         .par_iter()
         .filter_map(|token| {
             let dis = levenshtein(&token, &query.keyword);
@@ -23,10 +27,19 @@ fn get_min_token<'a>(
                 None
             }
         })
-        .min_by(|a, b| a.0.cmp(&b.0))
+        .min_by(|a, b| a.0.cmp(&b.0));
+
+    log(QueryLog {
+        id: query_id,
+        q_type: crate::utils::QueryLogType::Search,
+        msg: &format!("the min value of tokens {:?} is: {:?}", tokens, min),
+    });
+
+    min
 }
 
 fn process_word<'a>(
+    query_id: &u128,
     word: &'a Word,
     query: &Query,
     search_grid: &[bool; 2],
@@ -38,7 +51,7 @@ fn process_word<'a>(
         // search this token list if it's toggled
         if search_grid[ind] {
             // find the smallest distance in this list
-            let min = get_min_token(tokens, query);
+            let min = get_min_token(query_id, tokens, query);
 
             // see if the smallest distance exists
             let min = if let Some(num) = min {
@@ -47,7 +60,7 @@ fn process_word<'a>(
                 return;
             };
 
-            if let Ordering::Less = min_res.0.cmp(&min.0) {
+            if let Ordering::Less = min.0.cmp(&min_res.0) {
                 min_res = min.clone();
             }
         }
@@ -55,6 +68,11 @@ fn process_word<'a>(
 
     // see if a result is found
     if !min_res.1.is_none() {
+        log(QueryLog {
+            id: query_id,
+            q_type: crate::utils::QueryLogType::Search,
+            msg: &format!("A min is found: {:?}", min_res),
+        });
         Some(SearchResultEntry {
             word: &word.word,
             distance: min_res.0,
@@ -68,6 +86,7 @@ fn process_word<'a>(
 }
 
 fn search_in_words<'a>(
+    query_id: &u128,
     query: &Query,
     words: &'a Vec<Word>,
 ) -> Vec<SearchResultEntry<'a>> {
@@ -76,21 +95,26 @@ fn search_in_words<'a>(
     // parallel computes the lowest distance for each word
     words
         .par_iter()
-        .filter_map(|word| process_word(word, query, &search_grid))
+        .filter_map(|word| process_word(query_id, word, query, &search_grid))
         .collect()
 }
 
 pub async fn search<'a>(
     axum::extract::Query(query): axum::extract::Query<Query>,
 ) -> Json<Vec<SearchResultEntry<'a>>> {
-    Json(
-        search_in_words(&query, WORDS.get().unwrap())
+    let query_id = uuid::Uuid::new_v4().as_u128();
+
+    Json({
+        let mut result =
+            search_in_words(&query_id, &query, WORDS.get().unwrap());
+        result.sort_by(|a, b| a.distance.cmp(&b.distance));
+        result
             .iter()
             .skip(query.skip)
             .take(query.limit)
             .cloned()
-            .collect::<Vec<SearchResultEntry<'a>>>(),
-    )
+            .collect::<Vec<SearchResultEntry<'a>>>()
+    })
 }
 
 #[derive(Deserialize, Debug)]

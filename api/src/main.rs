@@ -1,5 +1,6 @@
 pub mod db;
 pub mod search;
+pub mod utils;
 
 use axum::{http::Method, routing::get, Router};
 use tower_http::cors::{Any, CorsLayer};
