@@ -6,17 +6,19 @@
     import { fly } from 'svelte/transition';
 
     let { data } = $props();
-    let { query, result } = $derived(data);
+    let { query } = $derived(data);
 
     let entries: Array<SearchResultEntry> = $state([]);
 
     let mounted = $state(false);
 
-    $effect(() => {
-        entries = result;
-    });
-
     let loadBtn: HTMLElement;
+
+    $effect(() => {
+        query.skip = 0;
+        query.limit = 10;
+        entries = [];
+    });
 
     onMount(() => {
         mounted = true;
@@ -31,8 +33,8 @@
                     }
 
                     // get data
-                    query.skip += 10;
                     entries.push(...(await apiSearch(query, fetch)));
+                    query.skip += 10;
                 }
             });
 
@@ -71,6 +73,12 @@
     <SearchEntry word={entry.word} pos={entry.pos} matched={entry.matched} en={entry.en} {index} />
 {/each}
 
-<div class="flex justify-center">
-    <button class="btn btn-accent" bind:this={loadBtn}>Load More</button>
+<div class="mb-5 flex justify-center">
+    <button
+        class="btn btn-accent"
+        bind:this={loadBtn}
+        onclick={async () => {
+            entries.push(...(await apiSearch(query, fetch)));
+        }}>Load More</button
+    >
 </div>
