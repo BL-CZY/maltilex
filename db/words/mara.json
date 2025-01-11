@@ -1,0 +1,36 @@
+{
+    "surf": "mara",
+    "surfPhon": "/WIP/",
+    "pos": "n",
+    "root": "WIP",
+    "forms": [
+        {
+            "form": "sg",
+            "word": "mara",
+            "gen": "f",
+            "phon": "/WIP/",
+            "en": "woman, wife, female"
+        },
+
+        {
+            "form": "pl",
+            "word": "nisa",
+            "gen": "f",
+            "phon": "/WIP/",
+            "en": "wemen, wives, females"
+        }
+    ],
+    "en": [
+        "female",
+        "woman",
+        "wife"
+    ],
+    "en-extra": [
+        "females",
+        "women",
+        "wives"
+    ],
+    "mt-extra": [],
+    "examples": [],
+    "contributors": []
+}

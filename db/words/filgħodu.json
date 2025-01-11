@@ -1,0 +1,30 @@
+{
+    "surf": "filgħodu",
+    "surfPhon": "/WIP/",
+    "pos": "n",
+    "root": "r-p-l",
+    "forms": [
+        {
+            "form": "sg",
+            "word": "filgħodu",
+            "gen": "f",
+            "phon": "/WIP/",
+            "en": "morning"
+        },
+
+        {
+            "form": "sg",
+            "word": "għodwa",
+            "gen": "f",
+            "phon": "/WIP/",
+            "en": "morning"
+        }
+    ],
+    "en": [
+        "morning"
+    ],
+    "en-extra": [],
+    "mt-extra": [],
+    "examples": [],
+    "contributors": []
+}

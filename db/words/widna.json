@@ -1,0 +1,31 @@
+{
+    "surf": "widna",
+    "surfPhon": "/WIP/",
+    "pos": "n",
+    "root": "w-d-n",
+    "forms": [
+        {
+            "form": "sg",
+            "word": "widna",
+            "gen": "f",
+            "phon": "/WIP/",
+            "en": "ear"
+        },
+        {
+            "form": "pl",
+            "word": "widnejn",
+            "gen": "f",
+            "phon": "/WIP/",
+            "en": "ears"
+        }
+    ],
+    "en": [
+        "ear"
+    ],
+    "en-extra": [
+        "ears"
+    ],
+    "mt-extra": [],
+    "examples": [],
+    "contributors": []
+}

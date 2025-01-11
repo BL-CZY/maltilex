@@ -1,0 +1,32 @@
+{
+    "surf": "raġuni",
+    "surfPhon": "/WIP/",
+    "pos": "n",
+    "root": "r-p-l",
+    "forms": [
+        {
+            "form": "sg",
+            "word": "raġuni",
+            "gen": "f",
+            "phon": "/WIP/",
+            "en": "reason"
+        },
+
+        {
+            "form": "pl",
+            "word": "raġunijiet",
+            "gen": "f",
+            "phon": "/WIP/",
+            "en": "reasons"
+        }
+    ],
+    "en": [
+        "reason"
+    ],
+    "en-extra": [
+        "reasons"
+    ],
+    "mt-extra": [],
+    "examples": [],
+    "contributors": []
+}

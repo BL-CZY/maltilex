@@ -1,0 +1,22 @@
+{
+    "surf": "l-istorja",
+    "surfPhon": "/WIP/",
+    "pos": "n",
+    "root": "--",
+    "forms": [
+        {
+            "form": "sg",
+            "word": "l-istorja",
+            "gen": "f",
+            "phon": "/WIP/",
+            "en": "history"
+        }
+    ],
+    "en": [
+        "history"
+    ],
+    "en-extra": [],
+    "mt-extra": [],
+    "examples": [],
+    "contributors": []
+}

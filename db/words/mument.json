@@ -1,0 +1,31 @@
+{
+    "surf": "mument",
+    "surfPhon": "/WIP/",
+    "pos": "n",
+    "root": "--",
+    "forms": [
+        {
+            "form": "sg",
+            "word": "mument",
+            "gen": "m",
+            "phon": "/WIP/",
+            "en": "moment"
+        },
+        {
+            "form": "pl",
+            "word": "mumenti",
+            "gen": "m",
+            "phon": "/WIP/",
+            "en": "moments"
+        }
+    ],
+    "en": [
+        "moment"
+    ],
+    "en-extra": [
+        "moments"
+    ],
+    "mt-extra": [],
+    "examples": [],
+    "contributors": []
+}

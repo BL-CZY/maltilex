@@ -1,0 +1,32 @@
+
+{
+    "surf": "reżultat",
+    "surfPhon": "/WIP/",
+    "pos": "n",
+    "root": "--",
+    "forms": [
+    {
+        "form": "sg",
+        "word": "reżultat",
+        "gen": "m",
+        "phon": "/WIP/",
+        "en": "result"
+    },
+    {
+        "form": "pl",
+        "word": "reżultati",
+        "gen": "m",
+        "phon": "/WIP/",
+        "en": "results"
+    }
+    ],
+    "en": [
+        "result"
+    ],
+    "en-extra": [
+        "results"
+    ],
+    "mt-extra": [],
+    "examples": [],
+    "contributors": []
+}

@@ -1,0 +1,31 @@
+{
+    "surf": "wiċċ",
+    "surfPhon": "/WIP/",
+    "pos": "n",
+    "root": "w-ċ-ċ",
+    "forms": [
+        {
+            "form": "sg",
+            "word": "wiċċ",
+            "gen": "m",
+            "phon": "/WIP/",
+            "en": "face"
+        },
+        {
+            "form": "pl",
+            "word": "uċuħ",
+            "gen": "m",
+            "phon": "/WIP/",
+            "en": "faces"
+        }
+    ],
+    "en": [
+        "face"
+    ],
+    "en-extra": [
+        "faces"
+    ],
+    "mt-extra": [],
+    "examples": [],
+    "contributors": []
+}

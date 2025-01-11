@@ -1,0 +1,29 @@
+{
+    "surf": "mhux",
+    "surfPhon": "/WIP/",
+    "pos": "adv",
+    "root": "m-h-x",
+    "forms": [
+        {
+            "form": "general",
+            "word": "mhux",
+            "gen": "mf",
+            "phon": "/WIP/",
+            "en": "not, he/she/it is not"
+        }
+    ],
+    "en": [
+        "not"
+    ],
+    "en-extra": [
+        "he is not",
+        "he's not",
+        "she is not",
+        "she's not",
+        "it is not",
+        "it's not"
+    ],
+    "mt-extra": [],
+    "examples": [],
+    "contributors": []
+}

@@ -1,0 +1,129 @@
+{
+    "surf": "mnieħer",
+    "surfPhon": "/WIP/",
+    "pos": "n",
+    "root": "m-n-ħ",
+    "forms": [
+        {
+            "form": "sg",
+            "word": "mnieħer",
+            "gen": "m",
+            "phon": "/WIP/",
+            "en": "nose"
+        },
+        {
+            "form": "sg",
+            "word": "imnieħer",
+            "gen": "m",
+            "phon": "/WIP/",
+            "en": "nose (after a consonant / pause)"
+        },
+        {
+            "form": "pl",
+            "word": "mniħerijiet",
+            "gen": "m",
+            "phon": "/WIP/",
+            "en": "noses"
+        },
+        {
+            "form": "pl",
+            "word": "mneħerijiet",
+            "gen": "m",
+            "phon": "/WIP/",
+            "en": "noses"
+        },
+        {
+            "form": "sg_p1sg",
+            "word": "mnieħri",
+            "gen": "m",
+            "phon": "/WIP/",
+            "en": "my nose"
+        },
+        {
+            "form": "pl_p1sg",
+            "word": "mnieħri",
+            "gen": "m",
+            "phon": "/WIP/",
+            "en": "my noses"
+        },
+        {
+            "form": "sg_p2sg",
+            "word": "mnieħrek",
+            "gen": "m",
+            "phon": "/WIP/",
+            "en": "your nose"
+        },
+        {
+            "form": "pl_p2pl",
+            "word": "mnieħrek",
+            "gen": "m",
+            "phon": "/WIP/",
+            "en": "your noses"
+        },
+        {
+            "form": "sg_p3sgm",
+            "word": "mnieħru",
+            "gen": "m",
+            "phon": "/WIP/",
+            "en": "his nose"
+        },
+        {
+            "form": "pl_p3sgm",
+            "word": "mnieħru",
+            "gen": "m",
+            "phon": "/WIP/",
+            "en": "his noses"
+        },
+        {
+            "form": "sg_p3sgf",
+            "word": "mnieħrha",
+            "gen": "m",
+            "phon": "/WIP/",
+            "en": "her nose"
+        },
+        {
+            "form": "pl_p3sgf",
+            "word": "mnieħrha",
+            "gen": "m",
+            "phon": "/WIP/",
+            "en": "her noses"
+        },
+        {
+            "form": "sg_p3sgf",
+            "word": "mneħrha",
+            "gen": "m",
+            "phon": "/WIP/",
+            "en": "her nose"
+        },
+        {
+            "form": "pl_p3sgf",
+            "word": "mneħrha",
+            "gen": "m",
+            "phon": "/WIP/",
+            "en": "her noses"
+        },
+        {
+            "form": "sg_p1pl",
+            "word": "mnieħerna",
+            "gen": "m",
+            "phon": "/WIP/",
+            "en": "our nose"
+        },
+        {
+            "form": "sg_p2pl",
+            "word": "mneħirkom",
+            "gen": "m",
+            "phon": "/WIP/",
+            "en": "your nose"
+        }
+    ],
+    "en": [
+        "nose"
+    ],
+    "en-extra": [
+        "noses"
+    ],
+    "mt-extra": [],
+    "examples": [],
+    "contributors": []
+}

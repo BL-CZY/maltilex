@@ -1,0 +1,131 @@
+{
+    "surf": "jien",
+    "surfPhon": "/jien/",
+    "pos": "pron",
+    "root": "--",
+    "forms": [
+        {
+            "form": "p1",
+            "word": "jien",
+            "phon": "/WIP/",
+            "en": "I, I am, me",
+            "extra": "--"
+        },
+        {
+            "form": "p1",
+            "word": "jiena",
+            "phon": "/WIP/",
+            "en": "I, I am, me",
+            "extra": "--"
+        },
+        {
+            "form": "p1",
+            "word": "jienx",
+            "phon": "/WIP/",
+            "en": "I am not",
+            "extra": "--"
+        },
+        {
+            "form": "p2",
+            "word": "int",
+            "phon": "/WIP/",
+            "en": "you(single), you are(single)",
+            "extra": "--"
+        },
+        {
+            "form": "p2",
+            "word": "intom",
+            "phon": "/WIP",
+            "en": "you(plural), you are(plural)",
+            "extra": "--"
+        },
+        {
+            "form": "p2",
+            "word": "intx",
+            "phon": "/WIP/",
+            "en": "you are not(single)",
+            "extra": "--"
+        },
+        {
+            "form": "p2",
+            "word": "intomx",
+            "phon": "/WIP/",
+            "en": "you are not(plural)",
+            "extra": "--"
+        },
+        {
+            "form": "p3m",
+            "word": "hu",
+            "phon": "/WIP/",
+            "en": "he, him",
+            "extra": "--"
+        },
+        {
+            "form": "p3m",
+            "word": "huwa",
+            "phon": "/WIP/",
+            "en": "he, him",
+            "extra": "--"
+        },
+        {
+            "form": "p3f",
+            "word": "hi",
+            "phon": "/WIP/",
+            "en": "she, her(not used for \"her items\")",
+            "extra": "--"
+        },
+        {
+            "form": "p3f",
+            "word": "hija",
+            "phon": "/WIP/",
+            "en": "she, her(not used for \"her items\")",
+            "extra": "--"
+        },
+        {
+            "form": "p1pl",
+            "word": "aħna",
+            "phon": "/l/",
+            "en": "we, us",
+            "extra": "--"
+        },
+        {
+            "form": "p3pl",
+            "word": "huma",
+            "phon": "/WIP/",
+            "en": "they",
+            "extra": "--"
+        }
+    ],
+    "en": [
+        "pronouns"
+    ],
+    "examples": [],
+    "en-extra": [
+        "I",
+        "I'm",
+        "I am",
+        "me",
+        "I am not",
+        "I'm not",
+        "we",
+        "us",
+        "you",
+        "you are",
+        "you're",
+        "you are not",
+        "you're not",
+        "you aren't",
+        "he",
+        "him",
+        "he is",
+        "she",
+        "her",
+        "she is",
+        "they",
+        "they are",
+        "they're"
+    ],
+    "mt-extra": [],
+    "contributors": []
+}
+

@@ -1,0 +1,31 @@
+{
+    "surf": "ġenitur",
+    "surfPhon": "/WIP/",
+    "pos": "n",
+    "root": "--",
+    "forms": [
+        {
+            "form": "sg",
+            "word": "ġenitur",
+            "gen": "m",
+            "phon": "/WIP/",
+            "en": "parent"
+        },
+        {
+            "form": "pl",
+            "word": "ġenituri",
+            "gen": "mf",
+            "phon": "/WIP/",
+            "en": "parents"
+        }
+    ],
+    "en": [
+        "parents"
+    ],
+    "en-extra": [
+        "parent"
+    ],
+    "mt-extra": [],
+    "examples": [],
+    "contributors": []
+}

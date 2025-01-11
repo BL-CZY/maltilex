@@ -1,0 +1,31 @@
+{
+    "surf": "ktieb",
+    "surfPhon": "/WIP/",
+    "pos": "n",
+    "root": "k-t-b",
+    "forms": [
+        {
+            "form": "sg",
+            "word": "ktieb",
+            "gen": "m",
+            "phon": "/WIP/",
+            "en": "book"
+        },
+        {
+            "form": "pl",
+            "word": "kotba",
+            "gen": "mf",
+            "phon": "/WIP/",
+            "en": "books"
+        }
+    ],
+    "en": [
+        "book"
+    ],
+    "en-extra": [
+        "books"
+    ],
+    "mt-extra": [],
+    "examples": [],
+    "contributors": []
+}

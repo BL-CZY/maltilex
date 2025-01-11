@@ -1,0 +1,38 @@
+{
+    "surf": "raġel",
+    "surfPhon": "/WIP/",
+    "pos": "n",
+    "root": "r-ġ-l",
+    "forms": [
+        {
+            "form": "sg",
+            "word": "raġel",
+            "gen": "m",
+            "phon": "/WIP/",
+            "en": "man, male, husband, guy"
+        },
+
+        {
+            "form": "pl",
+            "word": "irġiel",
+            "gen": "m",
+            "phon": "/WIP/",
+            "en": "men, males, husbands, guys"
+        }
+    ],
+    "en": [
+        "guy",
+        "male",
+        "man",
+        "husband"
+    ],
+    "en-extra": [
+        "guys",
+        "males",
+        "men",
+        "husbands"
+    ],
+    "mt-extra": [],
+    "examples": [],
+    "contributors": []
+}

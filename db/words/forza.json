@@ -1,0 +1,31 @@
+{
+    "surf": "forza",
+    "surfPhon": "/WIP/",
+    "pos": "n",
+    "root": "--",
+    "forms": [
+        {
+            "form": "sg",
+            "word": "forza",
+            "gen": "f",
+            "phon": "/WIP/",
+            "en": "force"
+        },
+        {
+            "form": "pl",
+            "word": "forzi",
+            "gen": "f",
+            "phon": "/WIP/",
+            "en": "forces"
+        }
+    ],
+    "en": [
+        "force"
+    ],
+    "en-extra": [
+        "forces"
+    ],
+    "mt-extra": [],
+    "examples": [],
+    "contributors": []
+}
