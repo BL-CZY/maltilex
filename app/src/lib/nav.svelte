@@ -2,8 +2,8 @@
     import { goto } from '$app/navigation';
 
     let value: string;
-    const submit = () => {
-        goto(`search?keyword=${value.trim()}`);
+    const submit = async () => {
+        await goto(`search?keyword=${value.trim()}`);
     };
 </script>
 

@@ -35,7 +35,6 @@ export const apiSearch = async (
         let res = await fetch(queryURL);
 
         let data: Array<SearchResultEntry> = await res.json();
-        console.log(data);
         return data;
     } catch (e) {
         console.log(e);
