@@ -38,9 +38,9 @@ fn parse_doc(doc: &Document) -> Result<Word, Box<dyn std::error::Error>> {
 
     let en_display = get_string_vec(doc.get_array("en-display")?);
 
-    let en_display = if en_display.len() > 3 {
+    let en_display = if en_display.len() > 2 {
         let mut res: Vec<String> =
-            en_display.iter().take(3).map(|e| e.to_string()).collect();
+            en_display.iter().take(2).map(|e| e.to_string()).collect();
         res.push("...".into());
         res
     } else {
