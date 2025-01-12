@@ -8,7 +8,7 @@
     };
 
     let props: Props = $props();
-    let { word, pos, matched, en, index } = props;
+    let { word, pos, matched, en, index } = $derived(props);
 </script>
 
 <div class="my-2 flex w-full justify-center">

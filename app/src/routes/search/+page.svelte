@@ -6,7 +6,7 @@
     import { fly } from 'svelte/transition';
 
     let { data } = $props();
-    let { query } = $derived(data);
+    let { query, result } = $derived(data);
 
     let entries: Array<SearchResultEntry> = $state([]);
 
@@ -17,7 +17,7 @@
     $effect(() => {
         query.skip = 0;
         query.limit = 10;
-        entries = [];
+        entries = result;
     });
 
     onMount(() => {
