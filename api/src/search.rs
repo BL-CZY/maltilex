@@ -74,6 +74,7 @@ fn process_word<'a>(
             msg: &format!("A min is found: {:?}", min_res),
         });
         Some(SearchResultEntry {
+            id: word.id.to_string(),
             word: &word.word,
             distance: min_res.0,
             pos: &word.pos,
@@ -138,6 +139,7 @@ pub struct Query {
 
 #[derive(Serialize, Clone)]
 pub struct SearchResultEntry<'a> {
+    id: String,
     word: &'a str,
     distance: usize,
     pos: &'a str,

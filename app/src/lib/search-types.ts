@@ -1,4 +1,5 @@
 export type SearchResultEntry = {
+    id: string;
     word: string;
     distance: number;
     pos: string;

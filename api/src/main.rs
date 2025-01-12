@@ -1,6 +1,7 @@
 pub mod db;
 pub mod search;
 pub mod utils;
+pub mod word;
 
 use axum::{http::Method, routing::get, Router};
 use tower_http::cors::{Any, CorsLayer};
@@ -17,6 +18,7 @@ async fn main() {
     let app = Router::new()
         .route("/", get(root))
         .route("/search", get(search::search))
+        .route("/word/{id}", get(word::get_word))
         .layer(
             CorsLayer::new()
                 .allow_origin(Any)

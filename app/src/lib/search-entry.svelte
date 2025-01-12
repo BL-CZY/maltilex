@@ -1,5 +1,6 @@
 <script lang="ts">
     type Props = {
+        id: string;
         word: string;
         pos: string;
         matched: string;
@@ -8,7 +9,7 @@
     };
 
     let props: Props = $props();
-    let { word, pos, matched, en, index } = $derived(props);
+    let { id, word, pos, matched, en, index } = $derived(props);
 </script>
 
 <div class="my-2 flex w-full justify-center">

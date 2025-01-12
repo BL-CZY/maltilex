@@ -70,7 +70,14 @@
 <div class="h-[20px]"></div>
 
 {#each entries as entry, index}
-    <SearchEntry word={entry.word} pos={entry.pos} matched={entry.matched} en={entry.en} {index} />
+    <SearchEntry
+        id={entry.id}
+        word={entry.word}
+        pos={entry.pos}
+        matched={entry.matched}
+        en={entry.en}
+        {index}
+    />
 {/each}
 
 <div class="mb-5 flex justify-center">
