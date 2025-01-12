@@ -24,6 +24,23 @@ export type Query = {
     maxDis?: number;
 };
 
+export type Word = {
+    word: string;
+    phon: string;
+    pos: string;
+    root: string;
+    forms: {
+        form: string;
+        word: string;
+        gen: string;
+        phon: string;
+        en: string;
+    }[];
+    enDisplay: string[];
+};
+
+export type WordResult = { word: Word } | { error: string };
+
 export const parseQuery = (data: URLSearchParams): Query => {
     let query: Query = {};
 

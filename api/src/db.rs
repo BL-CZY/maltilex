@@ -33,10 +33,10 @@ fn parse_doc(doc: &Document) -> Result<Word, Box<dyn std::error::Error>> {
     let word = doc.get_str("word")?.to_string();
     let pos = doc.get_str("pos")?.to_string();
 
-    let mt_tokens = get_string_vec(doc.get_array("mt-tokens")?);
-    let en_tokens = get_string_vec(doc.get_array("en-tokens")?);
+    let mt_tokens = get_string_vec(doc.get_array("mtTokens")?);
+    let en_tokens = get_string_vec(doc.get_array("enTokens")?);
 
-    let en_display = get_string_vec(doc.get_array("en-display")?);
+    let en_display = get_string_vec(doc.get_array("enDisplay")?);
 
     let en_display = if en_display.len() > 2 {
         let mut res: Vec<String> =

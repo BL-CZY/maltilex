@@ -36,6 +36,9 @@ pub async fn get_word(Path(str): Path<String>) -> Json<WordResult> {
 
 #[derive(Serialize, Clone)]
 pub struct WordResult {
+    #[serde(skip_serializing_if = "Option::is_none")]
     error: Option<String>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
     word: Option<String>,
 }

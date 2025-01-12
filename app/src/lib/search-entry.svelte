@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { goto } from '$app/navigation';
+
     type Props = {
         id: string;
         word: string;
@@ -14,6 +16,9 @@
 
 <div class="my-2 flex w-full justify-center">
     <button
+        onclick={() => {
+            goto(`/search/${id}`);
+        }}
         class="btn bg-base-100 hover:bg-accent hover:text-accent-content min-h-[100px] w-[90%] p-4 shadow-md"
     >
         <div class="flex w-full items-start justify-between gap-4">

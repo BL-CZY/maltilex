@@ -1,5 +1,5 @@
 import { PUBLIC_API_URL } from '$env/static/public';
-import type { Query, SearchResultEntry } from './search-types';
+import type { Query, SearchResultEntry, Word, WordResult } from './search-types';
 
 export const apiSearch = async (
     query: Query,
@@ -39,5 +39,27 @@ export const apiSearch = async (
     } catch (e) {
         console.log(e);
         return [];
+    }
+};
+
+export const apiWord = async (
+    id: string,
+    fetch: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>
+): Promise<WordResult> => {
+    try {
+        let queryURL = new URL(`${PUBLIC_API_URL}/word/${id}`);
+
+        let res = await fetch(queryURL);
+
+        let data: WordResult = await res.json();
+
+        if ('error' in data) {
+            throw new Error(data.error);
+        }
+
+        return { word: data.word };
+    } catch (e) {
+        console.log(e);
+        return { error: String(e) };
     }
 };
