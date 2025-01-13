@@ -51,7 +51,7 @@ export const apiWord = async (
 
         let res = await fetch(queryURL);
 
-        let data: WordResult = await res.json();
+        let data = await res.json();
 
         if ('error' in data) {
             throw new Error(data.error);

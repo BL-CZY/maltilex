@@ -23,10 +23,15 @@ pub async fn get_word(Path(str): Path<String>) -> Json<WordResult> {
     let col: Collection<Document> = db.collection("words");
 
     match col.find_one(doc! {"_id": id}).await {
-        Ok(Some(doc)) => Json(WordResult {
-            error: None,
-            word: Some(doc.to_string()),
-        }),
+        Ok(Some(mut doc)) => {
+            doc.remove("mtTokens");
+            doc.remove("EnTokens");
+
+            Json(WordResult {
+                error: None,
+                word: Some(doc),
+            })
+        }
         _ => Json(WordResult {
             error: Some("Cannot find word".to_string()),
             word: None,
@@ -40,5 +45,5 @@ pub struct WordResult {
     error: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    word: Option<String>,
+    word: Option<Document>,
 }

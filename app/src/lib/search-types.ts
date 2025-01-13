@@ -24,17 +24,36 @@ export type Query = {
     maxDis?: number;
 };
 
+// the word got from fetch
 export type Word = {
     word: string;
     phon: string;
     pos: string;
     root: string;
     forms: {
-        form: string;
         word: string;
-        gen: string;
         phon: string;
-        en: string;
+        en: string[];
+        num?: string[];
+        gen?: string[];
+        pol?: string[];
+        extra?: string[];
+        sub?: string[];
+
+        // verb exclusive
+        vsub?: {
+            num: string[];
+            gen: string[];
+        };
+        vobj?: {
+            num: string[];
+            gen: string[];
+        };
+        vobjInd?: {
+            num: string[];
+            gen: string[];
+        };
+        vform?: string[];
     }[];
     enDisplay: string[];
 };
