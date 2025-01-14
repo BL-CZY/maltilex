@@ -1,3 +1,5 @@
+import type { FilterField } from './filter';
+
 export type SearchResultEntry = {
     id: string;
     word: string;
@@ -24,37 +26,41 @@ export type Query = {
     maxDis?: number;
 };
 
+export type FormField = 'word' | 'phon' | 'en' | FilterField;
+
+export type Form = {
+    word: string;
+    phon: string;
+    en: string[];
+    num?: string[];
+    gen?: string[];
+    pol?: string[];
+    extra?: string[];
+    sub?: string[];
+
+    // verb exclusive
+    vsub?: {
+        num: string[];
+        gen: string[];
+    };
+    vobj?: {
+        num: string[];
+        gen: string[];
+    };
+    vobjInd?: {
+        num: string[];
+        gen: string[];
+    };
+    vform?: string[];
+};
+
 // the word got from fetch
 export type Word = {
     word: string;
     phon: string;
     pos: string;
     root: string;
-    forms: {
-        word: string;
-        phon: string;
-        en: string[];
-        num?: string[];
-        gen?: string[];
-        pol?: string[];
-        extra?: string[];
-        sub?: string[];
-
-        // verb exclusive
-        vsub?: {
-            num: string[];
-            gen: string[];
-        };
-        vobj?: {
-            num: string[];
-            gen: string[];
-        };
-        vobjInd?: {
-            num: string[];
-            gen: string[];
-        };
-        vform?: string[];
-    }[];
+    forms: Form[];
     enDisplay: string[];
 };
 
