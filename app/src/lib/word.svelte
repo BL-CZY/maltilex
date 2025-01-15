@@ -27,9 +27,9 @@
         filter = {};
         acceptedFilters = {};
 
-        untrack(() => {
-            word.forms.forEach((form) => {
-                names.forEach((name) => {
+        word.forms.forEach((form) => {
+            names.forEach((name) => {
+                untrack(() => {
                     if (name === 'word' || name === 'phon' || name === 'en') {
                         return;
                     }
@@ -41,11 +41,16 @@
 
                     if (!acceptedFilters[key]) {
                         acceptedFilters[key] = form[key];
-                        filter[key] = [];
+                        filter[key] = form[key];
                     } else {
                         form[key].forEach((property) => {
-                            if (acceptedFilters[key] && !acceptedFilters[key].includes(property)) {
+                            if (
+                                filter[key] &&
+                                acceptedFilters[key] &&
+                                !acceptedFilters[key].includes(property)
+                            ) {
                                 acceptedFilters[key].push(property);
+                                filter[key].push(property);
                             }
                         });
                     }
@@ -90,40 +95,62 @@
     });
 </script>
 
-<div>
-    <p>{word.word}</p>
-    <p>{word.phon}</p>
-    <p>{word.root}</p>
-    <p>{word.pos}</p>
-    {#each word.enDisplay as en}
-        <p>{en}</p>
-    {/each}
-</div>
-
-<div>
-    <table>
-        <tbody>
-            <tr>
-                {#each formKeyNames as name}
-                    {#if name === 'word' || name === 'en' || name === 'phon'}
-                        <th>{name}</th>
-                    {:else}
-                        <Filter
-                            options={acceptedFilters[name as FilterField] ?? []}
-                            callback={(options) => {
-                                filter[name as FilterField] = options;
-                            }}
-                        />
-                    {/if}
+<div class="flex w-full flex-col gap-6 p-4 md:flex-row">
+    <div class="bg-base-100 rounded-lg p-6 text-center shadow-lg md:w-[20%]">
+        <h2 class="text-base-content mb-2 text-2xl font-bold">{word.word}</h2>
+        <div class="space-y-3">
+            <p class="text-base-content/80 text-lg font-medium">{word.phon}</p>
+            <div class="divider"></div>
+            <p class="badge badge-primary">{word.pos}</p>
+            <p class="text-base-content/70 text-sm">{word.root}</p>
+            <div class="mt-4 space-y-2">
+                {#each word.enDisplay as en}
+                    <p class="text-base-content/90">{en}</p>
                 {/each}
-            </tr>
-            {#each displayedForms as form}
-                <tr>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-base-100 min-h-screen overflow-x-auto rounded-lg shadow-lg md:w-[80%]">
+        <table class="mb-1 table w-full md:table-fixed">
+            <tbody>
+                <tr class="bg-base-200">
                     {#each formKeyNames as name}
-                        <td>{form[name]}</td>
+                        {#if name === 'word' || name === 'en' || name === 'phon'}
+                            <th class="text-base-content min-w-[100px] font-bold">{name}</th>
+                        {:else}
+                            <th>
+                                <Filter
+                                    {name}
+                                    options={acceptedFilters[name as FilterField] ?? []}
+                                    callback={(options) => {
+                                        filter[name as FilterField] = options;
+                                    }}
+                                />
+                            </th>
+                        {/if}
                     {/each}
                 </tr>
+                {#each displayedForms as form}
+                    <tr class="hover:bg-base-200/50 transition-colors">
+                        {#each formKeyNames as name}
+                            <td class="text-base-content/80">{form[name]}</td>
+                        {/each}
+                    </tr>
+                {/each}
+            </tbody>
+        </table>
+        <p class="text-base-content ml-5 font-bold">Examples:</p>
+        <ul>
+            {#each word.examples as example}
+                <li><p>{example}</p></li>
             {/each}
-        </tbody>
-    </table>
+        </ul>
+        <p class="text-base-content ml-5 font-bold">Contributors:</p>
+        <ul>
+            {#each word.contributors as contributor}
+                <li><p>{contributor}</p></li>
+            {/each}
+        </ul>
+    </div>
 </div>

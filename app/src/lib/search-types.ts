@@ -57,6 +57,8 @@ export type Word = {
     root: string;
     forms: Form[];
     enDisplay: string[];
+    examples: string[];
+    contributors: string[];
 };
 
 export type WordResult = { word: Word } | { error: string };
