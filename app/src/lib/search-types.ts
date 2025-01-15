@@ -38,19 +38,14 @@ export type Form = {
     extra?: string[];
     sub?: string[];
 
-    // verb exclusive
-    vsub?: {
-        num: string[];
-        gen: string[];
-    };
-    vobj?: {
-        num: string[];
-        gen: string[];
-    };
-    vobjInd?: {
-        num: string[];
-        gen: string[];
-    };
+    obj?: string[];
+    objNum?: string[];
+    objGen?: string[];
+
+    indObj?: string[];
+    indObjNum?: string[];
+    indObjGen?: string[];
+
     vform?: string[];
 };
 

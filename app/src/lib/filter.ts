@@ -5,19 +5,14 @@ export type Filter = {
     extra?: string[];
     sub?: string[];
 
-    // verb exclusive
-    vsub?: {
-        num: string[];
-        gen: string[];
-    };
-    vobj?: {
-        num: string[];
-        gen: string[];
-    };
-    vobjInd?: {
-        num: string[];
-        gen: string[];
-    };
+    obj?: string[];
+    objNum?: string[];
+    objGen?: string[];
+
+    indObj?: string[];
+    indObjNum?: string[];
+    indObjGen?: string[];
+
     vform?: string[];
 };
 
@@ -27,7 +22,10 @@ export type FilterField =
     | 'pol'
     | 'extra'
     | 'sub'
-    | 'vsub'
-    | 'vobj'
-    | 'vobjInd'
+    | 'obj'
+    | 'objNum'
+    | 'objGen'
+    | 'indObj'
+    | 'indObjNum'
+    | 'indObjGen'
     | 'vform';
