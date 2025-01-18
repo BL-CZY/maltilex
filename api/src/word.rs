@@ -24,8 +24,8 @@ pub async fn get_word(Path(str): Path<String>) -> Json<WordResult> {
 
     match col.find_one(doc! {"_id": id}).await {
         Ok(Some(mut doc)) => {
-            doc.remove("mtTokens");
-            doc.remove("EnTokens");
+            doc.remove("mt_tokens");
+            doc.remove("en_tokens");
 
             Json(WordResult {
                 error: None,

@@ -56,7 +56,7 @@ export type Word = {
     pos: string;
     root: string;
     forms: Form[];
-    enDisplay: string[];
+    en_display: string[];
     examples: string[];
     contributors: string[];
 };
