@@ -8,15 +8,17 @@
         matched: string;
         en: Array<string>;
         index: number;
+        switchToLoading: () => void;
     };
 
     let props: Props = $props();
-    let { id, word, pos, matched, en, index } = $derived(props);
+    let { id, word, pos, matched, en, index, switchToLoading } = $derived(props);
 </script>
 
 <div class="my-2 flex w-full justify-center">
     <button
         onclick={() => {
+            switchToLoading();
             goto(`/search/${id}`);
         }}
         class="btn bg-base-100 hover:bg-accent hover:text-accent-content min-h-[100px] w-[90%] p-4 shadow-md"
