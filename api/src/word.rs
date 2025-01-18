@@ -1,14 +1,11 @@
-use std::{collections::HashMap, str::FromStr};
+use std::collections::HashMap;
 
 use axum::{extract::Path, Json};
 use lazy_static::lazy_static;
-use mongodb::{
-    bson::{doc, oid::ObjectId, Bson, Document},
-    Collection, Database,
-};
 use serde::Serialize;
+use serde_json::{Map, Value};
 
-use crate::db::CLIENT;
+use crate::db::get_client;
 
 lazy_static! {
     static ref WORD_KEYS_TABLE: HashMap<String, String> = {
@@ -67,21 +64,21 @@ lazy_static! {
     };
 }
 
-fn expand_word(mut doc: Document) -> Document {
-    if let Ok(arr) = doc.get_array_mut("f") {
-        arr.iter_mut().for_each(|d| {
-            if let Some(form) = d.as_document_mut() {
+fn expand_word(mut obj: Map<String, Value>) -> Map<String, Value> {
+    if let Some(Value::Array(arr)) = obj.get_mut("f") {
+        arr.iter_mut().for_each(|element| {
+            if let Value::Object(form) = element {
                 // set values
                 form.iter_mut().for_each(|(k, v)| {
                     if k == "w" || k == "ph" || k == "en" {
                         return;
                     }
 
-                    if let Some(a) = v.as_array_mut() {
-                        a.iter_mut().for_each(|ele| {
-                            if let Bson::String(field) = ele {
+                    if let Value::Array(fields) = v {
+                        fields.iter_mut().for_each(|ele| {
+                            if let Value::String(field) = ele {
                                 if let Some(val) = FORM_VAL_TABLE.get(field) {
-                                    *ele = Bson::String(val.clone());
+                                    *ele = Value::String(val.to_string());
                                 }
                             }
                         });
@@ -90,8 +87,8 @@ fn expand_word(mut doc: Document) -> Document {
 
                 // set keys
                 FORM_KEYS_TABLE.iter().for_each(|(key, replace)| {
-                    if let Some(b) = form.get(key) {
-                        form.insert(replace, b.clone());
+                    if let Some(val) = form.get(key) {
+                        form.insert(replace.clone(), val.clone());
                         form.remove(key);
                     }
                 });
@@ -100,17 +97,17 @@ fn expand_word(mut doc: Document) -> Document {
     }
 
     WORD_KEYS_TABLE.iter().for_each(|(key, replace)| {
-        if let Some(b) = doc.get(key) {
-            doc.insert(replace, b.clone());
-            doc.remove(key);
+        if let Some(val) = obj.get(key) {
+            obj.insert(replace.clone(), val.clone());
+            obj.remove(key);
         }
     });
 
-    doc
+    obj
 }
 
 pub async fn get_word(Path(str): Path<String>) -> Json<WordResult> {
-    let id = if let Ok(id) = ObjectId::from_str(&str) {
+    let id = if let Ok(id) = str.parse::<u64>() {
         id
     } else {
         return Json(WordResult {
@@ -119,23 +116,61 @@ pub async fn get_word(Path(str): Path<String>) -> Json<WordResult> {
         });
     };
 
-    let db: Database = CLIENT.get().unwrap().database("local");
-    let col: Collection<Document> = db.collection("words");
+    let client = get_client();
+    let resp = client
+        .from("words")
+        .eq("id", id.to_string())
+        .execute()
+        .await;
 
-    match col.find_one(doc! {"_id": id}).await {
-        Ok(Some(mut doc)) => {
-            doc.remove("mt");
-            doc.remove("et");
+    match resp {
+        Ok(res) => match res.text().await {
+            Ok(text) => {
+                let arr = if let Ok(Value::Array(arr)) =
+                    serde_json::from_str(&text)
+                {
+                    arr
+                } else {
+                    return Json(WordResult {
+                        error: Some("Cannot parse return data".into()),
+                        word: None,
+                    });
+                };
 
-            Json(WordResult {
-                error: None,
-                word: Some(expand_word(doc)),
+                if arr.is_empty() {
+                    return Json(WordResult {
+                        error: Some(format!("Can't find word")),
+                        word: None,
+                    });
+                }
+
+                let value = arr.get(0).unwrap().to_owned();
+
+                if let Value::Object(obj) = value {
+                    return Json(WordResult {
+                        error: None,
+                        word: Some(expand_word(obj)),
+                    });
+                } else {
+                    return Json(WordResult {
+                        error: Some(format!("Can't find word")),
+                        word: None,
+                    });
+                }
+            }
+            Err(e) => {
+                return Json(WordResult {
+                    error: Some(format!("Error when fetching data: {}", e)),
+                    word: None,
+                })
+            }
+        },
+        Err(e) => {
+            return Json(WordResult {
+                error: Some(format!("Error when fetching data: {}", e)),
+                word: None,
             })
         }
-        _ => Json(WordResult {
-            error: Some("Cannot find word".to_string()),
-            word: None,
-        }),
     }
 }
 
@@ -145,5 +180,5 @@ pub struct WordResult {
     error: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    word: Option<Document>,
+    word: Option<Map<String, Value>>,
 }

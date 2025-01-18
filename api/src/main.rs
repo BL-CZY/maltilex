@@ -9,8 +9,7 @@ use tower_http::cors::{Any, CorsLayer};
 #[tokio::main]
 async fn main() {
     dotenv::dotenv().ok();
-    let uri = std::env::var("MONGODB_URI").expect("MONGODB_URI must be set");
-    db::init(&uri).await;
+    db::init().await;
 
     // initialize tracing
     tracing_subscriber::fmt::init();
