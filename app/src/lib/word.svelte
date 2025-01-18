@@ -25,13 +25,8 @@
 
         // sort it in the order
         names.sort((a, b) => {
-            console.log(a);
-            console.log(b);
-            console.log((nameMap.get(a) ?? 0) - (nameMap.get(b) ?? 0));
             return (nameMap.get(a) ?? 0) - (nameMap.get(b) ?? 0);
         });
-
-        console.log(names);
 
         formKeyNames = names;
         filter = {};
@@ -106,7 +101,7 @@
         <div class="space-y-3">
             <p class="text-base-content/80 text-lg font-medium">{word.phonetic}</p>
             <div class="divider"></div>
-            <p class="badge badge-primary">{word.part_of_speech}</p>
+            <p class="badge badge-primary">{word.part_of_speech}.</p>
             <p class="text-base-content/70 text-sm">{word.root}</p>
             <div class="mt-4 space-y-2">
                 {#each word.en_display as en}

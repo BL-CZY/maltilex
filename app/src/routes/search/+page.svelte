@@ -28,7 +28,7 @@
         if (loadBtn) {
             const observer = new IntersectionObserver(async (elements) => {
                 if (elements[0].isIntersecting) {
-                    if (entries.length % 10 != 0 || query.skip == undefined || query.skip >= 40) {
+                    if (query.skip == undefined || query.skip >= 40) {
                         return;
                     }
 

@@ -52,11 +52,11 @@
                             <label class="flex cursor-pointer items-center space-x-2">
                                 <input
                                     type="checkbox"
-                                    class="checkbox checkbox-primary"
+                                    class="checkbox checkbox-accent"
                                     checked={selectedOptions.has(option)}
                                     onchange={() => toggleOption(option)}
                                 />
-                                <span class="label-text">{option}</span>
+                                <span class="label-text text-left">{option}</span>
                             </label>
                         </li>
                     {/each}

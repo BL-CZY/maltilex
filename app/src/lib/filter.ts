@@ -32,8 +32,8 @@ export enum NameIndex {
     IndirectObjectNumber,
     IndirectObjectGender,
     Polarity,
-    English,
-    Extra
+    Extra,
+    English
 }
 
 export const nameMap: Map<FormField, number> = new Map([

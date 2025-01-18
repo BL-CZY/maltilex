@@ -77,12 +77,12 @@ export const parseQuery = (data: URLSearchParams): Query => {
         query.keyword = String(keyword);
     }
 
-    if (searchMt) {
-        query.searchMt = Boolean(searchMt);
+    if (searchMt !== null && searchMt !== undefined) {
+        query.searchMt = searchMt.toLowerCase() == 'true';
     }
 
-    if (searchEn) {
-        query.searchEn = Boolean(searchEn);
+    if (searchEn !== null && searchEn !== undefined) {
+        query.searchEn = searchEn.toLowerCase() == 'true';
     }
 
     if (skip) {
@@ -95,14 +95,14 @@ export const parseQuery = (data: URLSearchParams): Query => {
     if (limit) {
         let num = parseInt(String(limit));
         if (!isNaN(num)) {
-            query.skip = num;
+            query.limit = num;
         }
     }
 
     if (maxDis) {
         let num = parseInt(String(maxDis));
         if (!isNaN(num)) {
-            query.skip = num;
+            query.maxDis = num;
         }
     }
 
