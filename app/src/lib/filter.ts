@@ -1,31 +1,31 @@
 export type Filter = {
-    num?: string[];
-    gen?: string[];
-    pol?: string[];
+    number?: string[];
+    gender?: string[];
+    polarity?: string[];
     extra?: string[];
-    sub?: string[];
+    subject?: string[];
 
-    obj?: string[];
-    objNum?: string[];
-    objGen?: string[];
+    object?: string[];
+    object_number?: string[];
+    object_gender?: string[];
 
-    indObj?: string[];
-    indObjNum?: string[];
-    indObjGen?: string[];
+    indirect_object?: string[];
+    indirect_object_number?: string[];
+    indirect_object_gender?: string[];
 
-    vform?: string[];
+    tense?: string[];
 };
 
 export type FilterField =
-    | 'num'
-    | 'gen'
-    | 'pol'
+    | 'number'
+    | 'gender'
+    | 'polarity'
     | 'extra'
-    | 'sub'
-    | 'obj'
-    | 'objNum'
-    | 'objGen'
-    | 'indObj'
-    | 'indObjNum'
-    | 'indObjGen'
-    | 'vform';
+    | 'subject'
+    | 'object'
+    | 'object_number'
+    | 'object_gender'
+    | 'indirect_object'
+    | 'indirect_object_number'
+    | 'indirect_object_gender'
+    | 'tense';

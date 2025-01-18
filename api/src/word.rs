@@ -31,9 +31,9 @@ lazy_static! {
             ("w", "word"),
             ("ph", "phonetic"),
             ("en", "english"),
-            ("n", "num"),
+            ("n", "number"),
             ("g", "gender"),
-            ("p", "part_of_speech"),
+            ("p", "polarity"),
             ("s", "subject"),
             ("o", "object"),
             ("on", "object_number"),
@@ -42,6 +42,7 @@ lazy_static! {
             ("ion", "indirect_object_number"),
             ("iog", "indirect_object_gender"),
             ("t", "tense"),
+            ("e", "extra"),
         ]
         .into_iter()
         .map(|s| (s.0.to_string(), s.1.to_string()))
@@ -57,6 +58,8 @@ lazy_static! {
             ("ip", "imperfect"),
             ("im", "imperative"),
             ("pa", "passive"),
+            ("pos", "positive"),
+            ("neg", "negative"),
         ]
         .into_iter()
         .map(|s| (s.0.to_string(), s.1.to_string()))
@@ -121,8 +124,8 @@ pub async fn get_word(Path(str): Path<String>) -> Json<WordResult> {
 
     match col.find_one(doc! {"_id": id}).await {
         Ok(Some(mut doc)) => {
-            doc.remove("mt_tokens");
-            doc.remove("en_tokens");
+            doc.remove("mt");
+            doc.remove("et");
 
             Json(WordResult {
                 error: None,

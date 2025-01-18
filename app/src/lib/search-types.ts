@@ -26,27 +26,27 @@ export type Query = {
     maxDis?: number;
 };
 
-export type FormField = 'word' | 'phon' | 'en' | FilterField;
+export type FormField = 'word' | 'phonetic' | 'en' | FilterField;
 
 export type Form = {
     word: string;
-    phon: string;
+    phonetic: string;
     en: string[];
-    num?: string[];
-    gen?: string[];
-    pol?: string[];
+    number?: string[];
+    gender?: string[];
+    polarity?: string[];
     extra?: string[];
-    sub?: string[];
+    subject?: string[];
 
-    obj?: string[];
-    objNum?: string[];
-    objGen?: string[];
+    object?: string[];
+    object_number?: string[];
+    object_gender?: string[];
 
-    indObj?: string[];
-    indObjNum?: string[];
-    indObjGen?: string[];
+    indirect_object?: string[];
+    indirect_object_number?: string[];
+    indirect_object_gender?: string[];
 
-    vform?: string[];
+    tense?: string[];
 };
 
 // the word got from fetch

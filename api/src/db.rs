@@ -30,13 +30,13 @@ fn get_string_vec(arr: &Vec<Bson>) -> Vec<String> {
 
 fn parse_doc(doc: &Document) -> Result<Word, Box<dyn std::error::Error>> {
     let id = doc.get_object_id("_id")?;
-    let word = doc.get_str("word")?.to_string();
-    let pos = doc.get_str("pos")?.to_string();
+    let word = doc.get_str("w")?.to_string();
+    let pos = doc.get_str("p")?.to_string();
 
-    let mt_tokens = get_string_vec(doc.get_array("mt_tokens")?);
-    let en_tokens = get_string_vec(doc.get_array("en_tokens")?);
+    let mt_tokens = get_string_vec(doc.get_array("mt")?);
+    let en_tokens = get_string_vec(doc.get_array("et")?);
 
-    let en_display = get_string_vec(doc.get_array("en_display")?);
+    let en_display = get_string_vec(doc.get_array("ed")?);
 
     let en_display = if en_display.len() > 2 {
         let mut res: Vec<String> =
@@ -71,11 +71,18 @@ pub async fn init(uri: &str) {
         ProgressBar::new(words.count_documents(doc! {}).await.unwrap() as u64);
 
     while let Ok(Some(doc)) = cursor.try_next().await {
-        if let Ok(w) = parse_doc(&doc) {
-            result.push(w);
+        match parse_doc(&doc) {
+            Ok(w) => {
+                result.push(w);
+            }
+            Err(e) => {
+                println!("Error when loading {}", e);
+            }
         }
         bar.inc(1);
     }
 
     WORDS.set(result).expect("Failed to initialize the search");
+
+    println!("{:?}", WORDS);
 }

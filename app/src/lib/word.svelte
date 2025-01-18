@@ -30,7 +30,7 @@
         word.forms.forEach((form) => {
             names.forEach((name) => {
                 untrack(() => {
-                    if (name === 'word' || name === 'phon' || name === 'en') {
+                    if (name === 'word' || name === 'phonetic' || name === 'en') {
                         return;
                     }
 
@@ -104,7 +104,7 @@
             <p class="badge badge-primary">{word.pos}</p>
             <p class="text-base-content/70 text-sm">{word.root}</p>
             <div class="mt-4 space-y-2">
-                {#each word.enDisplay as en}
+                {#each word.en_display as en}
                     <p class="text-base-content/90">{en}</p>
                 {/each}
             </div>
@@ -116,7 +116,7 @@
             <tbody>
                 <tr class="bg-base-200">
                     {#each formKeyNames as name}
-                        {#if name === 'word' || name === 'en' || name === 'phon'}
+                        {#if name === 'word' || name === 'en' || name === 'phonetic'}
                             <th class="text-base-content min-w-[100px] font-bold">{name}</th>
                         {:else}
                             <th>
