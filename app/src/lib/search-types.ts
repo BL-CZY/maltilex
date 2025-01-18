@@ -26,12 +26,12 @@ export type Query = {
     maxDis?: number;
 };
 
-export type FormField = 'word' | 'phonetic' | 'en' | FilterField;
+export type FormField = 'word' | 'phonetic' | 'english' | FilterField;
 
 export type Form = {
     word: string;
     phonetic: string;
-    en: string[];
+    english: string[];
     number?: string[];
     gender?: string[];
     polarity?: string[];
@@ -52,8 +52,8 @@ export type Form = {
 // the word got from fetch
 export type Word = {
     word: string;
-    phon: string;
-    pos: string;
+    phonetic: string;
+    part_of_speech: string;
     root: string;
     forms: Form[];
     en_display: string[];

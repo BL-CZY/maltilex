@@ -1,6 +1,6 @@
 <script lang="ts">
     import { type Form, type Word, type FormField } from '$lib/search-types';
-    import { type Filter as FilterType, type FilterField } from '$lib/filter';
+    import { type Filter as FilterType, type FilterField, nameMap } from '$lib/filter';
     import { untrack } from 'svelte';
     import Filter from './filter.svelte';
 
@@ -23,6 +23,16 @@
 
         let names = Object.keys(word.forms[0]) as FormField[];
 
+        // sort it in the order
+        names.sort((a, b) => {
+            console.log(a);
+            console.log(b);
+            console.log((nameMap.get(a) ?? 0) - (nameMap.get(b) ?? 0));
+            return (nameMap.get(a) ?? 0) - (nameMap.get(b) ?? 0);
+        });
+
+        console.log(names);
+
         formKeyNames = names;
         filter = {};
         acceptedFilters = {};
@@ -30,7 +40,7 @@
         word.forms.forEach((form) => {
             names.forEach((name) => {
                 untrack(() => {
-                    if (name === 'word' || name === 'phonetic' || name === 'en') {
+                    if (name === 'word' || name === 'phonetic' || name === 'english') {
                         return;
                     }
 
@@ -57,9 +67,6 @@
                 });
             });
         });
-
-        $inspect(acceptedFilters);
-        $inspect(filter);
     });
 
     $effect(() => {
@@ -90,8 +97,6 @@
                 displayedForms.push(form);
             });
         });
-
-        $inspect(displayedForms);
     });
 </script>
 
@@ -99,9 +104,9 @@
     <div class="bg-base-100 rounded-lg p-6 text-center shadow-lg md:w-[20%]">
         <h2 class="text-base-content mb-2 text-2xl font-bold">{word.word}</h2>
         <div class="space-y-3">
-            <p class="text-base-content/80 text-lg font-medium">{word.phon}</p>
+            <p class="text-base-content/80 text-lg font-medium">{word.phonetic}</p>
             <div class="divider"></div>
-            <p class="badge badge-primary">{word.pos}</p>
+            <p class="badge badge-primary">{word.part_of_speech}</p>
             <p class="text-base-content/70 text-sm">{word.root}</p>
             <div class="mt-4 space-y-2">
                 {#each word.en_display as en}
@@ -112,16 +117,24 @@
     </div>
 
     <div class="bg-base-100 min-h-screen overflow-x-auto rounded-lg shadow-lg md:w-[80%]">
-        <table class="mb-1 table w-full md:table-fixed">
+        <table class="mb-1 table w-full">
             <tbody>
                 <tr class="bg-base-200">
                     {#each formKeyNames as name}
-                        {#if name === 'word' || name === 'en' || name === 'phonetic'}
-                            <th class="text-base-content min-w-[100px] font-bold">{name}</th>
+                        {#if name === 'word' || name === 'english' || name === 'phonetic'}
+                            <th class="text-base-content min-w-[100px] text-center font-bold"
+                                >{(() => {
+                                    let display = name.replaceAll('_', ' ');
+                                    return display.charAt(0).toUpperCase() + display.slice(1);
+                                })()}</th
+                            >
                         {:else}
-                            <th>
+                            <th class="text-center">
                                 <Filter
-                                    {name}
+                                    name={(() => {
+                                        let display = name.replaceAll('_', ' ');
+                                        return display.charAt(0).toUpperCase() + display.slice(1);
+                                    })()}
                                     options={acceptedFilters[name as FilterField] ?? []}
                                     callback={(options) => {
                                         filter[name as FilterField] = options;
@@ -132,7 +145,7 @@
                     {/each}
                 </tr>
                 {#each displayedForms as form}
-                    <tr class="hover:bg-base-200/50 transition-colors">
+                    <tr class="hover:bg-base-200/50 text-center transition-colors">
                         {#each formKeyNames as name}
                             <td class="text-base-content/80">{form[name]}</td>
                         {/each}

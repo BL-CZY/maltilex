@@ -3,7 +3,7 @@
 
     let value: string;
     const submit = async () => {
-        await goto(`search?keyword=${value.trim()}`);
+        await goto(`/search?keyword=${value.trim().toLocaleLowerCase()}`);
     };
 </script>
 

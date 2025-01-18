@@ -43,7 +43,7 @@
         {#if isOpen}
             <div
                 id="filter-panel"
-                class="bg-base-100 absolute left-1/2 top-full z-10 mt-2 w-48 -translate-x-1/4 rounded-lg p-4 shadow-lg"
+                class="bg-base-100 absolute left-1/2 top-full z-10 mt-2 w-48 -translate-x-1/2 rounded-lg p-4 shadow-lg"
                 transition:slide
             >
                 <ul class="space-y-2">
