@@ -38,7 +38,7 @@
             </div>
 
             <div class="flex h-[50px] flex-[0.4] items-center">
-                <p>{index}</p>
+                <p>{index + 1}</p>
             </div>
         </div>
     </button>
