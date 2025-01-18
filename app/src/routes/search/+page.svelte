@@ -1,7 +1,7 @@
 <script lang="ts">
     import { apiSearch } from '$lib/api';
     import SearchEntry from '$lib/search-entry.svelte';
-    import { type Query, type SearchResultEntry } from '$lib/search-types';
+    import { type SearchResultEntry } from '$lib/search-types';
     import { onMount } from 'svelte';
     import { fly } from 'svelte/transition';
 
@@ -14,12 +14,17 @@
 
     let loadBtn: HTMLElement | undefined = $state();
 
-    let isLoading = $state(false);
+    let isLoading = $state(true);
 
     $effect(() => {
         query.skip = 0;
         query.limit = 10;
         entries = result;
+        isLoading = false;
+        return () => {
+            isLoading = true;
+            console.log(isLoading);
+        };
     });
 
     onMount(() => {
