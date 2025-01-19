@@ -4,7 +4,6 @@
     import SearchEntry from '$lib/search-entry.svelte';
     import { type SearchResultEntry } from '$lib/search-types';
     import { getLoadingState } from '$lib/utils.js';
-    import { untrack } from 'svelte';
     import { fly } from 'svelte/transition';
 
     let { data } = $props();

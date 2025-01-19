@@ -15,7 +15,7 @@
                 <a class="btn btn-ghost btn-md" href="/">Home</a>
             </div>
             {#if page.url.pathname != '/'}
-                <SearchBar isMain={false} {setLoading} bind:ref />
+                <SearchBar bind:ref />
             {/if}
             <div class="flex items-center gap-2">
                 <a class="btn btn-ghost btn-md" href="/about">About</a>
