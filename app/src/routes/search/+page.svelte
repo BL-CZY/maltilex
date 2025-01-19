@@ -1,7 +1,9 @@
 <script lang="ts">
     import { apiSearch } from '$lib/api';
+    import Loading from '$lib/loading.svelte';
     import SearchEntry from '$lib/search-entry.svelte';
     import { type SearchResultEntry } from '$lib/search-types';
+    import { getLoadingState, setLoadingState } from '$lib/utils.js';
     import { onMount } from 'svelte';
     import { fly } from 'svelte/transition';
 
@@ -14,17 +16,13 @@
 
     let loadBtn: HTMLElement | undefined = $state();
 
-    let isLoading = $state(true);
+    const isLoading = getLoadingState();
 
     $effect(() => {
         query.skip = 0;
         query.limit = 10;
         entries = result;
-        isLoading = false;
-        return () => {
-            isLoading = true;
-            console.log(isLoading);
-        };
+        isLoading.value = false;
     });
 
     onMount(() => {
@@ -50,7 +48,7 @@
     });
 </script>
 
-{#if !isLoading}
+{#if !isLoading.value}
     {#if mounted}
         <div
             transition:fly={{ y: -50, duration: 500 }}
@@ -86,7 +84,7 @@
             en={entry.en}
             {index}
             switchToLoading={() => {
-                isLoading = true;
+                isLoading.value = true;
             }}
         />
     {/each}
@@ -101,13 +99,5 @@
         >
     </div>
 {:else}
-    <div class="flex w-full flex-col items-center justify-center gap-4">
-        <div
-            class="border-t-accent text-accent flex h-20 w-20 animate-spin items-center justify-center rounded-full border-4 border-transparent text-4xl"
-        >
-            <div
-                class="border-t-primary text-accent-primary flex h-16 w-16 animate-spin items-center justify-center rounded-full border-4 border-transparent text-2xl"
-            ></div>
-        </div>
-    </div>
+    <Loading />
 {/if}

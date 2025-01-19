@@ -1,10 +1,21 @@
 <script lang="ts">
+    import Loading from '$lib/loading.svelte';
+    import { getLoadingState } from '$lib/utils.js';
     import Word from '$lib/word.svelte';
     let { data } = $props();
+
+    const isLoading = getLoadingState();
+    $effect(() => {
+        isLoading.value = false;
+    });
 </script>
 
-{#if 'error' in data.word}
-    <p>{data.word.error}</p>
+{#if !isLoading.value}
+    {#if 'error' in data.word}
+        <p>{data.word.error}</p>
+    {:else}
+        <Word word={data.word.word} />
+    {/if}
 {:else}
-    <Word word={data.word.word} />
+    <Loading />
 {/if}

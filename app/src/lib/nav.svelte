@@ -1,6 +1,9 @@
 <script lang="ts">
     import { page } from '$app/state';
     import SearchBar from './search-bar.svelte';
+
+    let props: { setLoading: (state: boolean) => void } = $props();
+    let { setLoading } = $derived(props);
 </script>
 
 <header class="bg-base-100 border-base-200 fixed left-0 right-0 top-0 z-10 border-b shadow-sm">
@@ -10,7 +13,7 @@
                 <a class="btn btn-ghost btn-md" href="/">Home</a>
             </div>
             {#if page.url.pathname != '/'}
-                <SearchBar isMain={false} />
+                <SearchBar isMain={false} {setLoading} />
             {/if}
             <div class="flex items-center gap-2">
                 <a class="btn btn-ghost btn-md" href="/about">About</a>

@@ -2,8 +2,8 @@
     import { goto } from '$app/navigation';
     import { slide } from 'svelte/transition';
 
-    let props: { isMain: boolean } = $props();
-    let { isMain }: { isMain: boolean } = $derived(props);
+    let props: { isMain: boolean; setLoading: (state: boolean) => void } = $props();
+    let { isMain, setLoading } = $derived(props);
 
     let keyword: string = $state('');
 
@@ -58,6 +58,11 @@
         event: SubmitEvent & { currentTarget: EventTarget & HTMLFormElement }
     ) => {
         event.preventDefault();
+
+        if (!isMain) {
+            setLoading(true);
+        }
+
         await goto(
             `/search?keyword=${keyword.trim().toLocaleLowerCase()}&skip=${skip}&limit=${limit}&searchMt=${searchMt}&searchEn=${searchEn}&maxDis=${maxDis}`
         );
