@@ -4,10 +4,15 @@
 
     import Nav from '$lib/nav.svelte';
     import { setContext } from 'svelte';
+    import { type Query } from '$lib/search-types';
 
     let isLoading = $state({ value: true });
     let element: HTMLElement | undefined = $state();
+
+    let currentQuery: { value: Query } = $state({ value: {} });
+
     setContext('isLoading', isLoading);
+    setContext('currentQuery', currentQuery);
 </script>
 
 <Nav

@@ -3,6 +3,7 @@
     import { getContext, onMount } from 'svelte';
     import { slide } from 'svelte/transition';
     import { toNumber } from './utils';
+    import type { Query } from './search-types';
 
     let {
         ref = $bindable()
@@ -11,6 +12,7 @@
     } = $props();
 
     let isLoading = getContext('isLoading') as { value: boolean } | undefined;
+    let currentQuery = getContext('currentQuery') as { value: Query } | undefined;
 
     let keyword: string = $state('');
 
@@ -37,12 +39,51 @@
             isLoading.value = true;
         }
 
+        if (currentQuery) {
+            currentQuery.value.keyword = keyword;
+            currentQuery.value.skip = skip;
+            currentQuery.value.limit = limit;
+            currentQuery.value.searchMt = searchMt;
+            currentQuery.value.searchEn = searchEn;
+            currentQuery.value.maxDis = maxDis;
+        }
+
         await goto(
             `/search?keyword=${keyword.trim().toLocaleLowerCase()}&skip=${skip}&limit=${limit}&searchMt=${searchMt}&searchEn=${searchEn}&maxDis=${maxDis}`
         );
     };
 
-    onMount(() => {});
+    onMount(() => {
+        if (currentQuery) {
+            keyword = currentQuery.value.keyword ?? '';
+            if (currentQuery.value.skip) {
+                if (currentQuery.value.skip != 0) {
+                    skipStr = String(currentQuery.value.skip);
+                }
+            }
+            if (currentQuery.value.limit) {
+                if (currentQuery.value.limit != 10) {
+                    limitStr = String(currentQuery.value.limit);
+                }
+            }
+            if (currentQuery.value.maxDis) {
+                if (currentQuery.value.maxDis != 5) {
+                    maxDisStr = String(currentQuery.value.maxDis);
+                }
+            }
+
+            if (currentQuery.value.searchEn != undefined) {
+                if (!currentQuery.value.searchEn) {
+                    searchEn = currentQuery.value.searchEn;
+                }
+            }
+            if (currentQuery.value.searchMt != undefined) {
+                if (!currentQuery.value.searchMt) {
+                    searchMt = currentQuery.value.searchMt;
+                }
+            }
+        }
+    });
 </script>
 
 <form class="flex flex-1 justify-center" onsubmit={submit}>
