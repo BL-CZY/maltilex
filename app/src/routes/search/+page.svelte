@@ -3,8 +3,8 @@
     import Loading from '$lib/loading.svelte';
     import SearchEntry from '$lib/search-entry.svelte';
     import { type SearchResultEntry } from '$lib/search-types';
-    import { getLoadingState, setLoadingState } from '$lib/utils.js';
-    import { onMount } from 'svelte';
+    import { getLoadingState } from '$lib/utils.js';
+    import { untrack } from 'svelte';
     import { fly } from 'svelte/transition';
 
     let { data } = $props();
@@ -23,13 +23,10 @@
         query.limit = 10;
         entries = result;
         isLoading.value = false;
+        mounted = true;
     });
 
-    onMount(() => {
-        mounted = true;
-
-        setInterval(() => {}, 1000);
-
+    $effect(() => {
         if (loadBtn) {
             const observer = new IntersectionObserver(async (elements) => {
                 if (elements[0].isIntersecting) {

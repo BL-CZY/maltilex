@@ -2,8 +2,15 @@
     import { goto } from '$app/navigation';
     import { slide } from 'svelte/transition';
 
-    let props: { isMain: boolean; setLoading: (state: boolean) => void } = $props();
-    let { isMain, setLoading } = $derived(props);
+    let {
+        isMain,
+        setLoading,
+        ref = $bindable()
+    }: {
+        isMain: boolean;
+        setLoading?: (state: boolean) => void;
+        ref: HTMLElement | undefined;
+    } = $props();
 
     let keyword: string = $state('');
 
@@ -59,7 +66,7 @@
     ) => {
         event.preventDefault();
 
-        if (!isMain) {
+        if (setLoading) {
             setLoading(true);
         }
 
@@ -158,6 +165,7 @@
             type="text"
             name="keyword"
             bind:value={keyword}
+            bind:this={ref}
             required
         />
         <input class="btn btn-sm ml-2" type="submit" value="search" />
@@ -170,6 +178,7 @@
             type="text"
             name="keyword"
             bind:value={keyword}
+            bind:this={ref}
             required
         /><br />
         <input class="btn btn-sm btn-primary mb-2 mt-2" type="submit" value="search" />
