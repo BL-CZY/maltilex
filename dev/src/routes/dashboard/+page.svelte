@@ -1,1 +1,1 @@
-<p>hi</p>
+<a href="/dashboard/add">Add Word</a>

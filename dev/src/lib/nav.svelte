@@ -2,14 +2,16 @@
 	let { loggedIn, logout }: { loggedIn: boolean; logout: () => void } = $props();
 </script>
 
-<header class="bg-base-100 border-base-200 border-b shadow-sm">
+<header class="bg-base-100 border-base-200 fixed left-0 right-0 top-0 border-b shadow-sm">
 	<nav class="navbar mx-auto min-h-16 max-w-7xl px-4">
-		<!-- Left side - Home -->
 		<div class="flex-1">
-			<a href="/" class="btn btn-ghost hover:bg-primary/50 text-lg normal-case"> 🧁 Home </a>
+			{#if loggedIn}
+				<a href="/dashboard" class="btn btn-ghost hover:bg-primary/50 normal-case"> Dashboard </a>
+			{:else}
+				<a href="/" class="btn btn-ghost hover:bg-primary/50 normal-case"> Home </a>
+			{/if}
 		</div>
 
-		<!-- Right side - About/Account -->
 		<div class="flex-none gap-2">
 			{#if loggedIn}
 				<button onclick={logout} class="btn btn-ghost hover:bg-secondary/50 normal-case">
@@ -21,3 +23,5 @@
 		</div>
 	</nav>
 </header>
+
+<div class="h-[70px]"></div>
