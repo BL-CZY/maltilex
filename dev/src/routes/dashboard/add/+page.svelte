@@ -1,5 +1,6 @@
 <script lang="ts">
     import type { Word } from '$lib/common/index';
+    import FormEditor from '$lib/form-editor.svelte';
     import ListEditor from '$lib/list-editor.svelte';
     import StrEditor from '$lib/str-editor.svelte';
     let word: Word = $state({
@@ -22,6 +23,7 @@
 <StrEditor bind:data={word.phonetic} fieldName="Phonetic" />
 <StrEditor bind:data={word.part_of_speech} fieldName="Part of Speech" />
 <StrEditor bind:data={word.root} fieldName="Root" />
+<FormEditor bind:forms={word.forms} />
 <ListEditor
     fieldName="English"
     sep=","
