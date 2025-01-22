@@ -37,7 +37,6 @@
 	},
 	"dependencies": {
 		"@supabase/ssr": "^0.5.2",
-		"@supabase/supabase-js": "^2.47.16",
-		"lucide-react": "^0.473.0"
+		"@supabase/supabase-js": "^2.47.16"
 	}
 }

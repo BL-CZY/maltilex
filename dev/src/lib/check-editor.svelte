@@ -21,7 +21,9 @@
 </script>
 
 <div class="flex w-full gap-2">
-    <p class="mb-2 block font-medium text-gray-700">{fieldName}:</p>
+    <p class="mb-2 block font-medium text-gray-700 sm:min-w-32">
+        {fieldName}:
+    </p>
     <div class="flex flex-wrap gap-2">
         {#each Object.keys(options) as key}
             <label

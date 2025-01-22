@@ -3,7 +3,7 @@
     import FormEditor from '$lib/form-editor.svelte';
     import ListEditor from '$lib/list-editor.svelte';
     import StrEditor from '$lib/str-editor.svelte';
-    import { X } from 'lucide-react';
+    import { slide, fade } from 'svelte/transition';
 
     let word: Word = $state({
         word: '',
@@ -62,26 +62,52 @@
         </div>
     </div>
 
-    <button class="btn btn-primary mt-4" onclick={() => (showJson = !showJson)}>
-        {showJson ? 'Hide' : 'Show'} JSON
-    </button>
-
     {#if showJson}
         <div
-            class="fixed bottom-4 right-4 w-96 rounded-lg border border-gray-200 bg-white p-4 shadow-xl"
+            class="fixed bottom-0 right-0 z-20 rounded-lg border border-gray-200 bg-white p-4 shadow-xl sm:bottom-4 sm:right-4 sm:w-96"
+            transition:slide
         >
             <div class="mb-2 flex items-center justify-between">
                 <h3 class="font-semibold">JSON Preview</h3>
                 <button
-                    class="btn btn-ghost btn-sm p-1"
+                    class="btn btn-ghost btn-sm btn-circle aria-label p-1"
                     onclick={() => (showJson = false)}
                 >
-                    <X class="h-4 w-4" />
+                    <span class="sr-only">Close</span>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="icon icon-tabler icons-tabler-outline icon-tabler-x"
+                        ><path
+                            stroke="none"
+                            d="M0 0h24v24H0z"
+                            fill="none"
+                        /><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg
+                    >
                 </button>
             </div>
-            <pre class="max-h-96 overflow-auto rounded bg-gray-50 p-4 text-sm">
-                {JSON.stringify(word, null, 4)}
+            <pre
+                class="m-0 max-h-96 overflow-auto rounded bg-gray-50 p-0 text-sm">{JSON.stringify(
+                    word,
+                    null,
+                    4
+                ).trim()}
             </pre>
         </div>
+    {:else}
+        <button
+            class="btn btn-primary fixed bottom-4 right-4"
+            onclick={() => (showJson = !showJson)}
+            transition:fade
+        >
+            {showJson ? 'Hide' : 'Show'} JSON
+        </button>
     {/if}
 </div>
