@@ -13,17 +13,18 @@
         examples: [],
         contributors: []
     });
-
-    // $effect(() => {
-    //     $inspect(word);
-    // });
 </script>
 
 <StrEditor bind:data={word.word} fieldName="Word" />
 <StrEditor bind:data={word.phonetic} fieldName="Phonetic" />
 <StrEditor bind:data={word.part_of_speech} fieldName="Part of Speech" />
 <StrEditor bind:data={word.root} fieldName="Root" />
-<FormEditor bind:forms={word.forms} />
+<FormEditor
+    bind:forms={word.forms}
+    deleteItem={(i) => {
+        word.forms.splice(i, 1);
+    }}
+/>
 <ListEditor
     fieldName="English"
     sep=","
@@ -40,3 +41,7 @@
         word.en_display = value;
     }}
 />
+
+<div>
+    <pre>{JSON.stringify(word, null, 4)}</pre>
+</div>
