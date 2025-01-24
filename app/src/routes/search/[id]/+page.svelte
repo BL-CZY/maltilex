@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { browser } from '$app/environment';
     import Loading from '$lib/loading.svelte';
     import { getLoadingState } from '$lib/utils.js';
     import Word from '$lib/word.svelte';
@@ -19,3 +20,9 @@
 {:else}
     <Loading />
 {/if}
+
+<svelte:window
+    on:popstate={() => {
+        isLoading.value = true;
+    }}
+/>
