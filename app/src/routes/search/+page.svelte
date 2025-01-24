@@ -14,6 +14,7 @@
     let mounted = $state(false);
 
     let loadBtn: HTMLElement | undefined = $state();
+    let isLoadingMore: boolean = $state(false);
 
     const isLoading = getLoadingState();
 
@@ -34,7 +35,9 @@
                     }
 
                     // get data
+                    isLoadingMore = true;
                     entries.push(...(await apiSearch(query, fetch)));
+                    isLoadingMore = false;
                     query.skip += 10;
                 }
             });
@@ -86,13 +89,17 @@
     {/each}
 
     <div class="mb-5 flex justify-center">
-        <button
-            class="btn btn-accent"
-            bind:this={loadBtn}
-            onclick={async () => {
-                entries.push(...(await apiSearch(query, fetch)));
-            }}>Load More</button
-        >
+        {#if !isLoadingMore}
+            <button
+                class="btn btn-accent"
+                bind:this={loadBtn}
+                onclick={async () => {
+                    entries.push(...(await apiSearch(query, fetch)));
+                }}>Load More</button
+            >
+        {:else}
+            <Loading />
+        {/if}
     </div>
 {:else}
     <Loading />
