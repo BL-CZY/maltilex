@@ -3,6 +3,7 @@
     import { type Filter as FilterType, type FilterField, nameMap } from '$lib/filter';
     import { untrack } from 'svelte';
     import Filter from './filter.svelte';
+    import { apiWord } from './api';
 
     type Props = {
         word: Word;
@@ -17,6 +18,7 @@
     let filter: FilterType = $state({});
 
     $effect(() => {
+        $inspect(word);
         if (word.forms.length == 0) {
             return;
         }
@@ -158,6 +160,16 @@
         <ul>
             {#each word.contributors as contributor}
                 <li><p>{contributor}</p></li>
+            {/each}
+        </ul>
+        <p class="text-base-content ml-5 font-bold">Related:</p>
+        <ul>
+            {#each word.related as rel}
+                {#await apiWord(String(rel), fetch) then wd}
+                    {#if 'word' in wd}
+                        <li><a href={`/search/${rel}`}>{wd.word.word}</a></li>
+                    {/if}
+                {/await}
             {/each}
         </ul>
     </div>

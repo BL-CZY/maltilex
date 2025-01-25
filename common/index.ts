@@ -20,18 +20,18 @@ export type Form = {
 };
 
 export type FormOptions =
-    | 'number'
-    | 'gender'
-    | 'polarity'
-    | 'extra'
-    | 'subject'
-    | 'object'
-    | 'object_number'
-    | 'object_gender'
-    | 'indirect_object'
-    | 'indirect_object_number'
-    | 'indirect_object_gender'
-    | 'tense';
+    | "number"
+    | "gender"
+    | "polarity"
+    | "extra"
+    | "subject"
+    | "object"
+    | "object_number"
+    | "object_gender"
+    | "indirect_object"
+    | "indirect_object_number"
+    | "indirect_object_gender"
+    | "tense";
 
 // the word got from fetch
 export type Word = {
@@ -43,4 +43,5 @@ export type Word = {
     en_display: string[];
     examples: string[];
     contributors: string[];
+    related: number[];
 };

@@ -18,6 +18,7 @@ lazy_static! {
             ("ed", "en_display"),
             ("ex", "examples"),
             ("c", "contributors"),
+            ("re", "related"),
         ]
         .into_iter()
         .map(|s| (s.0.to_string(), s.1.to_string()))
@@ -49,6 +50,7 @@ lazy_static! {
         [
             ("sg", "singular"),
             ("pl", "plural"),
+            ("bp", "bi-plural"),
             ("m", "male"),
             ("f", "female"),
             ("p", "perfect"),
