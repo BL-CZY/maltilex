@@ -2,7 +2,15 @@
     import type { Word } from '$lib/common/index';
     import FormEditor from '$lib/form-editor.svelte';
     import ListEditor from '$lib/list-editor.svelte';
+    import {
+        FormStreamLinedKeyTable,
+        type AddRequest,
+        type FormKey,
+        type FormStreamLined,
+        type FormStreamLinedKey
+    } from '$lib/req-types.js';
     import StrEditor from '$lib/str-editor.svelte';
+    import { genTokens } from '$lib/utils.js';
     import { slide, fade } from 'svelte/transition';
 
     let word: Word = $state({
@@ -15,6 +23,12 @@
         examples: [],
         contributors: []
     });
+
+    let en_extra: string[] = $state([]);
+    let mt_extra: string[] = $state([]);
+
+    let { data } = $props();
+    let { session, supabase, user } = $derived(data);
 
     let showJson = $state(false);
 </script>
@@ -49,6 +63,22 @@
                 placeholder={'use "," to separate words'}
                 setValue={(value) => {
                     word.en_display = value;
+                }}
+            />
+            <ListEditor
+                fieldName="Extra English Tokens"
+                sep=","
+                placeholder={'use "," to separate words'}
+                setValue={(value) => {
+                    en_extra = value;
+                }}
+            />
+            <ListEditor
+                fieldName="Extra Maltese Tokens"
+                sep=","
+                placeholder={'use "," to separate words'}
+                setValue={(value) => {
+                    mt_extra = value;
                 }}
             />
             <ListEditor
@@ -111,3 +141,59 @@
         </button>
     {/if}
 </div>
+<button
+    onclick={async () => {
+        if (!user) {
+            return;
+        }
+
+        let { et, mt } = genTokens(word, en_extra, mt_extra);
+
+        const { error } = await supabase.from('add_requests').insert({
+            user_id: user.id,
+            w: word.word,
+            ph: word.phonetic,
+            p: word.part_of_speech,
+            r: word.root,
+            f: word.forms.map((ele) => {
+                let result: FormStreamLined = {
+                    w: ele.word,
+                    ph: ele.phonetic,
+                    en: ele.english
+                };
+
+                Object.keys(ele).forEach((key) => {
+                    if (
+                        key == 'word' ||
+                        key == 'phonetic' ||
+                        key == 'english'
+                    ) {
+                        return;
+                    }
+
+                    let formKey = key as FormKey;
+                    if (ele[formKey] != undefined) {
+                        result[
+                            FormStreamLinedKeyTable[
+                                formKey
+                            ] as FormStreamLinedKey
+                        ] = ele[formKey];
+                    }
+                });
+
+                return result;
+            }),
+            ed: word.en_display,
+            et,
+            mt,
+            //TODO add this
+            ex: word.examples,
+            c: [],
+            re: []
+        } satisfies AddRequest);
+
+        if (error) {
+            console.log(error);
+        }
+    }}>Add Word</button
+>

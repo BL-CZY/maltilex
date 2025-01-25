@@ -1,11 +1,13 @@
 <script lang="ts">
     let {
         fieldName,
+        fieldTable,
         fields: options = $bindable(),
         setValue
     }: {
         fieldName: string;
         fields: { [key: string]: boolean };
+        fieldTable: { [key: string]: string };
         setValue: (val: string[]) => void;
     } = $props();
 
@@ -13,7 +15,7 @@
         let array: string[] = [];
         Object.keys(options).forEach((key) => {
             if (options[key]) {
-                array.push(key);
+                array.push(fieldTable[key]);
             }
         });
         setValue(array);

@@ -68,6 +68,22 @@
         tense: { perfect: false, imperfect: false, imperative: false }
     });
 
+    let fieldTable = $state({
+        singular: 'sg',
+        plural: 'pl',
+        'bi-plural': 'bp',
+        male: 'm',
+        female: 'f',
+        positive: 'pos',
+        negative: 'neg',
+        'first person': 'p1',
+        'second person': 'p2',
+        'third person': 'p3',
+        perfect: 'pf',
+        imperfect: 'ip',
+        imperative: 'im'
+    });
+
     let formFields = $derived.by(() => {
         let result: FormOptions[] = [];
         (Object.keys(formFieldsMap) as FormOptions[]).forEach(
@@ -137,6 +153,7 @@
                             setValue={(val) => {
                                 form[field] = val;
                             }}
+                            {fieldTable}
                             bind:fields={fieldOptions[field]}
                         />
                     {/if}
