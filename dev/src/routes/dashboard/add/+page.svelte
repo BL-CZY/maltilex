@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { goto } from '$app/navigation';
     import type { Word } from '$lib/common/index';
     import FormEditor from '$lib/form-editor.svelte';
     import ListEditor from '$lib/list-editor.svelte';
@@ -194,6 +195,9 @@
 
         if (error) {
             console.log(error);
+            goto('/dashboard/fail');
+        } else {
+            goto('/dashboard/success');
         }
     }}>Add Word</button
 >
