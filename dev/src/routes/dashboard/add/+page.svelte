@@ -22,7 +22,8 @@
         forms: [],
         en_display: [],
         examples: [],
-        contributors: []
+        contributors: [],
+        related: []
     });
 
     let en_extra: string[] = $state([]);
@@ -190,7 +191,7 @@
             //TODO add this
             ex: word.examples,
             c: [],
-            re: []
+            re: word.related
         } satisfies AddRequest);
 
         if (error) {

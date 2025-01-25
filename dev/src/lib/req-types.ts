@@ -74,5 +74,5 @@ export type AddRequest = {
     mt: string[];
     ex: string[];
     c: string[];
-    re: string[];
+    re: number[];
 };
