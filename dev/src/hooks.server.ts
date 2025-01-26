@@ -66,6 +66,23 @@ const authGuard: Handle = async ({ event, resolve }) => {
     event.locals.session = session;
     event.locals.user = user;
     event.locals.isAdmin = false;
+    event.locals.username = null;
+    event.locals.bio = null;
+
+    if (event.locals.session && event.locals.user) {
+        const { data, error } = await event.locals.supabase
+            .from('user_profiles')
+            .select('bio, username');
+
+        event.locals.bio = 'error';
+        event.locals.username = 'error';
+        if (!error) {
+            if (data[0]) {
+                event.locals.bio = data[0].bio;
+                event.locals.username = data[0].username;
+            }
+        }
+    }
 
     if (!event.locals.session && event.url.pathname.startsWith('/dashboard')) {
         redirect(303, '/auth');

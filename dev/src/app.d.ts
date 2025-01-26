@@ -13,6 +13,8 @@ declare global {
             }>;
             session: Session | null;
             user: User | null;
+            username: string | null;
+            bio: string | null;
             isAdmin: boolean;
         }
         interface PageData {

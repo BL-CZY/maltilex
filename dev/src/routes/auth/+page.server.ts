@@ -1,52 +1,72 @@
 import { redirect } from '@sveltejs/kit';
 import type { Actions } from '../$types';
-import type { AuthError } from '@supabase/supabase-js';
+import { createClient, type AuthError } from '@supabase/supabase-js';
+import { PUBLIC_SUPABASE_URL } from '$env/static/public';
+import { PRIVATE_SERVICE_ROLE_KEY } from '$env/static/private';
 
 const handlError = (err: AuthError) => {
-	console.log(err.message);
-	redirect(303, `/auth?msg=${err.message}`);
+    console.log(err.message);
+    redirect(303, `/auth?msg=${err.message}`);
 };
 
 export const actions: Actions = {
-	signup: async ({ request, locals: { supabase } }) => {
-		const formData = await request.formData();
-		const email = formData.get('email') as string;
-		const password = formData.get('password') as string;
+    signup: async ({ request, locals: { supabase } }) => {
+        const supabaseServiceRole = createClient(
+            PUBLIC_SUPABASE_URL,
+            PRIVATE_SERVICE_ROLE_KEY
+        );
 
-		const { error } = await supabase.auth.signUp({ email, password });
+        const formData = await request.formData();
+        const email = formData.get('email') as string;
+        const password = formData.get('password') as string;
+        const username = formData.get('username') as string;
 
-		if (error) {
-			handlError(error);
-		} else {
-			let id = (await supabase.auth.getUser()).data.user?.id;
-			if (id === undefined) {
-				console.log('no id');
-				redirect(303, '/auth/error');
-			}
+        const { data, error } = await supabase.auth.signUp({ email, password });
 
-			if (error) {
-				console.log("can't insert: " + String(error));
-				redirect(303, '/auth/error');
-			}
+        if (error) {
+            handlError(error);
+        } else {
+            const profileRes = await supabaseServiceRole
+                .from('user_profiles')
+                .insert({
+                    user_id: data.user?.id,
+                    bio: 'Welcome !',
+                    username: username
+                });
 
-			redirect(303, '/dashboard');
-		}
-	},
+            const roleRes = await supabaseServiceRole
+                .from('user_roles')
+                .insert({
+                    user_id: data.user?.id,
+                    role_id: 2
+                });
 
-	login: async ({ request, locals: { supabase } }) => {
-		const formData = await request.formData();
-		const email = formData.get('email') as string;
-		const password = formData.get('password') as string;
+            if (profileRes.error) {
+                console.log(profileRes.error);
+            }
 
-		const { error } = await supabase.auth.signInWithPassword({
-			email,
-			password
-		});
+            if (roleRes.error) {
+                console.log(roleRes.error);
+            }
 
-		if (error) {
-			handlError(error);
-		} else {
-			redirect(303, '/dashboard');
-		}
-	}
+            redirect(303, '/dashboard');
+        }
+    },
+
+    login: async ({ request, locals: { supabase } }) => {
+        const formData = await request.formData();
+        const email = formData.get('email') as string;
+        const password = formData.get('password') as string;
+
+        const { error } = await supabase.auth.signInWithPassword({
+            email,
+            password
+        });
+
+        if (error) {
+            handlError(error);
+        } else {
+            redirect(303, '/dashboard');
+        }
+    }
 };

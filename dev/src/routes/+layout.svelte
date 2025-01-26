@@ -2,12 +2,11 @@
     import '../app.css';
     import { goto, invalidate, invalidateAll } from '$app/navigation';
     import Nav from '$lib/nav.svelte';
-    import { onMount } from 'svelte';
 
     let { data, children } = $props();
-    let { session, supabase, isAdmin } = $derived(data);
+    let { session, supabase, isAdmin, bio, username, email } = $derived(data);
 
-    onMount(() => {
+    $effect(() => {
         const { data } = supabase.auth.onAuthStateChange(
             async (evt, newSession) => {
                 if (evt === 'SIGNED_OUT') {
@@ -27,6 +26,9 @@
 
 <Nav
     {isAdmin}
+    username={String(username)}
+    email={String(email)}
+    bio={String(bio)}
     loggedIn={session != null}
     logout={async () => {
         const { error } = await supabase.auth.signOut();

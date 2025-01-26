@@ -1,1 +1,5 @@
-<h1>Welcome to admin</h1>
+<script lang="ts">
+    let { data } = $props();
+</script>
+
+<a href="admin/add-requests">Requests</a>
