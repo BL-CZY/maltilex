@@ -200,5 +200,5 @@
         } else {
             goto('/dashboard/success');
         }
-    }}>Add Word</button
+    }}>Add word request</button
 >
