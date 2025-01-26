@@ -73,6 +73,6 @@ export type AddRequest = {
     et: string[];
     mt: string[];
     ex: string[];
-    c: string[];
     re: number[];
+    profile_id: number;
 };

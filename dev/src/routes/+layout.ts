@@ -43,6 +43,7 @@ export const load = async ({ data, depends, fetch }) => {
         isAdmin: data.isAdmin,
         username: data.username,
         email: data.email,
-        bio: data.bio
+        bio: data.bio,
+        profileID: data.profileID
     };
 };

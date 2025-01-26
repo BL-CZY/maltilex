@@ -29,24 +29,25 @@ export const actions: Actions = {
             const profileRes = await supabaseServiceRole
                 .from('user_profiles')
                 .insert({
-                    user_id: data.user?.id,
-                    bio: 'Welcome !',
+                    bio: 'Welcome!',
                     username: username
-                });
-
-            const roleRes = await supabaseServiceRole
-                .from('user_roles')
-                .insert({
-                    user_id: data.user?.id,
-                    role_id: 2
-                });
+                })
+                .select();
 
             if (profileRes.error) {
                 console.log(profileRes.error);
-            }
+            } else {
+                const roleRes = await supabaseServiceRole
+                    .from('user_info')
+                    .insert({
+                        user_id: data.user?.id,
+                        role_id: 2,
+                        profile_id: profileRes.data[0]?.id ?? -1
+                    });
 
-            if (roleRes.error) {
-                console.log(roleRes.error);
+                if (roleRes.error) {
+                    console.log(roleRes.error);
+                }
             }
 
             redirect(303, '/dashboard');

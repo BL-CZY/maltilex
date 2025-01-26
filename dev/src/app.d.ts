@@ -16,6 +16,7 @@ declare global {
             username: string | null;
             bio: string | null;
             isAdmin: boolean;
+            profileID: number | null;
         }
         interface PageData {
             session: Session | null;

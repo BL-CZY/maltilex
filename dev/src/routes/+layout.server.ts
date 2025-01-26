@@ -1,5 +1,5 @@
 export const load = async ({
-    locals: { safeGetSession, isAdmin, bio, username, user },
+    locals: { safeGetSession, isAdmin, bio, username, user, profileID },
     cookies
 }) => {
     const { session } = await safeGetSession();
@@ -9,6 +9,7 @@ export const load = async ({
         bio,
         username,
         email: user?.email,
+        profileID,
         cookies: cookies.getAll()
     };
 };

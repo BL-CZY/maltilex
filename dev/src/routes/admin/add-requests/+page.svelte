@@ -5,7 +5,7 @@
     type reqInfoShort = {
         id: number;
         word: string;
-        user: string;
+        user_profile_id: string;
     };
 
     let reqList = $state();

@@ -30,7 +30,7 @@
     let mt_extra: string[] = $state([]);
 
     let { data } = $props();
-    let { session, supabase, user } = $derived(data);
+    let { supabase, user, profileID } = $derived(data);
 
     let showJson = $state(false);
 </script>
@@ -188,10 +188,9 @@
             ed: word.en_display,
             et,
             mt,
-            //TODO add this
             ex: word.examples,
-            c: [],
-            re: word.related
+            re: word.related,
+            profile_id: profileID ?? 0
         } satisfies AddRequest);
 
         if (error) {

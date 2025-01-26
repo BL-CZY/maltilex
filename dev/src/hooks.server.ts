@@ -68,21 +68,7 @@ const authGuard: Handle = async ({ event, resolve }) => {
     event.locals.isAdmin = false;
     event.locals.username = null;
     event.locals.bio = null;
-
-    if (event.locals.session && event.locals.user) {
-        const { data, error } = await event.locals.supabase
-            .from('user_profiles')
-            .select('bio, username');
-
-        event.locals.bio = 'error';
-        event.locals.username = 'error';
-        if (!error) {
-            if (data[0]) {
-                event.locals.bio = data[0].bio;
-                event.locals.username = data[0].username;
-            }
-        }
-    }
+    event.locals.profileID = null;
 
     if (!event.locals.session && event.url.pathname.startsWith('/dashboard')) {
         redirect(303, '/auth');
@@ -92,19 +78,32 @@ const authGuard: Handle = async ({ event, resolve }) => {
         redirect(303, '/dashboard');
     }
 
-    if (event.locals.user) {
+    if (event.locals.user && event.locals.session) {
         const { data, error } = await event.locals.supabase
-            .from('user_roles')
-            .select('role_id')
+            .from('user_info')
+            .select('role_id, profile_id')
             .eq('user_id', event.locals.user.id);
 
         if (!error) {
             if (data[0]) {
-                if (
-                    data[0].role_id == 1 &&
-                    event.url.searchParams.get('admin') !== '1'
-                ) {
+                if (data[0].role_id == 1) {
                     event.locals.isAdmin = true;
+                }
+
+                event.locals.profileID = data[0].profile_id;
+
+                const profileRes = await event.locals.supabase
+                    .from('user_profiles')
+                    .select('bio, username')
+                    .eq('id', data[0].profile_id);
+
+                event.locals.bio = 'error';
+                event.locals.username = 'error';
+                if (!profileRes.error) {
+                    if (profileRes.data[0]) {
+                        event.locals.bio = profileRes.data[0].bio;
+                        event.locals.username = profileRes.data[0].username;
+                    }
                 }
             }
         }
