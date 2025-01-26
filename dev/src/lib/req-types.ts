@@ -76,3 +76,20 @@ export type AddRequest = {
     re: number[];
     profile_id: number;
 };
+
+export type AddRequestFull = {
+    id: number;
+    user_id: string;
+    w: string;
+    ph: string;
+    p: string;
+    r: string;
+    f: FormStreamLined[];
+    ed: string[];
+    et: string[];
+    mt: string[];
+    ex: string[];
+    re: number[];
+    profile_id: number;
+    time_created: string;
+};

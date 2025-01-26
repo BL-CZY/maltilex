@@ -1,3 +1,4 @@
+import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Word } from './common';
 
 export const genTokens = (
@@ -42,4 +43,24 @@ export const genTokens = (
     });
 
     return { et, mt };
+};
+
+export const getProfile = async (id: number, supabase: SupabaseClient) => {
+    const { data, error } = await supabase
+        .from('user_profiles')
+        .select('bio, username')
+        .eq('id', id);
+
+    if (error) {
+        throw new Error(error.message);
+    }
+
+    if (!data[0]) {
+        throw new Error('empty');
+    }
+
+    return data[0] as {
+        bio: string;
+        username: string;
+    };
 };

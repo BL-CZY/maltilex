@@ -41,7 +41,7 @@
 
             {#if isAdmin}
                 <a
-                    href="/admin"
+                    href="/dashboard/admin"
                     class="btn btn-ghost hover:big-primary/50 normal-case"
                     >Admin</a
                 >

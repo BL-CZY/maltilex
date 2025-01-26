@@ -10,7 +10,6 @@
         const { data } = supabase.auth.onAuthStateChange(
             async (evt, newSession) => {
                 if (evt === 'SIGNED_OUT') {
-                    await goto('/auth');
                     invalidateAll();
                 }
 
