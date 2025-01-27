@@ -1,18 +1,15 @@
 <script lang="ts">
+    import AddEntry from '$lib/add-entry.svelte';
     import type { AddRequestFull } from '$lib/req-types.js';
     import { getProfile } from '$lib/utils.js';
 
     let { data } = $props();
     let { supabase } = $derived(data);
 
-    type reqInfoShort = {
-        id: number;
-        word: string;
-        user_profile_id: string;
-    };
-
     const getReq = async () => {
-        const { data, error } = await supabase.from('add_requests').select('*');
+        const { data, error } = await supabase
+            .from('add_requests')
+            .select('id, w, profile_id, time_created');
         if (error) {
             throw new Error(error.message);
         }
@@ -24,17 +21,12 @@
 {#await getReq() then list}
     <ul>
         {#each list as req}
-            <div class="flex gap-2">
-                <p>{req.w}</p>
-                {#await getProfile(req.profile_id, supabase)}
-                    <p>loading..</p>
-                {:then profile}
-                    <p>{profile.username}</p>
-                {:catch e}
-                    <p>error: {String(e)}</p>
-                {/await}
-                <p>{req.time_created}</p>
-            </div>
+            <AddEntry
+                {req}
+                getProfile={(id) => {
+                    return getProfile(id, supabase);
+                }}
+            />
         {/each}
     </ul>
 {:catch e}

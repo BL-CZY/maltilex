@@ -64,3 +64,48 @@ export const getProfile = async (id: number, supabase: SupabaseClient) => {
         username: string;
     };
 };
+
+export class Result<K, E> {
+    constructor(
+        private readonly _ok: K | null,
+        private readonly _err: E | null
+    ) {}
+
+    get ok(): K | null {
+        return this._ok;
+    }
+
+    get err(): E | null {
+        return this._err;
+    }
+
+    isOk(): this is { ok: K; err: null } {
+        return this._ok !== null;
+    }
+
+    isErr(): this is { ok: null; err: E } {
+        return this._err !== null;
+    }
+
+    unwrap(): K {
+        if (this.isOk()) {
+            return this.ok;
+        }
+        throw new Error('Tried to unwrap an error result');
+    }
+
+    unwrapErr(): E {
+        if (this.isErr()) {
+            return this.err;
+        }
+        throw new Error('Tried to unwrapErr a successful result');
+    }
+}
+
+export function ok<K, E>(value: K): Result<K, E> {
+    return new Result<K, E>(value, null);
+}
+
+export function err<K, E>(error: E): Result<K, E> {
+    return new Result<K, E>(null, error);
+}
