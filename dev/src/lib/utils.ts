@@ -66,46 +66,55 @@ export const getProfile = async (id: number, supabase: SupabaseClient) => {
 };
 
 export class Result<K, E> {
-    constructor(
-        private readonly _ok: K | null,
-        private readonly _err: E | null
-    ) {}
+    constructor(private readonly _inner: { ok: K } | { err: E }) {}
 
-    get ok(): K | null {
-        return this._ok;
+    isOk(): boolean {
+        return 'ok' in this._inner;
     }
 
-    get err(): E | null {
-        return this._err;
+    ifErr(): boolean {
+        return 'err' in this._inner;
     }
 
-    isOk(): this is { ok: K; err: null } {
-        return this._ok !== null;
+    ok(): K | null {
+        if ('ok' in this._inner) {
+            return this._inner.ok;
+        } else {
+            return null;
+        }
     }
 
-    isErr(): this is { ok: null; err: E } {
-        return this._err !== null;
+    err(): E | null {
+        if ('err' in this._inner) {
+            return this._inner.err;
+        } else {
+            return null;
+        }
     }
 
     unwrap(): K {
-        if (this.isOk()) {
-            return this.ok;
+        let res = this.ok();
+        if (res !== null) {
+            return res;
+        } else {
+            throw new Error('Tried to unwrap an error result');
         }
-        throw new Error('Tried to unwrap an error result');
     }
 
     unwrapErr(): E {
-        if (this.isErr()) {
-            return this.err;
+        let res = this.err();
+        if (res !== null) {
+            return res;
+        } else {
+            throw new Error('Tried to unwrap an ok result');
         }
-        throw new Error('Tried to unwrapErr a successful result');
     }
 }
 
 export function ok<K, E>(value: K): Result<K, E> {
-    return new Result<K, E>(value, null);
+    return new Result<K, E>({ ok: value });
 }
 
 export function err<K, E>(error: E): Result<K, E> {
-    return new Result<K, E>(null, error);
+    return new Result<K, E>({ err: error });
 }
