@@ -1,5 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { Word } from './common';
+import type { Form, Word } from './common';
+import type { AddRequest, AddRequestFull, FormStreamLined } from './req-types';
 
 export const genTokens = (
     word: Word,
@@ -118,3 +119,23 @@ export function ok<K, E>(value: K): Result<K, E> {
 export function err<K, E>(error: E): Result<K, E> {
     return new Result<K, E>({ err: error });
 }
+
+export const StreamlinedToForm = (form: FormStreamLined): Form => {
+    return {
+        word: form.w,
+        phonetic: form.ph,
+        english: form.en,
+        number: form.n,
+        gender: form.g,
+        polarity: form.p,
+        extra: form.e,
+        subject: form.s,
+        object: form.o,
+        object_number: form.on,
+        object_gender: form.og,
+        indirect_object: form.io,
+        indirect_object_number: form.ion,
+        indirect_object_gender: form.iog,
+        tense: form.t
+    } satisfies Form;
+};
