@@ -1,6 +1,6 @@
 <script lang="ts">
     import { goto } from '$app/navigation';
-    import type { Word } from '$lib/common/index';
+    import type { WordFull } from '$lib/req-types';
     import {
         FormStreamLinedKeyTable,
         type AddRequest,
@@ -11,7 +11,7 @@
     import { genTokens } from '$lib/utils.js';
     import WordEditor from '$lib/word-editor.svelte';
 
-    let word: Word = $state({
+    let word: WordFull = $state({
         word: '',
         phonetic: '',
         part_of_speech: '',
@@ -20,6 +20,8 @@
         en_display: [],
         examples: [],
         contributors: [],
+        en_tokens: [],
+        mt_tokens: [],
         related: []
     });
 
@@ -31,9 +33,7 @@
 </script>
 
 <WordEditor
-    bind:word,
-    {en_extra}
-    {mt_extra}
+    bind:word
     callback={async () => {
         if (!user) {
             return;

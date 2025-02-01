@@ -1,3 +1,5 @@
+import type { Form } from './common';
+
 export type FormStreamLined = {
     w: string;
     ph: string;
@@ -92,4 +94,21 @@ export type AddRequestFull = {
     re: number[];
     profile_id: number;
     time_created: string;
+};
+
+export type WordFull = {
+    word: string;
+    phonetic: string;
+    part_of_speech: string;
+    root: string;
+    forms: Form[];
+    en_display: string[];
+    examples: string[];
+    contributors: {
+        profile_id: number;
+        time_contributed: string;
+    }[];
+    related: number[];
+    en_tokens: string[];
+    mt_tokens: string[];
 };

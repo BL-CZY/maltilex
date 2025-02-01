@@ -1,10 +1,13 @@
-import type { AddRequestFull } from '$lib/req-types.js';
-import { err, ok, Result } from '$lib/utils.js';
+import type { Word } from '$lib/common/index.js';
+import type { AddRequestFull, WordFull } from '$lib/req-types.js';
+import { err, ok, Result, StreamlinedToForm } from '$lib/utils.js';
 
 export const load = async ({
     parent,
     params
-}): Promise<{ result: Result<AddRequestFull, string> }> => {
+}): Promise<{
+    result: Result<WordFull, string>;
+}> => {
     const { supabase } = await parent();
 
     const { data, error } = await supabase
@@ -16,8 +19,28 @@ export const load = async ({
         return { result: err(error.message) };
     } else {
         if (data[0]) {
+            let req = data[0] as AddRequestFull;
             return {
-                result: ok(data[0])
+                result: ok({
+                    word: req.w,
+                    phonetic: req.ph,
+                    part_of_speech: req.p,
+                    root: req.r,
+                    forms: req.f.map((ele) => {
+                        return StreamlinedToForm(ele);
+                    }),
+                    en_display: req.ed,
+                    examples: req.ex,
+                    contributors: [
+                        {
+                            profile_id: req.profile_id,
+                            time_contributed: req.time_created
+                        }
+                    ],
+                    related: req.re,
+                    mt_tokens: req.mt,
+                    en_tokens: req.et
+                } satisfies WordFull)
             };
         }
         return {

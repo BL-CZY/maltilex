@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { Word } from '$lib/common/index';
+    import type { WordFull } from '$lib/req-types';
     import FormEditor from '$lib/form-editor.svelte';
     import ListEditor from '$lib/list-editor.svelte';
     import StrEditor from '$lib/str-editor.svelte';
@@ -9,13 +9,9 @@
 
     let {
         word = $bindable(),
-        en_extra,
-        mt_extra,
         callback
     }: {
-        word: Word;
-        en_extra: string[];
-        mt_extra: string[];
+        word: WordFull;
         callback: () => Promise<void>;
     } = $props();
 </script>
@@ -57,7 +53,7 @@
                 sep=","
                 placeholder={'use "," to separate words'}
                 setValue={(value) => {
-                    en_extra = value;
+                    word.en_tokens = value;
                 }}
             />
             <ListEditor
@@ -65,7 +61,7 @@
                 sep=","
                 placeholder={'use "," to separate words'}
                 setValue={(value) => {
-                    mt_extra = value;
+                    word.mt_tokens = value;
                 }}
             />
             <ListEditor

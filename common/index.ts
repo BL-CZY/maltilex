@@ -44,7 +44,7 @@ export type Word = {
     examples: string[];
     contributors: {
         profile_id: number;
-        time_created: string;
+        time_contributed: string;
     }[];
     related: number[];
 };
