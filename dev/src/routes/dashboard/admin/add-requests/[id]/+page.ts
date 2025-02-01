@@ -20,6 +20,7 @@ export const load = async ({
     } else {
         if (data[0]) {
             let req = data[0] as AddRequestFull;
+
             return {
                 result: ok({
                     word: req.w,

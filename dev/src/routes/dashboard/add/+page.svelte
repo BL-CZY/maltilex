@@ -39,7 +39,7 @@
             return;
         }
 
-        let { et, mt } = genTokens(word, en_extra, mt_extra);
+        let { et, mt } = genTokens(word);
 
         const { error } = await supabase.from('add_requests').insert({
             user_id: user.id,

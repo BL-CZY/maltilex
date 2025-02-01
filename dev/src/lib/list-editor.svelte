@@ -1,17 +1,32 @@
 <script lang="ts">
+    import { untrack } from 'svelte';
+
     let {
         fieldName,
         setValue,
+        defaultVal,
         sep,
         placeholder
     }: {
         fieldName: string;
         setValue: (value: string[]) => void;
+        defaultVal: string[];
         sep: string;
         placeholder: string;
     } = $props();
 
     let value: string = $state('');
+
+    $effect(() => {
+        defaultVal.forEach((ele, i) => {
+            untrack(() => {
+                value += ele;
+                if (i != defaultVal.length - 1) {
+                    value += ', ';
+                }
+            });
+        });
+    });
 </script>
 
 <div class="flex w-full items-center gap-2">

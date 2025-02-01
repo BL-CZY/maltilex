@@ -14,6 +14,10 @@
         word: WordFull;
         callback: () => Promise<void>;
     } = $props();
+
+    // $effect(() => {
+    //     $inspect(word);
+    // });
 </script>
 
 <div class="container mx-auto max-w-3xl p-6">
@@ -43,22 +47,25 @@
             <ListEditor
                 fieldName="English"
                 sep=","
+                defaultVal={word.en_display}
                 placeholder={'use "," to separate words'}
                 setValue={(value) => {
                     word.en_display = value;
                 }}
             />
             <ListEditor
-                fieldName="Extra English Tokens"
+                fieldName="English Tokens"
                 sep=","
+                defaultVal={word.en_tokens}
                 placeholder={'use "," to separate words'}
                 setValue={(value) => {
                     word.en_tokens = value;
                 }}
             />
             <ListEditor
-                fieldName="Extra Maltese Tokens"
+                fieldName="Maltese Tokens"
                 sep=","
+                defaultVal={word.mt_tokens}
                 placeholder={'use "," to separate words'}
                 setValue={(value) => {
                     word.mt_tokens = value;
@@ -66,6 +73,7 @@
             />
             <ListEditor
                 fieldName="Examples"
+                defaultVal={word.examples}
                 sep=","
                 placeholder={'Start a new line to separate sentences'}
                 setValue={(value) => {

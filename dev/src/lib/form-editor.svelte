@@ -133,6 +133,7 @@
                     form.english = val;
                 }}
                 sep=","
+                defaultVal={form.english}
                 placeholder={'Use "," to separate words'}
             />
 
@@ -145,6 +146,7 @@
                                 form[field] = val;
                             }}
                             sep=","
+                            defaultVal={form[field] ?? []}
                             placeholder={'Use "," to separate words'}
                         />
                     {:else}
@@ -153,6 +155,7 @@
                             setValue={(val) => {
                                 form[field] = val;
                             }}
+                            defaultVal={form[field] ?? []}
                             {fieldTable}
                             bind:fields={fieldOptions[field]}
                         />

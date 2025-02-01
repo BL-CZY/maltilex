@@ -32,6 +32,10 @@
             goto('/dashboard/success');
         }
     };
+
+    // $effect(() => {
+    //     $inspect(req);
+    // });
 </script>
 
 {#if req === null}

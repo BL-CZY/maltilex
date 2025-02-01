@@ -2,11 +2,13 @@
     let {
         fieldName,
         fieldTable,
+        defaultVal,
         fields: options = $bindable(),
         setValue
     }: {
         fieldName: string;
         fields: { [key: string]: boolean };
+        defaultVal: string[];
         fieldTable: { [key: string]: string };
         setValue: (val: string[]) => void;
     } = $props();
@@ -19,6 +21,14 @@
             }
         });
         setValue(array);
+    });
+
+    $effect(() => {
+        defaultVal.forEach((ele) => {
+            if (options[ele] !== undefined) {
+                options[ele] = true;
+            }
+        });
     });
 </script>
 

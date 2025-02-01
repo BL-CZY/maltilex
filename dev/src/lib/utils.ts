@@ -1,11 +1,9 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { Form, Word } from './common';
-import type { AddRequest, AddRequestFull, FormStreamLined } from './req-types';
+import type { Form } from './common';
+import type { FormStreamLined, WordFull } from './req-types';
 
 export const genTokens = (
-    word: Word,
-    en_extra: string[],
-    mt_extra: string[]
+    word: WordFull
 ): {
     et: string[];
     mt: string[];
@@ -29,14 +27,14 @@ export const genTokens = (
         }
     });
 
-    en_extra.forEach((en) => {
+    word.en_tokens.forEach((en) => {
         if (!enSet.has(en)) {
             enSet.add(en);
             et.push(en);
         }
     });
 
-    mt_extra.forEach((m) => {
+    word.mt_tokens.forEach((m) => {
         if (!mtSet.has(m)) {
             mtSet.add(m);
             mt.push(m);
