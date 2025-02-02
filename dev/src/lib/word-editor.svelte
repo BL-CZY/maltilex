@@ -77,7 +77,7 @@
             <ListEditor
                 fieldName="Examples"
                 defaultVal={word.examples}
-                sep=","
+                sep={'\n'}
                 placeholder={'Start a new line to separate sentences'}
                 setValue={(value) => {
                     word.examples = value;

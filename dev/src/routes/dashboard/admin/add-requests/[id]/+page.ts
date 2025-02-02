@@ -62,7 +62,7 @@ export const load = async ({
                     phonetic: req.ph,
                     part_of_speech: req.p,
                     root: req.r,
-                    forms,
+                    forms: forms,
                     en_display: req.ed,
                     examples: req.ex,
                     contributors: [

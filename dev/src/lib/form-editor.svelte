@@ -29,37 +29,6 @@
         'tense'
     ];
 
-    let fieldOptions = $state({
-        number: { singular: false, plural: false, 'bi-plural': false },
-        gender: { male: false, female: false },
-        polarity: { positive: false, negative: false },
-        extra: {},
-        subject: {
-            'first person': false,
-            'second person': false,
-            'third person': false
-        },
-        object: {
-            'first person': false,
-            'second person': false,
-            'third person': false
-        },
-        object_number: { singular: false, plural: false, 'bi-plural': false },
-        object_gender: { male: false, female: false },
-        indirect_object: {
-            'first person': false,
-            'second person': false,
-            'third person': false
-        },
-        indirect_object_number: {
-            singular: false,
-            plural: false,
-            'bi-plural': false
-        },
-        indirect_object_gender: { male: false, female: false },
-        tense: { perfect: false, imperfect: false, imperative: false }
-    });
-
     let fieldTable = $state({
         singular: 'sg',
         plural: 'pl',
@@ -89,8 +58,7 @@
     });
 
     // $effect(() => {
-    //     $inspect(formOptionsMap);
-    //     $inspect(formOptions);
+    //     $inspect(forms);
     // });
 </script>
 
@@ -149,7 +117,7 @@
                             }}
                             defaultVal={form[field] ?? []}
                             {fieldTable}
-                            bind:fields={fieldOptions[field]}
+                            {field}
                         />
                     {/if}
                 </div>

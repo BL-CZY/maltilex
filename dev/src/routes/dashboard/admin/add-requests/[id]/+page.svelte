@@ -30,7 +30,7 @@
     };
 
     // $effect(() => {
-    //     $inspect(req);
+    //     $inspect(word);
     // });
 </script>
 
