@@ -30,19 +30,19 @@
     ];
 
     let fieldTable = $state({
-        singular: 'sg',
-        plural: 'pl',
-        'bi-plural': 'bp',
-        male: 'm',
-        female: 'f',
-        positive: 'pos',
-        negative: 'neg',
-        'first person': 'p1',
-        'second person': 'p2',
-        'third person': 'p3',
-        perfect: 'pf',
-        imperfect: 'ip',
-        imperative: 'im'
+        sg: 'singular',
+        pl: 'plural',
+        bp: 'bi-plural',
+        m: 'male',
+        f: 'female',
+        pos: 'positive',
+        neg: 'negative',
+        p1: 'first person',
+        p2: 'second person',
+        p3: 'third person',
+        pf: 'perfect',
+        ip: 'imperfect',
+        im: 'imperative'
     });
 
     let formFields = $derived.by(() => {

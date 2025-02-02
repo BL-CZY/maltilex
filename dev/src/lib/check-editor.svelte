@@ -18,7 +18,6 @@
     } = $props();
 
     $effect(() => {
-        $inspect(defaultVal);
         untrack(() => {
             defaultVal.forEach((ele) => {
                 // it's 100% that fieldOptions[field] will have ele as its key
@@ -37,41 +36,41 @@
             // it's 100% that the key will be in fieldOptions[field]
             //@ts-ignore
             if (fieldOptions[field][key]) {
-                array.push(fieldTable[key]);
+                array.push(key);
             }
         });
         setValue(array);
     });
 
     let fieldOptions = $state({
-        number: { singular: false, plural: false, 'bi-plural': false },
-        gender: { male: false, female: false },
-        polarity: { positive: false, negative: false },
+        number: { sg: false, pl: false, bp: false },
+        gender: { m: false, f: false },
+        polarity: { pos: false, neg: false },
         extra: {},
         subject: {
-            'first person': false,
-            'second person': false,
-            'third person': false
+            p1: false,
+            p2: false,
+            p3: false
         },
         object: {
-            'first person': false,
-            'second person': false,
-            'third person': false
+            p1: false,
+            p2: false,
+            p3: false
         },
-        object_number: { singular: false, plural: false, 'bi-plural': false },
-        object_gender: { male: false, female: false },
+        object_number: { sg: false, pl: false, bp: false },
+        object_gender: { m: false, f: false },
         indirect_object: {
-            'first person': false,
-            'second person': false,
-            'third person': false
+            p1: false,
+            p2: false,
+            p3: false
         },
         indirect_object_number: {
-            singular: false,
-            plural: false,
-            'bi-plural': false
+            sg: false,
+            pl: false,
+            bp: false
         },
-        indirect_object_gender: { male: false, female: false },
-        tense: { perfect: false, imperfect: false, imperative: false }
+        indirect_object_gender: { m: false, f: false },
+        tense: { pf: false, ip: false, im: false }
     });
 </script>
 
@@ -89,7 +88,7 @@
                     bind:checked={fieldOptions[field][key]}
                     class="checkbox checkbox-sm"
                 />
-                <span class="text-sm">{key}</span>
+                <span class="text-sm">{fieldTable[key]}</span>
             </label>
         {/each}
     </div>
