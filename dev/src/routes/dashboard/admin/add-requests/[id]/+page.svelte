@@ -1,29 +1,25 @@
 <script lang="ts">
-    import type { WordFull } from '$lib/req-types';
     import WordEditor from '$lib/word-editor.svelte';
     import { goto } from '$app/navigation';
 
     let { data } = $props();
-    let req: WordFull | null = $state(null);
     let { supabase } = $derived(data);
 
-    $effect(() => {
-        req = data.result.ok();
-    });
+    let { word, formFieldsMap } = $state(data);
 
     const callback = async () => {
         const { error } = await supabase.from('words').insert({
-            w: req?.word,
-            ph: req?.phonetic,
-            p: req?.part_of_speech,
-            r: req?.root,
-            f: req?.forms,
-            ed: req?.en_display,
-            et: req?.en_tokens,
-            mt: req?.mt_tokens,
-            ex: req?.examples,
-            c: req?.contributors,
-            re: req?.related
+            w: word.word,
+            ph: word.phonetic,
+            p: word.part_of_speech,
+            r: word.root,
+            f: word.forms,
+            ed: word.en_display,
+            et: word.en_tokens,
+            mt: word.mt_tokens,
+            ex: word.examples,
+            c: word.contributors,
+            re: word.related
         });
 
         if (error) {
@@ -38,8 +34,4 @@
     // });
 </script>
 
-{#if req === null}
-    <p>not found</p>
-{:else}
-    <WordEditor bind:word={req} {callback} />
-{/if}
+<WordEditor bind:word bind:formFieldsMap {callback} />

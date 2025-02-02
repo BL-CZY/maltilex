@@ -112,3 +112,18 @@ export type WordFull = {
     en_tokens: string[];
     mt_tokens: string[];
 };
+
+export type FormFieldsMap = {
+    number: boolean;
+    gender: boolean;
+    polarity: boolean;
+    extra: boolean;
+    subject: boolean;
+    object: boolean;
+    object_number: boolean;
+    object_gender: boolean;
+    indirect_object: boolean;
+    indirect_object_number: boolean;
+    indirect_object_gender: boolean;
+    tense: boolean;
+};

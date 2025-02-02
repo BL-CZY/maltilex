@@ -119,7 +119,7 @@ export function err<K, E>(error: E): Result<K, E> {
 }
 
 export const StreamlinedToForm = (form: FormStreamLined): Form => {
-    return {
+    let temp = {
         word: form.w,
         phonetic: form.ph,
         english: form.en,
@@ -136,4 +136,16 @@ export const StreamlinedToForm = (form: FormStreamLined): Form => {
         indirect_object_gender: form.iog,
         tense: form.t
     } satisfies Form;
+
+    let result = {};
+    Object.keys(temp).forEach((key) => {
+        // @ts-ignore
+        if (temp[key] !== undefined) {
+            // @ts-ignore
+            result[key] = temp[key];
+        }
+    });
+
+    // @ts-ignore
+    return result;
 };

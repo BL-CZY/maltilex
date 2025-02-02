@@ -18,6 +18,7 @@
     let value: string = $state('');
 
     $effect(() => {
+        value = '';
         defaultVal.forEach((ele, i) => {
             untrack(() => {
                 value += ele;

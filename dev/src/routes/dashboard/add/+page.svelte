@@ -25,8 +25,20 @@
         related: []
     });
 
-    let en_extra: string[] = $state([]);
-    let mt_extra: string[] = $state([]);
+    let formFieldsMap = $state({
+        number: false,
+        gender: false,
+        polarity: false,
+        extra: false,
+        subject: false,
+        object: false,
+        object_number: false,
+        object_gender: false,
+        indirect_object: false,
+        indirect_object_number: false,
+        indirect_object_gender: false,
+        tense: false
+    });
 
     let { data } = $props();
     let { supabase, user, profileID } = $derived(data);
@@ -34,6 +46,7 @@
 
 <WordEditor
     bind:word
+    bind:formFieldsMap
     callback={async () => {
         if (!user) {
             return;

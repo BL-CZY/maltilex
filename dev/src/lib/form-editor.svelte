@@ -2,25 +2,17 @@
     import type { Form, FormOptions } from '$lib/common/index';
     import CheckEditor from './check-editor.svelte';
     import ListEditor from './list-editor.svelte';
+    import type { FormFieldsMap } from './req-types';
     import StrEditor from './str-editor.svelte';
     let {
         forms = $bindable(),
+        formFieldsMap = $bindable(),
         deleteItem
-    }: { forms: Array<Form>; deleteItem: (index: number) => void } = $props();
-    let formFieldsMap = $state({
-        number: false,
-        gender: false,
-        polarity: false,
-        extra: false,
-        subject: false,
-        object: false,
-        object_number: false,
-        object_gender: false,
-        indirect_object: false,
-        indirect_object_number: false,
-        indirect_object_gender: false,
-        tense: false
-    });
+    }: {
+        forms: Array<Form>;
+        formFieldsMap: FormFieldsMap;
+        deleteItem: (index: number) => void;
+    } = $props();
 
     let fields: FormOptions[] = [
         'number',

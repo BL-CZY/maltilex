@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { WordFull } from '$lib/req-types';
+    import type { FormFieldsMap, WordFull } from '$lib/req-types';
     import FormEditor from '$lib/form-editor.svelte';
     import ListEditor from '$lib/list-editor.svelte';
     import StrEditor from '$lib/str-editor.svelte';
@@ -9,9 +9,11 @@
 
     let {
         word = $bindable(),
+        formFieldsMap = $bindable(),
         callback
     }: {
         word: WordFull;
+        formFieldsMap: FormFieldsMap;
         callback: () => Promise<void>;
     } = $props();
 
@@ -37,6 +39,7 @@
         <div class="mt-8">
             <FormEditor
                 bind:forms={word.forms}
+                bind:formFieldsMap
                 deleteItem={(i) => {
                     word.forms.splice(i, 1);
                 }}
