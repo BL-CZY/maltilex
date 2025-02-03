@@ -33,13 +33,17 @@
         if (error) {
             goto('/dashboard/fail');
         } else {
+            await supabase
+                .from('add_requests')
+                .update({ state: 2 })
+                .eq('id', id);
             goto('/dashboard/success');
         }
     };
 
-    $effect(() => {
-        $inspect(word);
-    });
+    // $effect(() => {
+    //     $inspect(word);
+    // });
 </script>
 
 {#snippet control()}
