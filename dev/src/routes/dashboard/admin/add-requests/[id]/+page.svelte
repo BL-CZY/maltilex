@@ -46,6 +46,7 @@
     <WordEditor
         bind:word={wordBind}
         bind:formFieldsMap={formFieldsMapBind}
+        btnText={'Approve Add Request'}
         {callback}
     />
 {/if}

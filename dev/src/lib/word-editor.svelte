@@ -10,10 +10,12 @@
     let {
         word = $bindable(),
         formFieldsMap = $bindable(),
+        btnText,
         callback
     }: {
         word: WordFull;
         formFieldsMap: FormFieldsMap;
+        btnText: string;
         callback: () => Promise<void>;
     } = $props();
 
@@ -84,6 +86,9 @@
                 }}
             />
         </div>
+        <button onclick={callback} class="btn btn-primary mx-auto block">
+            {btnText}
+        </button>
     </div>
 
     {#if showJson}
@@ -135,4 +140,3 @@
         </button>
     {/if}
 </div>
-<button onclick={callback}>Add word request</button>

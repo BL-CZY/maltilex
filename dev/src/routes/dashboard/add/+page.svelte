@@ -47,6 +47,7 @@
 <WordEditor
     bind:word
     bind:formFieldsMap
+    btnText={'Add Request'}
     callback={async () => {
         if (!user) {
             return;
