@@ -9,7 +9,8 @@
     const getReq = async () => {
         const { data, error } = await supabase
             .from('add_requests')
-            .select('id, w, profile_id, time_created');
+            .select('id, w, profile_id, time_created')
+            .eq('state', 1);
         if (error) {
             throw new Error(error.message);
         }

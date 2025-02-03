@@ -4,19 +4,18 @@
     import ListEditor from '$lib/list-editor.svelte';
     import StrEditor from '$lib/str-editor.svelte';
     import { slide, fade } from 'svelte/transition';
+    import type { Component } from 'svelte';
 
     let showJson = $state(false);
 
     let {
         word = $bindable(),
         formFieldsMap = $bindable(),
-        btnText,
-        callback
+        control
     }: {
         word: WordFull;
         formFieldsMap: FormFieldsMap;
-        btnText: string;
-        callback: () => Promise<void>;
+        control: () => ReturnType<import('svelte').Snippet>;
     } = $props();
 
     // $effect(() => {
@@ -86,9 +85,7 @@
                 }}
             />
         </div>
-        <button onclick={callback} class="btn btn-primary mx-auto block">
-            {btnText}
-        </button>
+        {@render control()}
     </div>
 
     {#if showJson}

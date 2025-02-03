@@ -12,6 +12,7 @@ export const load = async ({
     parent,
     params
 }): Promise<{
+    id: string;
     word: WordFull;
     formFieldsMap: FormFieldsMap;
 }> => {
@@ -57,6 +58,7 @@ export const load = async ({
             }
 
             return {
+                id: params.id,
                 word: {
                     word: req.w,
                     phonetic: req.ph,
