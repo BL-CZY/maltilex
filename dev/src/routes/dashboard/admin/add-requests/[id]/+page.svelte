@@ -1,11 +1,19 @@
 <script lang="ts">
     import WordEditor from '$lib/word-editor.svelte';
     import { goto } from '$app/navigation';
+    import type { FormFieldsMap, WordFull } from '$lib/req-types.js';
 
     let { data } = $props();
     let { supabase } = $derived(data);
 
-    let { word, formFieldsMap } = $state(data);
+    let { word, formFieldsMap } = $derived(data);
+    let wordBind: undefined | WordFull = $state();
+    let formFieldsMapBind: undefined | FormFieldsMap = $state();
+
+    $effect(() => {
+        wordBind = word;
+        formFieldsMapBind = formFieldsMap;
+    });
 
     const callback = async () => {
         const { error } = await supabase.from('words').insert({
@@ -29,9 +37,15 @@
         }
     };
 
-    // $effect(() => {
-    //     $inspect(word);
-    // });
+    $effect(() => {
+        $inspect(word);
+    });
 </script>
 
-<WordEditor bind:word bind:formFieldsMap {callback} />
+{#if formFieldsMapBind && wordBind}
+    <WordEditor
+        bind:word={wordBind}
+        bind:formFieldsMap={formFieldsMapBind}
+        {callback}
+    />
+{/if}
