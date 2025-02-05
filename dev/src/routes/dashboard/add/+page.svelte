@@ -8,7 +8,7 @@
         type FormStreamLined,
         type FormStreamLinedKey
     } from '$lib/req-types.js';
-    import { saveAddRequest } from '$lib/req.js';
+    import { saveAddRequest, updateAddRequest } from '$lib/req.js';
     import { genTokens } from '$lib/utils.js';
     import WordEditor from '$lib/word-editor.svelte';
     import { onMount } from 'svelte';
@@ -72,65 +72,14 @@
             return;
         }
 
-        let { et, mt } = genTokens(word);
-
-        const { error } = await supabase
-            .from('add_requests')
-            .update({
-                w: word.word,
-                ph: word.phonetic,
-                p: word.part_of_speech,
-                r: word.root,
-                f: word.forms.map((ele) => {
-                    let result: FormStreamLined = {
-                        w: ele.word,
-                        ph: ele.phonetic,
-                        en: ele.english
-                    };
-
-                    Object.keys(ele).forEach((key) => {
-                        if (
-                            key == 'word' ||
-                            key == 'phonetic' ||
-                            key == 'english'
-                        ) {
-                            return;
-                        }
-
-                        let formKey = key as FormKey;
-                        if (ele[formKey] != undefined) {
-                            result[
-                                FormStreamLinedKeyTable[
-                                    formKey
-                                ] as FormStreamLinedKey
-                            ] = ele[formKey];
-                        }
-                    });
-
-                    return result;
-                }),
-                ed: word.en_display,
-                et,
-                mt,
-                ex: word.examples,
-                re: word.related,
-                state: 1
-            } satisfies AddRequest)
-            .eq('id', id);
-
-        if (error) {
-            console.log(error);
-            goto('/dashboard/fail');
-        } else {
-            goto('/dashboard/success');
-        }
+        await updateAddRequest($state.snapshot(word), supabase, id);
     };
 
     let isSaving = $state(false);
 
     let save = async () => {
         isSaving = true;
-        await saveAddRequest(supabase, word, id);
+        await saveAddRequest(supabase, $state.snapshot(word), id);
         isSaving = false;
     };
 </script>
