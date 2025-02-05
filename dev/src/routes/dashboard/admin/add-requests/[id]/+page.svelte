@@ -23,7 +23,7 @@
     });
 
     const archive = async () => {
-        await supabase.from('add_requests_arch').insert({
+        const { error } = await supabase.from('add_requests_arch').insert({
             user_id: req.user_id,
             w: wordBind?.word,
             ph: wordBind?.phonetic,
@@ -43,11 +43,15 @@
             note: req.note
         });
 
+        if (error) {
+            console.log(error.message);
+        }
+
         await supabase.from('add_requests').delete().eq('id', id);
     };
 
     const callback = async () => {
-        await supabase.from('words').insert({
+        const { error } = await supabase.from('words').insert({
             w: wordBind?.word,
             ph: wordBind?.phonetic,
             p: wordBind?.part_of_speech,
@@ -61,9 +65,16 @@
             re: wordBind?.related
         });
 
-        await supabase.from('add_requests').update({ state: 2 }).eq('id', id);
-        await archive();
-        goto('/dashboard/success');
+        if (!error) {
+            await supabase
+                .from('add_requests')
+                .update({ state: 2 })
+                .eq('id', id);
+            await archive();
+            goto('/dashboard/success');
+        } else {
+            goto('/dashboard/fail');
+        }
     };
 
     let msg = $state('');
@@ -89,12 +100,20 @@
         </button>
         <button
             onclick={async () => {
-                await supabase
+                const { error } = await supabase
                     .from('add_requests')
-                    .update({ state: -1, note: [...req.note, msg] })
+                    .update({
+                        state: -1,
+                        note: [...req.note, msg]
+                    })
                     .eq('id', id);
 
-                await archive();
+                if (!error) {
+                    await archive();
+                    goto('/dashboard/success');
+                } else {
+                    goto('/dashboard/fail');
+                }
             }}
             class="btn btn-outline btn-error">Cancel Request</button
         >

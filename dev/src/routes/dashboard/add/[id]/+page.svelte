@@ -1,10 +1,14 @@
 <script lang="ts">
     import type { FormFieldsMap, WordFull } from '$lib/req-types.js';
-    import { saveAddRequest, updateAddRequest } from '$lib/req.js';
+    import {
+        saveAddRequest,
+        updateAddRequest as addAddRequest
+    } from '$lib/req.js';
     import WordEditor from '$lib/word-editor.svelte';
 
     const { data } = $props();
-    const { id, formFieldsMap, word, supabase, user } = $derived(data);
+    const { id, formFieldsMap, word, supabase, user, profileID } =
+        $derived(data);
     let wordBind: undefined | WordFull = $state();
     let formFieldsMapBind: undefined | FormFieldsMap = $state();
 
@@ -31,7 +35,13 @@
             return;
         }
 
-        updateAddRequest($state.snapshot(wordBind!), supabase, id);
+        addAddRequest(
+            $state.snapshot(wordBind!),
+            supabase,
+            id,
+            profileID ?? 0,
+            user.id
+        );
     };
 </script>
 

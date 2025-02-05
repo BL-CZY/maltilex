@@ -8,13 +8,14 @@ import { streamlinedToForm } from '$lib/utils.js';
 import { redirect } from '@sveltejs/kit';
 
 export const load = async ({
-    locals: { supabase },
+    locals: { supabase, profileID, user },
     params
 }): Promise<{
     id: string;
     req: AddRequestFull;
     formFieldsMap: FormFieldsMap;
     word: WordFull;
+    profileID: number | null;
 }> => {
     const { data, error } = await supabase
         .from('add_requests')
@@ -32,6 +33,7 @@ export const load = async ({
         id: params.id,
         word: parsed.word,
         formFieldsMap: parsed.formFieldsMap,
-        req: parsed.req
+        req: parsed.req,
+        profileID
     };
 };

@@ -16,11 +16,14 @@ export const load = async ({
     req: AddRequestFull;
 }> => {
     const { data, error } = await supabase
-        .from('add_requests')
+        .from('add_requests_ready')
         .select('*')
         .eq('id', params.id);
 
+    console.log('hi');
+
     if (error) {
+        console.log(error);
         redirect(303, '/dashboard/error?msg=error fetching');
     } else {
         if (data[0]) {

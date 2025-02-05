@@ -65,6 +65,7 @@ export type FormKey =
     | 'tense';
 
 export type AddRequest = {
+    user_id?: string;
     w: string;
     ph: string;
     p: string;
@@ -75,6 +76,7 @@ export type AddRequest = {
     mt: string[];
     ex: string[];
     re: number[];
+    profile_id?: number;
     state: number;
 };
 

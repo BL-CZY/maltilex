@@ -123,53 +123,50 @@ export const parseAddReq = (req: AddRequestFull) => {
 export const updateAddRequest = async (
     word: WordFull,
     supabase: SupabaseClient,
-    id: string
+    id: string,
+    profileID: number,
+    user_id: string
 ) => {
     let { et, mt } = genTokens(word);
 
-    const { error } = await supabase
-        .from('add_requests')
-        .update({
-            w: word.word,
-            ph: word.phonetic,
-            p: word.part_of_speech,
-            r: word.root,
-            f: word.forms.map((ele) => {
-                let result: FormStreamLined = {
-                    w: ele.word,
-                    ph: ele.phonetic,
-                    en: ele.english
-                };
+    const { error } = await supabase.from('add_requests_ready').insert({
+        user_id: user_id,
+        w: word.word,
+        ph: word.phonetic,
+        p: word.part_of_speech,
+        r: word.root,
+        f: word.forms.map((ele) => {
+            let result: FormStreamLined = {
+                w: ele.word,
+                ph: ele.phonetic,
+                en: ele.english
+            };
 
-                Object.keys(ele).forEach((key) => {
-                    if (
-                        key == 'word' ||
-                        key == 'phonetic' ||
-                        key == 'english'
-                    ) {
-                        return;
-                    }
+            Object.keys(ele).forEach((key) => {
+                if (key == 'word' || key == 'phonetic' || key == 'english') {
+                    return;
+                }
 
-                    let formKey = key as FormKey;
-                    if (ele[formKey] != undefined) {
-                        result[
-                            FormStreamLinedKeyTable[
-                                formKey
-                            ] as FormStreamLinedKey
-                        ] = ele[formKey];
-                    }
-                });
+                let formKey = key as FormKey;
+                if (ele[formKey] != undefined) {
+                    result[
+                        FormStreamLinedKeyTable[formKey] as FormStreamLinedKey
+                    ] = ele[formKey];
+                }
+            });
 
-                return result;
-            }),
-            ed: word.en_display,
-            et,
-            mt,
-            ex: word.examples,
-            re: word.related,
-            state: 1
-        } satisfies AddRequest)
-        .eq('id', id);
+            return result;
+        }),
+        ed: word.en_display,
+        et,
+        mt,
+        ex: word.examples,
+        re: word.related,
+        profile_id: profileID,
+        state: 1
+    } satisfies AddRequest);
+
+    await supabase.from('add_requests').delete().eq('id', id);
 
     if (error) {
         console.log(error);
