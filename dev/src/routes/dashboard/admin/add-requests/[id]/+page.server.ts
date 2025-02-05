@@ -4,7 +4,7 @@ import type {
     FormKey,
     WordFull
 } from '$lib/req-types.js';
-import { StreamlinedToForm } from '$lib/utils.js';
+import { streamlinedToForm } from '$lib/utils.js';
 import { redirect } from '@sveltejs/kit';
 
 export const load = async ({
@@ -27,7 +27,7 @@ export const load = async ({
         if (data[0]) {
             let req = data[0] as AddRequestFull;
             let forms = req.f.map((ele) => {
-                return StreamlinedToForm(ele);
+                return streamlinedToForm(ele);
             });
 
             let formFieldsMap: FormFieldsMap = {

@@ -118,7 +118,7 @@ export function err<K, E>(error: E): Result<K, E> {
     return new Result<K, E>({ err: error });
 }
 
-export const StreamlinedToForm = (form: FormStreamLined): Form => {
+export const streamlinedToForm = (form: FormStreamLined): Form => {
     let temp = {
         word: form.w,
         phonetic: form.ph,
@@ -136,6 +136,38 @@ export const StreamlinedToForm = (form: FormStreamLined): Form => {
         indirect_object_gender: form.iog,
         tense: form.t
     } satisfies Form;
+
+    let result = {};
+    Object.keys(temp).forEach((key) => {
+        // @ts-ignore
+        if (temp[key] !== undefined) {
+            // @ts-ignore
+            result[key] = temp[key];
+        }
+    });
+
+    // @ts-ignore
+    return result;
+};
+
+export const formToStreamlined = (form: Form): FormStreamLined => {
+    let temp = {
+        w: form.word,
+        ph: form.phonetic,
+        en: form.english,
+        n: form.number,
+        g: form.gender,
+        p: form.polarity,
+        e: form.extra,
+        s: form.subject,
+        o: form.object,
+        on: form.object_number,
+        og: form.object_gender,
+        io: form.indirect_object,
+        ion: form.indirect_object_number,
+        iog: form.indirect_object_gender,
+        t: form.tense
+    } satisfies FormStreamLined;
 
     let result = {};
     Object.keys(temp).forEach((key) => {

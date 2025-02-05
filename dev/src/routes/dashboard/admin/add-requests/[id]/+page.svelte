@@ -4,6 +4,7 @@
     import type { FormFieldsMap, WordFull } from '$lib/req-types.js';
     import StrEditor from '$lib/str-editor.svelte';
     import { saveAddRequest } from '$lib/req.js';
+    import { formToStreamlined } from '$lib/utils.js';
 
     let { data } = $props();
     let { supabase, id } = $derived(data);
@@ -18,10 +19,32 @@
         setInterval(save, 10000);
     });
 
-    const archive = async () => {};
+    const archive = async () => {
+        await supabase.from('add_requests_arch').insert({
+            user_id: req.user_id,
+            w: wordBind?.word,
+            ph: wordBind?.phonetic,
+            p: wordBind?.part_of_speech,
+            r: wordBind?.root,
+            f: wordBind?.forms.map((ele) => {
+                return formToStreamlined(ele);
+            }),
+            ed: wordBind?.en_display,
+            et: wordBind?.en_tokens,
+            mt: wordBind?.mt_tokens,
+            ex: wordBind?.examples,
+            re: wordBind?.related,
+            time_created: req.time_created,
+            profile_id: req.profile_id,
+            state: req.state,
+            note: req.note
+        });
+
+        await supabase.from('add_requests').delete().eq('id', id);
+    };
 
     const callback = async () => {
-        const { error } = await supabase.from('words').insert({
+        await supabase.from('words').insert({
             w: wordBind?.word,
             ph: wordBind?.phonetic,
             p: wordBind?.part_of_speech,
@@ -35,15 +58,9 @@
             re: wordBind?.related
         });
 
-        if (error) {
-            goto('/dashboard/fail');
-        } else {
-            await supabase
-                .from('add_requests')
-                .update({ state: 2 })
-                .eq('id', id);
-            goto('/dashboard/success');
-        }
+        await supabase.from('add_requests').update({ state: 2 }).eq('id', id);
+        await archive();
+        goto('/dashboard/success');
     };
 
     let msg = $state('');
@@ -69,10 +86,12 @@
         </button>
         <button
             onclick={async () => {
-                const updateRes = await supabase
+                await supabase
                     .from('add_requests')
                     .update({ state: -1, note: [...req.note, msg] })
                     .eq('id', id);
+
+                await archive();
             }}
             class="btn btn-outline btn-error">Cancel Request</button
         >
