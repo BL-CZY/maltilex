@@ -11,11 +11,13 @@
     let {
         word = $bindable(),
         formFieldsMap = $bindable(),
-        control
+        control,
+        notes
     }: {
         word: WordFull;
         formFieldsMap: FormFieldsMap;
         control: () => ReturnType<import('svelte').Snippet>;
+        notes: string[];
     } = $props();
 
     // $effect(() => {
@@ -23,74 +25,82 @@
     // });
 </script>
 
-<div class="container mx-auto max-w-3xl p-6">
-    <div class="space-y-4 rounded-lg bg-white p-6 shadow-lg">
-        <h1 class="mb-6 text-2xl font-bold">Word Editor</h1>
-
-        <div class="grid gap-4">
-            <StrEditor bind:data={word.word} fieldName="Word" />
-            <StrEditor bind:data={word.phonetic} fieldName="Phonetic" />
-            <StrEditor
-                bind:data={word.part_of_speech}
-                fieldName="Part of Speech"
-            />
-            <StrEditor bind:data={word.root} fieldName="Root" />
+{#snippet editor()}
+    <div class="flex gap-2">
+        {#if notes.length > 0}
+            <div class="bg-base-100 flex-1 shadow-lg">
+                <h1 class="text-2xl font-bold">past notes</h1>
+                <div>
+                    {#each notes as note}
+                        <p>{note}</p>
+                    {/each}
+                </div>
+            </div>
+        {/if}
+        <div class="bg-base-100 flex-[3] space-y-4 rounded-lg p-6 shadow-lg">
+            <h1 class="mb-6 text-2xl font-bold">Word Editor</h1>
+            <div class="grid gap-4">
+                <StrEditor bind:data={word.word} fieldName="Word" />
+                <StrEditor bind:data={word.phonetic} fieldName="Phonetic" />
+                <StrEditor
+                    bind:data={word.part_of_speech}
+                    fieldName="Part of Speech"
+                />
+                <StrEditor bind:data={word.root} fieldName="Root" />
+            </div>
+            <div class="mt-8">
+                <FormEditor
+                    bind:forms={word.forms}
+                    bind:formFieldsMap
+                    deleteItem={(i) => {
+                        word.forms.splice(i, 1);
+                    }}
+                />
+            </div>
+            <div class="space-y-4">
+                <ListEditor
+                    fieldName="English"
+                    sep=","
+                    defaultVal={word.en_display}
+                    placeholder={'use "," to separate words'}
+                    setValue={(value) => {
+                        word.en_display = value;
+                    }}
+                />
+                <ListEditor
+                    fieldName="English Tokens"
+                    sep=","
+                    defaultVal={word.en_tokens}
+                    placeholder={'use "," to separate words'}
+                    setValue={(value) => {
+                        word.en_tokens = value;
+                    }}
+                />
+                <ListEditor
+                    fieldName="Maltese Tokens"
+                    sep=","
+                    defaultVal={word.mt_tokens}
+                    placeholder={'use "," to separate words'}
+                    setValue={(value) => {
+                        word.mt_tokens = value;
+                    }}
+                />
+                <ListEditor
+                    fieldName="Examples"
+                    defaultVal={word.examples}
+                    sep={'\n'}
+                    placeholder={'Start a new line to separate sentences'}
+                    setValue={(value) => {
+                        word.examples = value;
+                    }}
+                />
+            </div>
+            {@render control()}
         </div>
-
-        <div class="mt-8">
-            <FormEditor
-                bind:forms={word.forms}
-                bind:formFieldsMap
-                deleteItem={(i) => {
-                    word.forms.splice(i, 1);
-                }}
-            />
-        </div>
-
-        <div class="space-y-4">
-            <ListEditor
-                fieldName="English"
-                sep=","
-                defaultVal={word.en_display}
-                placeholder={'use "," to separate words'}
-                setValue={(value) => {
-                    word.en_display = value;
-                }}
-            />
-            <ListEditor
-                fieldName="English Tokens"
-                sep=","
-                defaultVal={word.en_tokens}
-                placeholder={'use "," to separate words'}
-                setValue={(value) => {
-                    word.en_tokens = value;
-                }}
-            />
-            <ListEditor
-                fieldName="Maltese Tokens"
-                sep=","
-                defaultVal={word.mt_tokens}
-                placeholder={'use "," to separate words'}
-                setValue={(value) => {
-                    word.mt_tokens = value;
-                }}
-            />
-            <ListEditor
-                fieldName="Examples"
-                defaultVal={word.examples}
-                sep={'\n'}
-                placeholder={'Start a new line to separate sentences'}
-                setValue={(value) => {
-                    word.examples = value;
-                }}
-            />
-        </div>
-        {@render control()}
     </div>
-
     {#if showJson}
         <div
-            class="fixed bottom-0 right-0 z-20 rounded-lg border border-gray-200 bg-white p-4 shadow-xl sm:bottom-4 sm:right-4 sm:w-96"
+            class="bg-base-100 fixed bottom-0 right-0 z-20 rounded-lg border border-gray-200 p-4 shadow-xl sm:bottom-4 sm:right-4 sm:w-96"
             transition:slide
         >
             <div class="mb-2 flex items-center justify-between">
@@ -120,7 +130,7 @@
                 </button>
             </div>
             <pre
-                class="m-0 max-h-96 overflow-auto rounded bg-gray-50 p-0 text-sm">{JSON.stringify(
+                class="bg-base-100 m-0 max-h-96 overflow-auto rounded p-0 text-sm">{JSON.stringify(
                     word,
                     null,
                     4
@@ -136,4 +146,14 @@
             {showJson ? 'Hide' : 'Show'} JSON
         </button>
     {/if}
-</div>
+{/snippet}
+
+{#if notes.length > 0}
+    <div class="container mx-auto max-w-[60rem] p-6">
+        {@render editor()}
+    </div>
+{:else}
+    <div class="container mx-auto max-w-3xl p-6">
+        {@render editor()}
+    </div>
+{/if}

@@ -7,7 +7,7 @@
     import WordEditor from '$lib/word-editor.svelte';
 
     const { data } = $props();
-    const { id, formFieldsMap, word, supabase, user, profileID } =
+    const { id, formFieldsMap, word, supabase, user, profileID, req } =
         $derived(data);
     let wordBind: undefined | WordFull = $state();
     let formFieldsMapBind: undefined | FormFieldsMap = $state();
@@ -61,5 +61,6 @@
         bind:word={wordBind}
         bind:formFieldsMap={formFieldsMapBind}
         {control}
+        notes={req.note}
     />
 {/if}

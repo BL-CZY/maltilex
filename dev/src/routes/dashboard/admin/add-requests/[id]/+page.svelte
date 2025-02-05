@@ -22,8 +22,8 @@
         };
     });
 
-    const archive = async () => {
-        const { error } = await supabase.from('add_requests_arch').insert({
+    const transferTo = async (table: string) => {
+        const { error } = await supabase.from(table).insert({
             user_id: req.user_id,
             w: wordBind?.word,
             ph: wordBind?.phonetic,
@@ -47,7 +47,7 @@
             console.log(error.message);
         }
 
-        await supabase.from('add_requests').delete().eq('id', id);
+        await supabase.from('add_requests_ready').delete().eq('id', id);
     };
 
     const callback = async () => {
@@ -67,10 +67,10 @@
 
         if (!error) {
             await supabase
-                .from('add_requests')
+                .from('add_requests_ready')
                 .update({ state: 2 })
                 .eq('id', id);
-            await archive();
+            await transferTo('add_requests_arch');
             goto('/dashboard/success');
         } else {
             goto('/dashboard/fail');
@@ -87,6 +87,13 @@
         isSaving = false;
     };
 
+    let cancel = async () => {
+        req.note.push(msg);
+        await transferTo('add_requests');
+
+        goto('/dashboard/success');
+    };
+
     // $effect(() => {
     //     $inspect(word);
     // });
@@ -98,24 +105,8 @@
         <button onclick={callback} class="btn btn-primary">
             Approve Add Request
         </button>
-        <button
-            onclick={async () => {
-                const { error } = await supabase
-                    .from('add_requests')
-                    .update({
-                        state: -1,
-                        note: [...req.note, msg]
-                    })
-                    .eq('id', id);
-
-                if (!error) {
-                    await archive();
-                    goto('/dashboard/success');
-                } else {
-                    goto('/dashboard/fail');
-                }
-            }}
-            class="btn btn-outline btn-error">Cancel Request</button
+        <button onclick={cancel} class="btn btn-outline btn-error"
+            >Cancel Request</button
         >
         <button class="btn btn-secondary" onclick={save} disabled={isSaving}>
             {#if isSaving}
@@ -132,5 +123,6 @@
         bind:word={wordBind}
         bind:formFieldsMap={formFieldsMapBind}
         {control}
+        notes={req.note}
     />
 {/if}

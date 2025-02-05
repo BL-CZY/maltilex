@@ -63,12 +63,12 @@
 </script>
 
 <div class="space-y-6">
-    <div class="rounded-lg bg-gray-50 p-4">
+    <div class="bg-base-100 rounded-lg p-4">
         <p class="mb-3 font-semibold">Form Fields:</p>
         <div class="flex flex-wrap gap-3">
             {#each fields as option}
                 <label
-                    class="flex items-center gap-2 rounded-md bg-white px-3 py-1.5 shadow-sm"
+                    class="flex items-center gap-2 rounded-md border border-gray-200 bg-white px-3 py-1.5 shadow-sm"
                 >
                     <input
                         type="checkbox"
@@ -83,7 +83,7 @@
 
     {#each forms as form, i}
         <div
-            class="space-y-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm"
+            class="bg-base-100 space-y-4 rounded-lg border border-gray-200 p-4 shadow-sm"
         >
             <StrEditor fieldName="Word" bind:data={form.word} />
             <StrEditor fieldName="Phonetic" bind:data={form.phonetic} />
