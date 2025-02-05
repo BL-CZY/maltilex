@@ -1,23 +1,21 @@
-import type { Word } from '$lib/common/index.js';
 import type {
     AddRequestFull,
     FormFieldsMap,
     FormKey,
     WordFull
 } from '$lib/req-types.js';
-import { err, ok, Result, StreamlinedToForm } from '$lib/utils.js';
+import { StreamlinedToForm } from '$lib/utils.js';
 import { redirect } from '@sveltejs/kit';
 
 export const load = async ({
-    parent,
+    locals: { supabase },
     params
 }): Promise<{
     id: string;
     word: WordFull;
     formFieldsMap: FormFieldsMap;
+    req: AddRequestFull;
 }> => {
-    const { supabase } = await parent();
-
     const { data, error } = await supabase
         .from('add_requests')
         .select('*')
@@ -77,7 +75,8 @@ export const load = async ({
                     mt_tokens: req.mt,
                     en_tokens: req.et
                 } satisfies WordFull,
-                formFieldsMap
+                formFieldsMap,
+                req
             };
         }
         redirect(303, '/dashboard/error?msg=not found');

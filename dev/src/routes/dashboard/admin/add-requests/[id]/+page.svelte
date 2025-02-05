@@ -2,18 +2,23 @@
     import WordEditor from '$lib/word-editor.svelte';
     import { goto } from '$app/navigation';
     import type { FormFieldsMap, WordFull } from '$lib/req-types.js';
+    import StrEditor from '$lib/str-editor.svelte';
+    import { saveAddRequest } from '$lib/req.js';
 
     let { data } = $props();
     let { supabase, id } = $derived(data);
 
-    let { word, formFieldsMap } = $derived(data);
+    let { word, formFieldsMap, req } = $derived(data);
     let wordBind: undefined | WordFull = $state();
     let formFieldsMapBind: undefined | FormFieldsMap = $state();
 
     $effect(() => {
         wordBind = word;
         formFieldsMapBind = formFieldsMap;
+        setInterval(save, 10000);
     });
+
+    const archive = async () => {};
 
     const callback = async () => {
         const { error } = await supabase.from('words').insert({
@@ -41,31 +46,43 @@
         }
     };
 
+    let msg = $state('');
+
+    let isSaving = $state(false);
+
+    let save = async () => {
+        isSaving = true;
+        await saveAddRequest(supabase, word, id);
+        isSaving = false;
+    };
+
     // $effect(() => {
     //     $inspect(word);
     // });
 </script>
 
 {#snippet control()}
+    <StrEditor fieldName="Extra notes" bind:data={msg} />
     <div class="flex justify-center gap-2">
         <button onclick={callback} class="btn btn-primary">
             Approve Add Request
         </button>
         <button
             onclick={async () => {
-                const { error } = await supabase
+                const updateRes = await supabase
                     .from('add_requests')
-                    .update({ state: -1 })
+                    .update({ state: -1, note: [...req.note, msg] })
                     .eq('id', id);
-
-                if (error) {
-                    goto('/dashboard/fail');
-                } else {
-                    goto('/dashboard/success');
-                }
             }}
             class="btn btn-outline btn-error">Cancel Request</button
         >
+        <button class="btn btn-secondary" onclick={save} disabled={isSaving}>
+            {#if isSaving}
+                Saving...
+            {:else}
+                Save Progress
+            {/if}
+        </button>
     </div>
 {/snippet}
 

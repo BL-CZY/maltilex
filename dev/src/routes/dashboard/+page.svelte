@@ -5,11 +5,11 @@
 
 <div class="mx-5 flex gap-2">
     <div
-        class="bg-base-100 flex-1 items-center space-y-4 rounded-md p-5 text-center shadow-lg"
+        class="bg-base-100 flex flex-1 flex-col items-center space-y-4 rounded-md p-5 text-center shadow-lg"
     >
         <p>Your add requests</p>
         <div
-            class="flex max-h-svh w-full flex-col items-center gap-2 overflow-y-auto"
+            class="flex max-h-svh w-[80%] flex-col items-center gap-2 overflow-y-auto"
         >
             {#each req as { id, w, state }}
                 <a href="/dashboard/add/{id}" class="btn w-full max-w-md">

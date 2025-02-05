@@ -93,6 +93,7 @@ export type AddRequestFull = {
     re: number[];
     profile_id: number;
     time_created: string;
+    note: string[];
 };
 
 export type WordFull = {

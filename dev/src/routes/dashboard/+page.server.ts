@@ -1,9 +1,7 @@
-import { browser } from '$app/environment';
-import { goto } from '$app/navigation';
 import { redirect } from '@sveltejs/kit';
 
 export const load = async ({
-    parent
+    locals: { supabase }
 }): Promise<{
     req: {
         id: string;
@@ -11,18 +9,15 @@ export const load = async ({
         state: string;
     }[];
 }> => {
-    const { supabase } = await parent();
     const { data, error } = await supabase
         .from('add_requests')
         .select('id, w, state');
 
     if (error) {
-        if (browser) {
-            goto('/dashboard/fail');
-        } else {
-            redirect(303, '/dashboard/fail');
-        }
+        redirect(303, '/dashboard/fail');
     }
+
+    let result = data as { id: string; w: string; state: string }[];
 
     return { req: data as { id: string; w: string; state: string }[] };
 };
