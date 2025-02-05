@@ -63,8 +63,13 @@
         } else {
             goto('/dashboard/fail');
         }
+    });
 
-        setInterval(save, 10000);
+    $effect(() => {
+        let interval = setInterval(save, 10000);
+        return () => {
+            clearInterval(interval);
+        };
     });
 
     let callback = async () => {

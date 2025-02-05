@@ -16,7 +16,10 @@
     $effect(() => {
         wordBind = word;
         formFieldsMapBind = formFieldsMap;
-        setInterval(save, 10000);
+        let interval = setInterval(save, 10000);
+        return () => {
+            clearInterval(interval);
+        };
     });
 
     const archive = async () => {
