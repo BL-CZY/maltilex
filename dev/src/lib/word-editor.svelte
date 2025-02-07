@@ -28,8 +28,8 @@
 {#snippet editor()}
     <div class="flex gap-2">
         {#if notes.length > 0}
-            <div class="bg-base-100 flex-1 shadow-lg">
-                <h1 class="text-2xl font-bold">past notes</h1>
+            <div class="bg-base-100 flex-1 space-y-4 rounded-lg p-6 shadow-lg">
+                <h1 class="text-2xl font-bold">Past notes</h1>
                 <div>
                     {#each notes as note}
                         <p>{note}</p>
