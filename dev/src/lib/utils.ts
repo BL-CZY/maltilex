@@ -181,3 +181,30 @@ export const formToStreamlined = (form: Form): FormStreamLined => {
     // @ts-ignore
     return result;
 };
+
+function recursiveObjectLoop(
+    obj: Record<string, any>,
+    path: string = ''
+): void {
+    for (const [key, value] of Object.entries(obj)) {
+        const currentPath = path ? `${path}.${key}` : key;
+
+        if (typeof value === 'object' && value !== null) {
+            // Recursively loop if value is an object
+            recursiveObjectLoop(value, currentPath);
+        } else {
+            // Log or process leaf values
+            key;
+            currentPath;
+            value;
+        }
+    }
+}
+
+export const track = (val: any) => {
+    if (typeof val === 'object') {
+        recursiveObjectLoop(val);
+    } else {
+        val;
+    }
+};

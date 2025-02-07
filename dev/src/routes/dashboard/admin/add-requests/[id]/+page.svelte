@@ -124,5 +124,6 @@
         bind:formFieldsMap={formFieldsMapBind}
         {control}
         notes={req.note}
+        {supabase}
     />
 {/if}

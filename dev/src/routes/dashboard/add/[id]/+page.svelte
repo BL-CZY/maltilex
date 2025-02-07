@@ -4,6 +4,7 @@
         saveAddRequest,
         updateAddRequest as addAddRequest
     } from '$lib/req.js';
+    import { track } from '$lib/utils';
     import WordEditor from '$lib/word-editor.svelte';
 
     const { data } = $props();
@@ -17,11 +18,17 @@
     $effect(() => {
         wordBind = word;
         formFieldsMapBind = formFieldsMap;
-        let interval = setInterval(save, 10000);
-
         return () => {
-            clearInterval(interval);
+            clearTimeout(timeout);
         };
+    });
+
+    let timeout: ReturnType<typeof setTimeout>;
+
+    $effect(() => {
+        track(wordBind);
+        clearTimeout(timeout);
+        timeout = setTimeout(save, 1000);
     });
 
     let save = async () => {
@@ -62,5 +69,6 @@
         bind:formFieldsMap={formFieldsMapBind}
         {control}
         notes={req.note}
+        {supabase}
     />
 {/if}

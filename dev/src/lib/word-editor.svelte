@@ -5,6 +5,8 @@
     import StrEditor from '$lib/str-editor.svelte';
     import { slide, fade } from 'svelte/transition';
     import TagsEditor from './tags-editor.svelte';
+    import type { SupabaseClient } from '@supabase/supabase-js';
+    import { onMount } from 'svelte';
 
     let showJson = $state(false);
 
@@ -12,17 +14,47 @@
         word = $bindable(),
         formFieldsMap = $bindable(),
         control,
-        notes
+        notes,
+        supabase
     }: {
         word: WordFull;
         formFieldsMap: FormFieldsMap;
         control: () => ReturnType<import('svelte').Snippet>;
         notes: string[];
+        supabase: SupabaseClient;
     } = $props();
 
-    $effect(() => {
-        $inspect(word);
+    const loadRelated = async () => {
+        const { data, error } = await supabase
+            .from('words')
+            .select('id, w')
+            .in('id', word.related);
+
+        if (error) {
+            throw new Error(error.message);
+        }
+
+        return data.map((ele) => {
+            return {
+                index: String(ele.id),
+                word: ele.w as string
+            };
+        });
+    };
+
+    let defaultVal: { index: string; word: string }[] | undefined = $state();
+
+    onMount(async () => {
+        try {
+            defaultVal = await loadRelated();
+        } catch (e) {
+            console.log(e);
+        }
     });
+
+    // $effect(() => {
+    //     $inspect(word);
+    // });
 </script>
 
 {#snippet editor()}
@@ -94,11 +126,18 @@
                         word.examples = value;
                     }}
                 />
-                <TagsEditor
-                    setVal={(val) => {
-                        word.related = val;
-                    }}
-                />
+
+                {#if defaultVal}
+                    <div class="flex w-full items-center gap-2">
+                        <p class="sm:min-w-32">Related:</p>
+                        <TagsEditor
+                            setVal={(val) => {
+                                word.related = val;
+                            }}
+                            {defaultVal}
+                        />
+                    </div>
+                {/if}
             </div>
             {@render control()}
         </div>

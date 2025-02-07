@@ -8,7 +8,13 @@
 
     let list: { index: string; word: string }[] = $state([]);
 
-    let { setVal }: { setVal: (val: string[]) => void } = $props();
+    let {
+        setVal,
+        defaultVal
+    }: {
+        setVal: (val: string[]) => void;
+        defaultVal: { index: string; word: string }[];
+    } = $props();
 
     const updateVal = () => {
         setVal(
@@ -17,9 +23,13 @@
             })
         );
     };
+
+    $effect(() => {
+        list = defaultVal;
+    });
 </script>
 
-<div class="relative">
+<div class="relative w-full max-w-lg">
     <input
         type="text"
         onfocusin={() => {
@@ -31,7 +41,7 @@
         class="input input-bordered input-sm w-full"
     />
 
-    <div>
+    <div class="flex gap-2">
         {#each list as ele, index}
             <div class="mt-3 flex gap-2">
                 <div class="bg-secondary flex gap-2 rounded-3xl p-2">
@@ -49,7 +59,7 @@
     </div>
     {#if showRelatedPanel}
         <div
-            class="bg-base-100 border-base-300 absolute bottom-10 left-0 right-0 z-50 mt-2 rounded-lg border shadow-lg"
+            class="bg-base-100 border-base-300 absolute left-0 right-0 top-0 z-50 mt-2 translate-y-[-105%] rounded-lg border shadow-lg"
             transition:fade={{ duration: 100 }}
         >
             {#await search(value.trim().toLocaleLowerCase())}

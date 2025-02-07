@@ -75,7 +75,7 @@ export type AddRequest = {
     et: string[];
     mt: string[];
     ex: string[];
-    re: number[];
+    re: string[];
     profile_id?: number;
     state: number;
 };
@@ -92,7 +92,7 @@ export type AddRequestFull = {
     et: string[];
     mt: string[];
     ex: string[];
-    re: number[];
+    re: string[];
     profile_id: number;
     time_created: string;
     state: number;
