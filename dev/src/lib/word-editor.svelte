@@ -4,7 +4,7 @@
     import ListEditor from '$lib/list-editor.svelte';
     import StrEditor from '$lib/str-editor.svelte';
     import { slide, fade } from 'svelte/transition';
-    import type { Component } from 'svelte';
+    import TagsEditor from './tags-editor.svelte';
 
     let showJson = $state(false);
 
@@ -20,9 +20,9 @@
         notes: string[];
     } = $props();
 
-    // $effect(() => {
-    //     $inspect(word);
-    // });
+    $effect(() => {
+        $inspect(word);
+    });
 </script>
 
 {#snippet editor()}
@@ -92,6 +92,11 @@
                     placeholder={'Start a new line to separate sentences'}
                     setValue={(value) => {
                         word.examples = value;
+                    }}
+                />
+                <TagsEditor
+                    setVal={(val) => {
+                        word.related = val;
                     }}
                 />
             </div>

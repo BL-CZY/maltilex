@@ -111,7 +111,7 @@ export type WordFull = {
         profile_id: number;
         time_contributed: string;
     }[];
-    related: number[];
+    related: string[];
     en_tokens: string[];
     mt_tokens: string[];
 };
