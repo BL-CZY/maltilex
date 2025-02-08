@@ -4,17 +4,19 @@
 
     let {
         req,
-        getProfile
+        getProfile,
+        path
     }: {
         req: AddRequestFull;
         getProfile: (id: number) => Promise<{ username: string; bio: string }>;
+        path: string;
     } = $props();
 </script>
 
 <button
     class="btn btn-primary mb-5 mt-5 flex w-[90%] gap-2"
     onclick={() => {
-        goto(`/dashboard/admin/add-requests/${req.id}`);
+        goto(`/dashboard/admin/${path}/${req.id}`);
     }}
 >
     <p>{req.w}</p>

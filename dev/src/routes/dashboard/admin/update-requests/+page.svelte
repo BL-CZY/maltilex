@@ -8,7 +8,7 @@
 
     const getReq = async () => {
         const { data, error } = await supabase
-            .from('add_requests_ready')
+            .from('update_requests_ready')
             .select('id, w, profile_id, time_created');
         if (error) {
             throw new Error(error.message);
@@ -26,7 +26,7 @@
                 getProfile={(id) => {
                     return getProfile(id, supabase);
                 }}
-                path="add-requests"
+                path="update-requests"
             />
         {/each}
     </ul>
