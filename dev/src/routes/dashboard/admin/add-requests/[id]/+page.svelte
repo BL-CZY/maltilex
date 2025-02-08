@@ -28,13 +28,13 @@
         timeout = setTimeout(save, 1000);
     });
 
-    const transferTo = async (table: string) => {
+    const transferTo = async (table: string, cancel: boolean) => {
         const { error } = await supabase.from(table).insert({
             ...word,
             user_id: req.user_id,
             time_created: req.time_created,
             profile_id: req.profile_id,
-            state: req.state,
+            state: cancel ? 1 : req.state,
             note: req.note
         });
 
@@ -45,16 +45,12 @@
         await supabase.from('add_requests_ready').delete().eq('id', id);
     };
 
-    const callback = async () => {
+    const approve = async () => {
         genTokens(word);
         const { error } = await supabase.from('words').insert(word);
 
         if (!error) {
-            await supabase
-                .from('add_requests_ready')
-                .update({ state: 2 })
-                .eq('id', id);
-            await transferTo('add_requests_arch');
+            await transferTo('add_requests_arch', false);
             goto('/dashboard/success');
         } else {
             goto('/dashboard/fail');
@@ -73,7 +69,7 @@
 
     let cancel = async () => {
         req.note.push(msg);
-        await transferTo('add_requests');
+        await transferTo('add_requests', true);
 
         goto('/dashboard/success');
     };
@@ -86,7 +82,7 @@
 {#snippet control()}
     <StrEditor fieldName="Extra notes" bind:data={msg} />
     <div class="flex justify-center gap-2">
-        <button onclick={callback} class="btn btn-primary">
+        <button onclick={approve} class="btn btn-primary">
             Approve Add Request
         </button>
         <button onclick={cancel} class="btn btn-outline btn-error"

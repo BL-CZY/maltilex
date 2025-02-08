@@ -4,7 +4,7 @@ export const load = async ({
     locals: { supabase }
 }): Promise<{
     req: {
-        id: string;
+        id: number;
         w: string;
         state: string;
     }[];
@@ -17,7 +17,11 @@ export const load = async ({
         redirect(303, '/dashboard/fail');
     }
 
-    let result = data as { id: string; w: string; state: string }[];
-
-    return { req: data as { id: string; w: string; state: string }[] };
+    return {
+        req: (data as { id: number; w: string; state: string }[]).sort(
+            (a, b) => {
+                return a.id - b.id;
+            }
+        )
+    };
 };

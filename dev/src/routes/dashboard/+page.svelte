@@ -21,11 +21,7 @@
                                 if (state == '0') {
                                     return 'In Progress';
                                 } else if (state == '1') {
-                                    return 'In Review';
-                                } else if (state == '2') {
-                                    return 'Accepted';
-                                } else {
-                                    return 'Canceled';
+                                    return 'Cancelled';
                                 }
                             })()}
                         </p>

@@ -76,7 +76,7 @@ export const updateAddRequest = async (
         ...word,
         user_id: user_id,
         profile_id: profileID,
-        state: 1
+        state: 0
     } satisfies AddRequest);
 
     await supabase.from('add_requests').delete().eq('id', id);
