@@ -57,14 +57,8 @@ export const parseAddReq = (
 
     return {
         word: {
-            ...req,
-            c: [
-                {
-                    profile_id: req.profile_id,
-                    time_contributed: req.time_created
-                }
-            ]
-        } satisfies WordFull,
+            ...req
+        },
         formFieldsMap
     };
 };

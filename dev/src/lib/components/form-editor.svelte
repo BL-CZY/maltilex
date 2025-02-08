@@ -45,6 +45,21 @@
         im: 'imperative'
     });
 
+    let optionTable = $state({
+        n: 'Number',
+        g: 'Geneder',
+        p: 'Polarity',
+        e: 'Extra',
+        s: 'Subject',
+        o: 'Object',
+        on: 'Object Number',
+        og: 'Object Gender',
+        io: 'Indirect Object',
+        ion: 'Indirect Object Number',
+        iog: 'Indirect Object Gender',
+        t: 'Tense'
+    });
+
     let formFields = $derived.by(() => {
         let result: FormOptions[] = [];
         (Object.keys(formFieldsMap) as FormOptions[]).forEach(
@@ -75,7 +90,7 @@
                         class="checkbox checkbox-sm"
                         bind:checked={formFieldsMap[option]}
                     />
-                    <span class="text-sm">{option}</span>
+                    <span class="text-sm">{optionTable[option]}</span>
                 </label>
             {/each}
         </div>
@@ -111,7 +126,7 @@
                         />
                     {:else}
                         <CheckEditor
-                            fieldName={field}
+                            fieldName={optionTable[field]}
                             setValue={(val) => {
                                 form[field] = val;
                             }}

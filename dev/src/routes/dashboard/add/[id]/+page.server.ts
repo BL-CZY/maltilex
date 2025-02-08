@@ -24,6 +24,8 @@ export const load = async ({
     let req = data[0] as AddRequestFull;
     let parsed = parseAddReq(req);
 
+    console.log(req);
+
     return {
         id: params.id,
         word: parsed.word,

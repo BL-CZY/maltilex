@@ -21,6 +21,7 @@ export type Form = {
 
 export type WordFull = Word & {
     id: number;
+    c: { profile_id: number; time_contributed: string }[];
 };
 
 export type Word = {
@@ -34,7 +35,6 @@ export type Word = {
     mt: string[];
     ex: string[];
     re: string[];
-    c: { profile_id: number; time_contributed: string }[];
 };
 
 export type FormOptions =
