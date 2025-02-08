@@ -29,7 +29,9 @@ export const saveAddRequest = async (
     }
 };
 
-export const parseAddReq = (req: AddRequestFull) => {
+export const parseAddReq = (
+    req: AddRequestFull
+): { word: Word; formFieldsMap: FormFieldsMap } => {
     let formFieldsMap: FormFieldsMap = {
         n: false,
         g: false,
@@ -63,8 +65,7 @@ export const parseAddReq = (req: AddRequestFull) => {
                 }
             ]
         } satisfies WordFull,
-        formFieldsMap,
-        req
+        formFieldsMap
     };
 };
 

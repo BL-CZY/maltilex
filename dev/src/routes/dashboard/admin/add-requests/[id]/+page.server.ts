@@ -1,6 +1,7 @@
 import type {
     AddRequestFull,
     FormFieldsMap,
+    Word,
     WordFull
 } from '$lib/req-types.js';
 import { parseAddReq } from '$lib/req.js';
@@ -11,7 +12,7 @@ export const load = async ({
     params
 }): Promise<{
     id: string;
-    word: WordFull;
+    word: Word;
     formFieldsMap: FormFieldsMap;
     req: AddRequestFull;
 }> => {
@@ -34,7 +35,7 @@ export const load = async ({
                 id: params.id,
                 word: parsed.word,
                 formFieldsMap: parsed.formFieldsMap,
-                req: parsed.req
+                req
             };
         }
         redirect(303, '/dashboard/error?msg=not found');

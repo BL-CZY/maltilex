@@ -1,7 +1,7 @@
 <script lang="ts">
     import '../app.css';
     import { goto, invalidate, invalidateAll } from '$app/navigation';
-    import Nav from '$lib/nav.svelte';
+    import Nav from '$lib/components/nav.svelte';
 
     let { data, children } = $props();
     let { session, supabase, isAdmin, bio, username, email } = $derived(data);

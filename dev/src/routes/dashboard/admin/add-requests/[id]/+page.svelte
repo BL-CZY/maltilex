@@ -1,15 +1,14 @@
 <script lang="ts">
-    import WordEditor from '$lib/word-editor.svelte';
+    import WordEditor from '$lib/components/word-editor.svelte';
     import { goto } from '$app/navigation';
-    import type { FormFieldsMap, WordFull } from '$lib/req-types.js';
-    import StrEditor from Wordr-editor.svelte';
+    import type { FormFieldsMap, Word } from '$lib/req-types.js';
+    import StrEditor from '$lib/components/str-editor.svelte';
     import { saveAddRequest } from '$lib/req.js';
-    import { formToStreamlined } from '$lib/utils.js';
 
     let { data } = $props();
-    let { supabase, id } = $derived(data);Word
+    let { supabase, id } = $derived(data);
     let { word, formFieldsMap, req } = $derived(data);
-    let wordBind: undefined | WordFull = $state();
+    let wordBind: undefined | Word = $state();
     let formFieldsMapBind: undefined | FormFieldsMap = $state();
 
     $effect(() => {
@@ -23,19 +22,8 @@
 
     const transferTo = async (table: string) => {
         const { error } = await supabase.from(table).insert({
+            ...word,
             user_id: req.user_id,
-            w: wordBind?.word,
-            ph: wordBind?.phonetic,
-            p: wordBind?.part_of_speech,
-            r: wordBind?.root,
-            f: wordBind?.forms.map((ele) => {
-                return formToStreamlined(ele);
-            }),
-            ed: wordBind?.en_display,
-            et: wordBind?.en_tokens,
-            mt: wordBind?.mt_tokens,
-            ex: wordBind?.examples,
-            re: wordBind?.related,
             time_created: req.time_created,
             profile_id: req.profile_id,
             state: req.state,
@@ -50,19 +38,7 @@
     };
 
     const callback = async () => {
-        const { error } = await supabase.from('words').insert({
-            w: wordBind?.word,
-            ph: wordBind?.phonetic,
-            p: wordBind?.part_of_speech,
-            r: wordBind?.root,
-            f: wordBind?.forms,
-            ed: wordBind?.en_display,
-            et: wordBind?.en_tokens,
-            mt: wordBind?.mt_tokens,
-            ex: wordBind?.examples,
-            c: wordBind?.contributors,
-            re: wordBind?.related
-        });
+        const { error } = await supabase.from('words').insert(word);
 
         if (!error) {
             await supabase
