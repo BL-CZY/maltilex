@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { FormFieldsMap, Word } from '$lib/req-types';
+    import type { Form, FormFieldsMap, Word } from '$lib/req-types';
     import FormEditor from './form-editor.svelte';
     ('$lib/form-editor.svelte');
     import ListEditor from '$lib/components/list-editor.svelte';

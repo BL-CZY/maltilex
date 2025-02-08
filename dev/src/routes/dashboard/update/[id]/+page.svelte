@@ -33,14 +33,16 @@
     });
 
     let save = async () => {
-        isSaving = true;
-        await saveRequest(
-            supabase,
-            $state.snapshot(wordBind!),
-            id,
-            'update_requests'
-        );
-        isSaving = false;
+        if (wordBind) {
+            isSaving = true;
+            await saveRequest(
+                supabase,
+                $state.snapshot(wordBind),
+                id,
+                'update_requests'
+            );
+            isSaving = false;
+        }
     };
 
     let callback = async () => {

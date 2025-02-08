@@ -1,4 +1,9 @@
-import type { AddRequestFull, FormFieldsMap, Word } from '$lib/req-types.js';
+import type {
+    AddRequestFull,
+    FormFieldsMap,
+    UpdateRequestFull,
+    Word
+} from '$lib/req-types.js';
 import { parseReq } from '$lib/req.js';
 import { redirect } from '@sveltejs/kit';
 
@@ -9,21 +14,19 @@ export const load = async ({
     id: string;
     word: Word;
     formFieldsMap: FormFieldsMap;
-    req: AddRequestFull;
+    req: UpdateRequestFull;
 }> => {
     const { data, error } = await supabase
-        .from('add_requests_ready')
+        .from('update_requests_ready')
         .select('*')
         .eq('id', params.id);
-
-    console.log('hi');
 
     if (error) {
         console.log(error);
         redirect(303, '/dashboard/error?msg=error fetching');
     } else {
         if (data[0]) {
-            let req = data[0] as AddRequestFull;
+            let req = data[0] as UpdateRequestFull;
             let parsed = parseReq(req);
 
             return {

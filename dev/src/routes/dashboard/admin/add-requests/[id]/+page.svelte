@@ -62,9 +62,16 @@
     let isSaving = $state(false);
 
     let save = async () => {
-        isSaving = true;
-        await saveRequest(supabase, word, id, 'add_requests_ready');
-        isSaving = false;
+        if (wordBind) {
+            isSaving = true;
+            await saveRequest(
+                supabase,
+                $state.snapshot(wordBind),
+                id,
+                'add_requests_ready'
+            );
+            isSaving = false;
+        }
     };
 
     let cancel = async () => {

@@ -19,8 +19,11 @@ export type Form = {
     t?: string[];
 };
 
-export type WordFull = Word & {
+export type WordFull = WordFullNoID & {
     id: number;
+};
+
+export type WordFullNoID = Word & {
     c: { profile_id: number; time_contributed: string }[];
 };
 

@@ -72,6 +72,18 @@
         return result;
     });
 
+    $effect(() => {
+        (Object.keys(formFieldsMap) as FormOptions[]).forEach(
+            (key: FormOptions) => {
+                if (formFieldsMap[key] !== true) {
+                    forms.forEach((form) => {
+                        delete form[key];
+                    });
+                }
+            }
+        );
+    });
+
     // $effect(() => {
     //     $inspect(forms);
     // });

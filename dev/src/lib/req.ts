@@ -15,8 +15,13 @@ export const saveRequest = async (
     supabase: SupabaseClient,
     word: Word,
     id: string,
-    table: 'update_requests' | 'add_requests' | 'add_requests_ready'
+    table:
+        | 'update_requests'
+        | 'add_requests'
+        | 'add_requests_ready'
+        | 'update_requests_ready'
 ) => {
+    // console.log(word);
     const { error } = await supabase
         .from(table)
         .update({
@@ -56,10 +61,21 @@ export const parseReq = (
         });
     }
 
+    let word: Word = {
+        w: req.w,
+        ph: req.ph,
+        p: req.p,
+        r: req.r,
+        f: req.f,
+        ed: req.ed,
+        et: req.et,
+        mt: req.mt,
+        ex: req.ex,
+        re: req.re
+    };
+
     return {
-        word: {
-            ...req
-        },
+        word,
         formFieldsMap
     };
 };
