@@ -51,9 +51,9 @@
 
         if (!error) {
             await transferTo('add_requests_arch', false);
-            goto('/dashboard/success');
+            goto('/dashboard/success?url=/dashboard/admin');
         } else {
-            goto('/dashboard/fail');
+            goto(`/dashboard/fail?url=/dashboard/admin&msg=${error.message}`);
         }
     };
 
@@ -78,7 +78,7 @@
         req.note.push(msg);
         await transferTo('add_requests', true);
 
-        goto('/dashboard/success');
+        goto('/dashboard/success?url=/dashboard/admin');
     };
 
     // $effect(() => {
