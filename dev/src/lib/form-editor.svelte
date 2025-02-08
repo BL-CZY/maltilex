@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { Form, FormOptions } from '$lib/common/index';
+    import type { Form, FormOptions } from '$lib/req-types';
     import CheckEditor from './check-editor.svelte';
     import ListEditor from './list-editor.svelte';
     import type { FormFieldsMap } from './req-types';
@@ -15,18 +15,18 @@
     } = $props();
 
     let fields: FormOptions[] = [
-        'number',
-        'gender',
-        'polarity',
-        'extra',
-        'subject',
-        'object',
-        'object_number',
-        'object_gender',
-        'indirect_object',
-        'indirect_object_number',
-        'indirect_object_gender',
-        'tense'
+        'n',
+        'g',
+        'p',
+        'e',
+        's',
+        'o',
+        'on',
+        'og',
+        'io',
+        'ion',
+        'iog',
+        't'
     ];
 
     let fieldTable = $state({
@@ -85,21 +85,21 @@
         <div
             class="bg-base-100 space-y-4 rounded-lg border border-gray-200 p-4 shadow-sm"
         >
-            <StrEditor fieldName="Word" bind:data={form.word} />
-            <StrEditor fieldName="Phonetic" bind:data={form.phonetic} />
+            <StrEditor fieldName="Word" bind:data={form.w} />
+            <StrEditor fieldName="Phonetic" bind:data={form.ph} />
             <ListEditor
                 fieldName="English"
                 setValue={(val) => {
-                    form.english = val;
+                    form.en = val;
                 }}
                 sep=","
-                defaultVal={form.english}
+                defaultVal={form.en}
                 placeholder={'Use "," to separate words'}
             />
 
             {#each formFields as field}
                 <div class="mt-2">
-                    {#if field === 'extra'}
+                    {#if field === 'e'}
                         <ListEditor
                             fieldName={field}
                             setValue={(val) => {
@@ -136,9 +136,9 @@
         class="btn btn-primary btn-sm"
         onclick={() => {
             forms.push({
-                word: '',
-                phonetic: '',
-                english: ['']
+                w: '',
+                ph: '',
+                en: ['']
             } satisfies Form);
         }}
     >

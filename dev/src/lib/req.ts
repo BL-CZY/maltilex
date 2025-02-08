@@ -3,12 +3,12 @@ import {
     type AddRequest,
     type AddRequestFull,
     type FormFieldsMap,
-    type FormKey,
+    type FormOptions,
     type Form,
     type WordFull,
     type Word
 } from './req-types';
-import { genTokens, streamlinedToForm } from './utils';
+import { genTokens } from './utils';
 import { goto } from '$app/navigation';
 
 export const saveAddRequest = async (
@@ -30,10 +30,6 @@ export const saveAddRequest = async (
 };
 
 export const parseAddReq = (req: AddRequestFull) => {
-    let forms = req.f.map((ele) => {
-        return streamlinedToForm(ele);
-    });
-
     let formFieldsMap: FormFieldsMap = {
         n: false,
         g: false,
@@ -49,10 +45,10 @@ export const parseAddReq = (req: AddRequestFull) => {
         t: false
     };
 
-    if (forms[0]) {
-        Object.keys(forms[0]).forEach((key) => {
+    if (req.f[0]) {
+        Object.keys(req.f[0]).forEach((key) => {
             if (key in formFieldsMap) {
-                formFieldsMap[key as FormKey] = true;
+                formFieldsMap[key as FormOptions] = true;
             }
         });
     }

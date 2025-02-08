@@ -37,22 +37,7 @@ export type Word = {
     re: string[];
 };
 
-// export const FormStreamLinedKeyTable = {
-//     number: 'n',
-//     gender: 'g',
-//     polarity: 'p',
-//     extra: 'e',
-//     subject: 's',
-//     object: 'o',
-//     object_number: 'on',
-//     object_gender: 'og',
-//     indirect_object: 'io',
-//     indirect_object_number: 'ion',
-//     indirect_object_gender: 'iog',
-//     tense: 't'
-// };
-
-export type FormKey =
+export type FormOptions =
     | 'n'
     | 'g'
     | 'p'

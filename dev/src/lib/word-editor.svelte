@@ -1,6 +1,7 @@
 <script lang="ts">
-    import type { FormFieldsMap, WordFull } from '$lib/req-types';
-    import FormEdiWord '$lib/form-editor.svelte';
+    import type { FormFieldsMap, Word, WordFull } from '$lib/req-types';
+    import FormEditor from './form-editor.svelte';
+    ('$lib/form-editor.svelte');
     import ListEditor from '$lib/list-editor.svelte';
     import StrEditor from '$lib/str-editor.svelte';
     import { slide, fade } from 'svelte/transition';
@@ -14,10 +15,10 @@
         word = $bindable(),
         formFieldsMap = $bindable(),
         control,
-        notes,Word
+        notes,
         supabase
     }: {
-        word: WordFull;
+        word: Word;
         formFieldsMap: FormFieldsMap;
         control: () => ReturnType<import('svelte').Snippet>;
         notes: string[];
@@ -28,7 +29,7 @@
         const { data, error } = await supabase
             .from('words')
             .select('id, w')
-            .in('id', word.related);
+            .in('id', word.re);
 
         if (error) {
             throw new Error(error.message);
@@ -72,20 +73,17 @@
         <div class="bg-base-100 flex-[3] space-y-4 rounded-lg p-6 shadow-lg">
             <h1 class="mb-6 text-2xl font-bold">Word Editor</h1>
             <div class="grid gap-4">
-                <StrEditor bind:data={word.word} fieldName="Word" />
-                <StrEditor bind:data={word.phonetic} fieldName="Phonetic" />
-                <StrEditor
-                    bind:data={word.part_of_speech}
-                    fieldName="Part of Speech"
-                />
-                <StrEditor bind:data={word.root} fieldName="Root" />
+                <StrEditor bind:data={word.w} fieldName="Word" />
+                <StrEditor bind:data={word.ph} fieldName="Phonetic" />
+                <StrEditor bind:data={word.p} fieldName="Part of Speech" />
+                <StrEditor bind:data={word.r} fieldName="Root" />
             </div>
             <div class="mt-8">
                 <FormEditor
-                    bind:forms={word.forms}
+                    bind:forms={word.f}
                     bind:formFieldsMap
                     deleteItem={(i) => {
-                        word.forms.splice(i, 1);
+                        word.f.splice(i, 1);
                     }}
                 />
             </div>
@@ -93,37 +91,37 @@
                 <ListEditor
                     fieldName="English"
                     sep=","
-                    defaultVal={word.en_display}
+                    defaultVal={word.ed}
                     placeholder={'use "," to separate words'}
                     setValue={(value) => {
-                        word.en_display = value;
+                        word.ed = value;
                     }}
                 />
                 <ListEditor
                     fieldName="English Tokens"
                     sep=","
-                    defaultVal={word.en_tokens}
+                    defaultVal={word.et}
                     placeholder={'use "," to separate words'}
                     setValue={(value) => {
-                        word.en_tokens = value;
+                        word.et = value;
                     }}
                 />
                 <ListEditor
                     fieldName="Maltese Tokens"
                     sep=","
-                    defaultVal={word.mt_tokens}
+                    defaultVal={word.mt}
                     placeholder={'use "," to separate words'}
                     setValue={(value) => {
-                        word.mt_tokens = value;
+                        word.mt = value;
                     }}
                 />
                 <ListEditor
                     fieldName="Examples"
-                    defaultVal={word.examples}
+                    defaultVal={word.ex}
                     sep={'\n'}
                     placeholder={'Start a new line to separate sentences'}
                     setValue={(value) => {
-                        word.examples = value;
+                        word.ex = value;
                     }}
                 />
 
@@ -132,7 +130,7 @@
                         <p class="sm:min-w-32">Related:</p>
                         <TagsEditor
                             setVal={(val) => {
-                                word.related = val;
+                                word.re = val;
                             }}
                             {defaultVal}
                         />

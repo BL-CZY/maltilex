@@ -2,13 +2,13 @@
     // @ts-nocheck
     import { untrack } from 'svelte';
     import type { FormKey } from './req-types';
-
+    FormOptions;
     let {
         fieldName,
         fieldTable,
         defaultVal,
         field,
-        setValue
+        setValueFormOptions
     }: {
         fieldName: string;
         field: FormKey;
