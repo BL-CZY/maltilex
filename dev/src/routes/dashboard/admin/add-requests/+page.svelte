@@ -1,5 +1,5 @@
 <script lang="ts">
-    import AddEntry from '$lib/add-entry.svelte';
+    import AddEntry from '$lib/components/add-entry.svelte';
     import type { AddRequestFull } from '$lib/req-types.js';
     import { getProfile } from '$lib/utils.js';
 

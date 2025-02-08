@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { search } from './api';
+    import { search } from '$lib/api';
     import { fade } from 'svelte/transition';
 
     let showRelatedPanel = $state(false);

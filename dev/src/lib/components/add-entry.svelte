@@ -1,6 +1,6 @@
 <script lang="ts">
     import { goto } from '$app/navigation';
-    import type { AddRequestFull } from './req-types';
+    import type { AddRequestFull } from '../req-types';
 
     let {
         req,

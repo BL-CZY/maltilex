@@ -2,8 +2,8 @@
     import type { FormFieldsMap, Word, WordFull } from '$lib/req-types';
     import FormEditor from './form-editor.svelte';
     ('$lib/form-editor.svelte');
-    import ListEditor from '$lib/list-editor.svelte';
-    import StrEditor from '$lib/str-editor.svelte';
+    import ListEditor from '$lib/components/list-editor.svelte';
+    import StrEditor from '$lib/components/str-editor.svelte';
     import { slide, fade } from 'svelte/transition';
     import TagsEditor from './tags-editor.svelte';
     import type { SupabaseClient } from '@supabase/supabase-js';

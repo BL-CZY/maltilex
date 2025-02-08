@@ -2,7 +2,7 @@
     import type { Form, FormOptions } from '$lib/req-types';
     import CheckEditor from './check-editor.svelte';
     import ListEditor from './list-editor.svelte';
-    import type { FormFieldsMap } from './req-types';
+    import type { FormFieldsMap } from '$lib/req-types';
     import StrEditor from './str-editor.svelte';
     let {
         forms = $bindable(),
