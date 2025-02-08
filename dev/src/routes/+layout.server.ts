@@ -11,7 +11,7 @@ export const load = async ({
         throw redirect(303, '/auth');
     } else {
         if (url.pathname.startsWith('/dashboard/admin') && !isAdmin) {
-            throw redirect(303, '/dashboard/error?msg=Unauthorized');
+            throw redirect(303, '/dashboard/fail?msg=Unauthorized');
         }
     }
 

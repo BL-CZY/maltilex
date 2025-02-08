@@ -83,8 +83,10 @@ export const updateAddRequest = async (
 
     if (error) {
         console.log(error);
-        goto('/dashboard/fail');
+        goto(`/dashboard/fail?msg=Error: ${error.message}`);
     } else {
-        goto('/dashboard/success');
+        goto(
+            '/dashboard/success?msg=Thank you so much for your contribution to the project! One of our Admins will review the request and sort it out ASAP, and you can expect the word to be added within a week after the approval.'
+        );
     }
 };
