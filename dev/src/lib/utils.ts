@@ -1,7 +1,47 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Form, Word, WordFull } from './req-types';
 
+const wrapSlash = (str: string): string => {
+    if (!str.startsWith('/')) {
+        str = '/' + str;
+    }
+
+    if (!str.endsWith('/')) {
+        str = str + '/';
+    }
+
+    if (str === '/') {
+        str += '/';
+    }
+
+    return str;
+};
+
+export const cleanWord = (word: Word) => {
+    (['w', 'p', 'r'] as ('w' | 'p' | 'r')[]).forEach((key) => {
+        word[key] = word[key].trim().toLowerCase();
+    });
+
+    word.ph = wrapSlash(word.ph.trim().toLowerCase());
+
+    (['et', 'mt'] as ('et' | 'mt')[]).forEach((key) => {
+        word[key] = word[key].map((ele) => {
+            return ele.trim().toLowerCase();
+        });
+    });
+
+    word.f = word.f.map((form) => {
+        form.w = form.w.trim().toLowerCase();
+        form.ph = wrapSlash(form.ph.trim().toLowerCase());
+        form.en = form.en.map((e) => {
+            return e.trim().toLowerCase();
+        });
+        return form;
+    });
+};
+
 export const genTokens = (word: Word) => {
+    cleanWord(word);
     let mt: string[] = [];
     let et: string[] = [];
     let mtSet: Set<string> = new Set();
@@ -35,8 +75,12 @@ export const genTokens = (word: Word) => {
         }
     });
 
-    word.et = et;
-    word.mt = mt;
+    word.et = et.filter((ele) => {
+        return ele !== '';
+    });
+    word.mt = mt.filter((ele) => {
+        return ele !== '';
+    });
 };
 
 export const getProfile = async (id: number, supabase: SupabaseClient) => {

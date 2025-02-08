@@ -4,6 +4,7 @@
     import type { FormFieldsMap, Word } from '$lib/req-types.js';
     import StrEditor from '$lib/components/str-editor.svelte';
     import { saveAddRequest } from '$lib/req.js';
+    import { genTokens, track } from '$lib/utils.js';
 
     let { data } = $props();
     let { supabase, id } = $derived(data);
@@ -14,10 +15,17 @@
     $effect(() => {
         wordBind = word;
         formFieldsMapBind = formFieldsMap;
-        let interval = setInterval(save, 10000);
         return () => {
-            clearInterval(interval);
+            clearTimeout(timeout);
         };
+    });
+
+    let timeout: ReturnType<typeof setTimeout>;
+
+    $effect(() => {
+        track(wordBind);
+        clearTimeout(timeout);
+        timeout = setTimeout(save, 1000);
     });
 
     const transferTo = async (table: string) => {
@@ -38,6 +46,7 @@
     };
 
     const callback = async () => {
+        genTokens(word);
         const { error } = await supabase.from('words').insert(word);
 
         if (!error) {

@@ -8,7 +8,7 @@ import {
     type WordFull,
     type Word
 } from './req-types';
-import { genTokens } from './utils';
+import { cleanWord, genTokens } from './utils';
 import { goto } from '$app/navigation';
 
 export const saveAddRequest = async (
@@ -70,7 +70,7 @@ export const updateAddRequest = async (
     profileID: number,
     user_id: string
 ) => {
-    genTokens(word);
+    cleanWord(word);
 
     const { error } = await supabase.from('add_requests_ready').insert({
         ...word,
