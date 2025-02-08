@@ -12,10 +12,9 @@ export const load = async ({
     params
 }): Promise<{
     id: string;
-    req: AddRequestFull;
+    req: UpdateRequestFull;
     formFieldsMap: FormFieldsMap;
     word: Word;
-    profileID: number | null;
 }> => {
     const { data, error } = await supabase
         .from('update_requests')
@@ -33,7 +32,6 @@ export const load = async ({
         id: params.id,
         word: parsed.word,
         formFieldsMap: parsed.formFieldsMap,
-        req,
-        profileID
+        req
     };
 };

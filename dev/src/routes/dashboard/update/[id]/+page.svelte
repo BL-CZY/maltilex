@@ -1,13 +1,16 @@
 <script lang="ts">
     import type { FormFieldsMap, Word } from '$lib/req-types.js';
-    import { saveRequest, updateAddRequest } from '$lib/req.js';
+    import {
+        saveRequest,
+        updateAddRequest,
+        updateUpdateRequest
+    } from '$lib/req.js';
     import { track } from '$lib/utils';
     import WordEditor from '$lib/components/word-editor.svelte';
     import { goto } from '$app/navigation';
 
     const { data } = $props();
-    const { id, formFieldsMap, word, supabase, user, profileID, req } =
-        $derived(data);
+    const { id, formFieldsMap, word, supabase, user, req } = $derived(data);
     let wordBind: undefined | Word = $state();
     let formFieldsMapBind: undefined | FormFieldsMap = $state();
 
@@ -45,13 +48,7 @@
             return;
         }
 
-        updateAddRequest(
-            $state.snapshot(wordBind!),
-            supabase,
-            id,
-            profileID ?? 0,
-            user.id
-        );
+        updateUpdateRequest($state.snapshot(wordBind!), supabase, id, req);
     };
 </script>
 
@@ -68,7 +65,7 @@
         class="btn btn-error btn-outline"
         onclick={async () => {
             const { error } = await supabase
-                .from('add_requests')
+                .from('update_requests')
                 .delete()
                 .eq('id', req.id);
             if (error) {
