@@ -99,6 +99,43 @@ export type AddRequestFull = {
     note: string[];
 };
 
+export type UpdateRequestFull = {
+    id: number;
+    user_id: string;
+    w: string;
+    ph: string;
+    p: string;
+    r: string;
+    f: FormStreamLined[];
+    ed: string[];
+    et: string[];
+    mt: string[];
+    ex: string[];
+    re: string[];
+    profile_id: number;
+    time_created: string;
+    state: number;
+    note: string[];
+    word_id: string;
+};
+
+export type UpdateRequest = {
+    user_id: string;
+    w: string;
+    ph: string;
+    p: string;
+    r: string;
+    f: FormStreamLined[];
+    ed: string[];
+    et: string[];
+    mt: string[];
+    ex: string[];
+    re: string[];
+    profile_id: number;
+    state: number;
+    word_id: string;
+};
+
 export type WordFull = {
     word: string;
     phonetic: string;
