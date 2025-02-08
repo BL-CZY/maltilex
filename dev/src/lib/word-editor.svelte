@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { FormFieldsMap, WordFull } from '$lib/req-types';
-    import FormEditor from '$lib/form-editor.svelte';
+    import FormEdiWord '$lib/form-editor.svelte';
     import ListEditor from '$lib/list-editor.svelte';
     import StrEditor from '$lib/str-editor.svelte';
     import { slide, fade } from 'svelte/transition';
@@ -14,7 +14,7 @@
         word = $bindable(),
         formFieldsMap = $bindable(),
         control,
-        notes,
+        notes,Word
         supabase
     }: {
         word: WordFull;

@@ -1,47 +1,42 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { Form } from './common';
-import type { FormStreamLined, WordFull } from './req-types';
+import type { Form, Word, WordFull } from './req-types';
 
-export const genTokens = (
-    word: WordFull
-): {
-    et: string[];
-    mt: string[];
-} => {
+export const genTokens = (word: Word) => {
     let mt: string[] = [];
     let et: string[] = [];
     let mtSet: Set<string> = new Set();
     let enSet: Set<string> = new Set();
 
-    word.forms.forEach((form) => {
-        if (!mtSet.has(form.word)) {
-            mtSet.add(form.word);
-            mt.push(form.word);
+    word.f.forEach((form) => {
+        if (!mtSet.has(form.w)) {
+            mtSet.add(form.w);
+            mt.push(form.w);
         }
     });
 
-    word.en_display.forEach((en) => {
+    word.ed.forEach((en) => {
         if (!enSet.has(en)) {
             enSet.add(en);
             et.push(en);
         }
     });
 
-    word.en_tokens.forEach((en) => {
+    word.et.forEach((en) => {
         if (!enSet.has(en)) {
             enSet.add(en);
             et.push(en);
         }
     });
 
-    word.mt_tokens.forEach((m) => {
+    word.mt.forEach((m) => {
         if (!mtSet.has(m)) {
             mtSet.add(m);
             mt.push(m);
         }
     });
 
-    return { et, mt };
+    word.et = et;
+    word.mt = mt;
 };
 
 export const getProfile = async (id: number, supabase: SupabaseClient) => {
@@ -117,70 +112,6 @@ export function ok<K, E>(value: K): Result<K, E> {
 export function err<K, E>(error: E): Result<K, E> {
     return new Result<K, E>({ err: error });
 }
-
-export const streamlinedToForm = (form: FormStreamLined): Form => {
-    let temp = {
-        word: form.w,
-        phonetic: form.ph,
-        english: form.en,
-        number: form.n,
-        gender: form.g,
-        polarity: form.p,
-        extra: form.e,
-        subject: form.s,
-        object: form.o,
-        object_number: form.on,
-        object_gender: form.og,
-        indirect_object: form.io,
-        indirect_object_number: form.ion,
-        indirect_object_gender: form.iog,
-        tense: form.t
-    } satisfies Form;
-
-    let result = {};
-    Object.keys(temp).forEach((key) => {
-        // @ts-ignore
-        if (temp[key] !== undefined) {
-            // @ts-ignore
-            result[key] = temp[key];
-        }
-    });
-
-    // @ts-ignore
-    return result;
-};
-
-export const formToStreamlined = (form: Form): FormStreamLined => {
-    let temp = {
-        w: form.word,
-        ph: form.phonetic,
-        en: form.english,
-        n: form.number,
-        g: form.gender,
-        p: form.polarity,
-        e: form.extra,
-        s: form.subject,
-        o: form.object,
-        on: form.object_number,
-        og: form.object_gender,
-        io: form.indirect_object,
-        ion: form.indirect_object_number,
-        iog: form.indirect_object_gender,
-        t: form.tense
-    } satisfies FormStreamLined;
-
-    let result = {};
-    Object.keys(temp).forEach((key) => {
-        // @ts-ignore
-        if (temp[key] !== undefined) {
-            // @ts-ignore
-            result[key] = temp[key];
-        }
-    });
-
-    // @ts-ignore
-    return result;
-};
 
 function recursiveObjectLoop(
     obj: Record<string, any>,

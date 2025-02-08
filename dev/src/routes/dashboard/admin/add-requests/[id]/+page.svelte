@@ -2,13 +2,12 @@
     import WordEditor from '$lib/word-editor.svelte';
     import { goto } from '$app/navigation';
     import type { FormFieldsMap, WordFull } from '$lib/req-types.js';
-    import StrEditor from '$lib/str-editor.svelte';
+    import StrEditor from Wordr-editor.svelte';
     import { saveAddRequest } from '$lib/req.js';
     import { formToStreamlined } from '$lib/utils.js';
 
     let { data } = $props();
-    let { supabase, id } = $derived(data);
-
+    let { supabase, id } = $derived(data);Word
     let { word, formFieldsMap, req } = $derived(data);
     let wordBind: undefined | WordFull = $state();
     let formFieldsMapBind: undefined | FormFieldsMap = $state();
