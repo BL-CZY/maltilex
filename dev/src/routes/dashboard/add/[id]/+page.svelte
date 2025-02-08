@@ -6,6 +6,7 @@
     } from '$lib/req.js';
     import { track } from '$lib/utils';
     import WordEditor from '$lib/components/word-editor.svelte';
+    import { goto } from '$app/navigation';
 
     const { data } = $props();
     const { id, formFieldsMap, word, supabase, user, profileID, req } =
@@ -61,6 +62,19 @@
             Save Progress
         {/if}
     </button>
+    <button
+        class="btn btn-error btn-outline"
+        onclick={async () => {
+            const { error } = await supabase
+                .from('add_requests')
+                .delete()
+                .eq('id', req.id);
+            if (error) {
+                console.log(error);
+            }
+            goto('/dashboard');
+        }}>Delete Request</button
+    >
 {/snippet}
 
 {#if formFieldsMapBind && wordBind}
