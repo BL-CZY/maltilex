@@ -4,7 +4,7 @@ import type {
     Word,
     WordFull
 } from '$lib/req-types.js';
-import { parseAddReq } from '$lib/req.js';
+import { parseReq } from '$lib/req.js';
 import { redirect } from '@sveltejs/kit';
 
 export const load = async ({
@@ -29,7 +29,7 @@ export const load = async ({
     } else {
         if (data[0]) {
             let req = data[0] as AddRequestFull;
-            let parsed = parseAddReq(req);
+            let parsed = parseReq(req);
 
             return {
                 id: params.id,

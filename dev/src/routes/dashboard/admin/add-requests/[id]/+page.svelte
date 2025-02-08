@@ -3,7 +3,7 @@
     import { goto } from '$app/navigation';
     import type { FormFieldsMap, Word } from '$lib/req-types.js';
     import StrEditor from '$lib/components/str-editor.svelte';
-    import { saveAddRequest } from '$lib/req.js';
+    import { saveRequest } from '$lib/req.js';
     import { genTokens, track } from '$lib/utils.js';
 
     let { data } = $props();
@@ -63,7 +63,7 @@
 
     let save = async () => {
         isSaving = true;
-        await saveAddRequest(supabase, word, id);
+        await saveRequest(supabase, word, id, 'add_requests_ready');
         isSaving = false;
     };
 

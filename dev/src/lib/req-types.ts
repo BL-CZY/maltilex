@@ -71,7 +71,7 @@ export type UpdateRequestFull = AddRequestFull & {
 };
 
 export type UpdateRequest = AddRequest & {
-    word_id: string;
+    word_id: number;
 };
 
 export type FormFieldsMap = {

@@ -116,7 +116,7 @@
                 <div class="mt-2">
                     {#if field === 'e'}
                         <ListEditor
-                            fieldName={field}
+                            fieldName={optionTable[field]}
                             setValue={(val) => {
                                 form[field] = val;
                             }}

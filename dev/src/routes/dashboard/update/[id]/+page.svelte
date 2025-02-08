@@ -35,7 +35,7 @@
             supabase,
             $state.snapshot(wordBind!),
             id,
-            'add_requests'
+            'update_requests'
         );
         isSaving = false;
     };
@@ -78,6 +78,8 @@
         }}>Delete Request</button
     >
 {/snippet}
+
+{@debug word}
 
 {#if formFieldsMapBind && wordBind}
     <WordEditor

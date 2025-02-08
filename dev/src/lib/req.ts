@@ -4,20 +4,21 @@ import {
     type AddRequestFull,
     type FormFieldsMap,
     type FormOptions,
-    type Form,
-    type WordFull,
-    type Word
+    type Word,
+    type UpdateRequestFull,
+    type UpdateRequest
 } from './req-types';
-import { cleanWord, genTokens } from './utils';
+import { cleanWord } from './utils';
 import { goto } from '$app/navigation';
 
-export const saveAddRequest = async (
+export const saveRequest = async (
     supabase: SupabaseClient,
     word: Word,
-    id: string
+    id: string,
+    table: 'update_requests' | 'add_requests' | 'add_requests_ready'
 ) => {
     const { error } = await supabase
-        .from('add_requests')
+        .from(table)
         .update({
             ...word,
             state: 0
@@ -29,8 +30,8 @@ export const saveAddRequest = async (
     }
 };
 
-export const parseAddReq = (
-    req: AddRequestFull
+export const parseReq = (
+    req: AddRequestFull | UpdateRequestFull
 ): { word: Word; formFieldsMap: FormFieldsMap } => {
     let formFieldsMap: FormFieldsMap = {
         n: false,
@@ -87,6 +88,34 @@ export const updateAddRequest = async (
     } else {
         goto(
             '/dashboard/success?msg=Thank you so much for your contribution to the project! One of our Admins will review the request and sort it out ASAP, and you can expect the word to be added within a week after the approval.'
+        );
+    }
+};
+
+export const updateUpdateRequest = async (
+    word: Word,
+    supabase: SupabaseClient,
+    id: string,
+    req: UpdateRequestFull
+) => {
+    cleanWord(word);
+
+    const { error } = await supabase.from('update_requests_ready').insert({
+        ...word,
+        user_id: req.user_id,
+        profile_id: req.profile_id,
+        state: 0,
+        word_id: req.word_id
+    } satisfies UpdateRequest);
+
+    await supabase.from('update_requests').delete().eq('id', id);
+
+    if (error) {
+        console.log(error);
+        goto(`/dashboard/fail?msg=Error: ${error.message}`);
+    } else {
+        goto(
+            '/dashboard/success?msg=Thank you so much for your contribution to the project! One of our Admins will review the request and sort it out ASAP, and you can expect the word to be updated within a week after the approval.'
         );
     }
 };
