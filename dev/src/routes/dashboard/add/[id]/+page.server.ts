@@ -1,19 +1,15 @@
 import { parseAddReq } from '$lib/req';
-import type {
-    AddRequestFull,
-    FormFieldsMap,
-    WordFull
-} from '$lib/req-types.js';
+import type { AddRequestFull, FormFieldsMap, Word } from '$lib/req-types.js';
 import { redirect } from '@sveltejs/kit';
 
 export const load = async ({
-    locals: { supabase, profileID, user },
+    locals: { supabase, profileID },
     params
 }): Promise<{
     id: string;
     req: AddRequestFull;
     formFieldsMap: FormFieldsMap;
-    word: WordFull;
+    word: Word;
     profileID: number | null;
 }> => {
     const { data, error } = await supabase
@@ -32,7 +28,7 @@ export const load = async ({
         id: params.id,
         word: parsed.word,
         formFieldsMap: parsed.formFieldsMap,
-        req: parsed.req,
+        req,
         profileID
     };
 };

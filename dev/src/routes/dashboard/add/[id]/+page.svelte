@@ -1,16 +1,16 @@
 <script lang="ts">
-    import type { FormFieldsMap, WordFull } from '$lib/req-types.js';
-    import {Word
+    import type { FormFieldsMap, Word } from '$lib/req-types.js';
+    import {
         saveAddRequest,
         updateAddRequest as addAddRequest
     } from '$lib/req.js';
     import { track } from '$lib/utils';
-    import WordEditor from '$lib/word-editor.svelte';
+    import WordEditor from '$lib/components/word-editor.svelte';
 
     const { data } = $props();
-    const { id, formFieldsMap, word, supabase, user, profileID, req } =Word
+    const { id, formFieldsMap, word, supabase, user, profileID, req } =
         $derived(data);
-    let wordBind: undefined | WordFull = $state();
+    let wordBind: undefined | Word = $state();
     let formFieldsMapBind: undefined | FormFieldsMap = $state();
 
     let isSaving = $state(false);
