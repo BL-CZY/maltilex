@@ -77,6 +77,7 @@
                             class="btn btn-ghost hover:bg-base-200 w-full"
                             onclick={() => {
                                 list.push({ index: req.id, word: req.word });
+                                value = '';
                                 showRelatedPanel = false;
                                 updateVal();
                             }}

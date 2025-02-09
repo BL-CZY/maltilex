@@ -24,7 +24,7 @@ export const cleanWord = (word: Word) => {
 
     word.ph = wrapSlash(word.ph.trim().toLowerCase());
 
-    (['et', 'mt'] as ('et' | 'mt')[]).forEach((key) => {
+    (['et', 'mt', 'ed'] as ('et' | 'mt' | 'ed')[]).forEach((key) => {
         word[key] = word[key].map((ele) => {
             return ele.trim().toLowerCase();
         });

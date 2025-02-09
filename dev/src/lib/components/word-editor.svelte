@@ -73,10 +73,30 @@
         <div class="bg-base-100 flex-[3] space-y-4 rounded-lg p-6 shadow-lg">
             <h1 class="mb-6 text-2xl font-bold">Word Editor</h1>
             <div class="grid gap-4">
-                <StrEditor bind:data={word.w} fieldName="Word" />
-                <StrEditor bind:data={word.ph} fieldName="Phonetic" />
-                <StrEditor bind:data={word.p} fieldName="Part of Speech" />
-                <StrEditor bind:data={word.r} fieldName="Root" />
+                <StrEditor
+                    bind:data={word.w}
+                    fieldName="Word"
+                    description={'A form of the word, like "ktieb".'}
+                    placeholder="ktieb"
+                />
+                <StrEditor
+                    bind:data={word.ph}
+                    fieldName="Phonetic"
+                    description={"The IPA phonetic symbols of the word. If you don't know, you can leave it empty."}
+                    placeholder="/kti:b/"
+                />
+                <StrEditor
+                    bind:data={word.p}
+                    fieldName="Part of Speech"
+                    description={'The part of speech of the word, like "v", "n", etc.'}
+                    placeholder="n"
+                />
+                <StrEditor
+                    bind:data={word.r}
+                    fieldName="Root"
+                    description={"The root of the word. If you don't know, you can leave it blank."}
+                    placeholder="k-t-b"
+                />
             </div>
             <div class="mt-8">
                 <FormEditor
@@ -96,7 +116,16 @@
                     setValue={(value) => {
                         word.ed = value;
                     }}
+                    description={'The English meanings of the word, such as "book"'}
                 />
+                <p class="text-lg font-bold">
+                    For "English Tokens" and "Maltese Tokens"
+                </p>
+                <p class="text-sm text-gray-600">
+                    We generate keywords that will be utilized by the search
+                    algorithm from the information filled out. If you think
+                    there are other keywords, you can add some extra ones here.
+                </p>
                 <ListEditor
                     fieldName="English Tokens"
                     sep=","
@@ -105,6 +134,7 @@
                     setValue={(value) => {
                         word.et = value;
                     }}
+                    description={'We encourage you to add different forms of the English meanings of the word, such as "books".'}
                 />
                 <ListEditor
                     fieldName="Maltese Tokens"
@@ -114,6 +144,7 @@
                     setValue={(value) => {
                         word.mt = value;
                     }}
+                    description={'You can leave this one blank.'}
                 />
                 <ListEditor
                     fieldName="Examples"
@@ -123,11 +154,21 @@
                     setValue={(value) => {
                         word.ex = value;
                     }}
+                    description={'Some examples of this word.'}
                 />
 
                 {#if defaultVal}
-                    <div class="flex w-full items-center gap-2">
-                        <p class="sm:min-w-32">Related:</p>
+                    <div
+                        class="flex w-full flex-col items-center gap-2 sm:flex-row"
+                    >
+                        <div class="flex-col sm:w-32">
+                            <p class="font-bold text-gray-700">Related:</p>
+                            <p class="text-sm text-gray-500">
+                                You can put words that you think are related to
+                                this word here such as "riħ" and "ir-riħ." You
+                                can search in the input as well.
+                            </p>
+                        </div>
                         <TagsEditor
                             setVal={(val) => {
                                 word.re = val;
