@@ -102,7 +102,9 @@
     };
 
     let cancel = async () => {
-        req.note.push(msg);
+        if (msg.trim() != '') {
+            req.note.push(msg);
+        }
         await transferTo('update_requests', true);
 
         goto('/dashboard/success?url=/dashboard/admin');
@@ -114,7 +116,12 @@
 </script>
 
 {#snippet control()}
-    <StrEditor fieldName="Extra notes" bind:data={msg} />
+    <StrEditor
+        fieldName="Extra notes"
+        bind:data={msg}
+        description={"Notes you want to leave to the contributor if it's cancelled. Please include your username."}
+        placeholder={'Unfortunately this word already exists in the database. --Abcde'}
+    />
     <div class="flex justify-center gap-2">
         <button onclick={approve} class="btn btn-primary">
             Approve Add Request

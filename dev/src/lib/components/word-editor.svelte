@@ -59,7 +59,7 @@
 </script>
 
 {#snippet editor()}
-    <div class="flex gap-2">
+    <div class="flex flex-col gap-2 sm:flex-row">
         {#if notes.length > 0}
             <div class="bg-base-100 flex-1 space-y-4 rounded-lg p-6 shadow-lg">
                 <h1 class="text-2xl font-bold">Past notes</h1>
