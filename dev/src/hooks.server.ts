@@ -45,6 +45,10 @@ const supabase: Handle = async ({ event, resolve }) => {
             return { session: null, user: null };
         }
 
+        // @ts-ignore
+        // this is here so that it won't complain abt the user used in session
+        delete session.user;
+
         return { session, user };
     };
 

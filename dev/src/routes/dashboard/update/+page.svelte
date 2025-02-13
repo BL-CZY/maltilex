@@ -2,7 +2,6 @@
     import { goto } from '$app/navigation';
     import { PUBLIC_APP_URL } from '$env/static/public';
     import { search } from '$lib/api';
-    import { fade } from 'svelte/transition';
 
     let value = $state('');
 
@@ -29,7 +28,6 @@
 
             <div
                 class="bg-base-100 border-base-300 rounded-lg border shadow-lg"
-                transition:fade={{ duration: 100 }}
             >
                 {#await search(value.trim().toLocaleLowerCase())}
                     <div
