@@ -3,6 +3,7 @@
     import { getLoadingState } from '$lib/utils.js';
     import Word from '$lib/word.svelte';
     let { data } = $props();
+    let { supabase } = $derived(data);
 
     const isLoading = getLoadingState();
     $effect(() => {
@@ -10,11 +11,11 @@
     });
 </script>
 
-{#if !isLoading.value}
+{#if !isLoading.value && supabase}
     {#if 'error' in data.word}
         <p>{data.word.error}</p>
     {:else}
-        <Word word={data.word.word} />
+        <Word word={data.word.word} {supabase} />
     {/if}
 {:else}
     <Loading />

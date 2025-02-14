@@ -4,13 +4,15 @@
     import { untrack } from 'svelte';
     import Filter from './filter.svelte';
     import { apiWord } from './api';
+    import type { SupabaseClient } from '@supabase/supabase-js';
 
     type Props = {
         word: Word;
+        supabase: SupabaseClient;
     };
 
     let props: Props = $props();
-    let { word } = $derived(props);
+    let { word, supabase } = $derived(props);
 
     let formKeyNames: FormField[] = $state([]);
     let displayedForms: Form[] = $state([]);
@@ -95,6 +97,17 @@
             });
         });
     });
+
+    function formatISODate(isoString: string): string {
+        const date = new Date(isoString);
+        return date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    }
 </script>
 
 <div class="flex w-full flex-col gap-6 p-4 md:flex-row">
@@ -150,27 +163,77 @@
                 {/each}
             </tbody>
         </table>
-        <p class="text-base-content ml-5 font-bold">Examples:</p>
-        <ul>
-            {#each word.examples as example}
-                <li><p>{example}</p></li>
-            {/each}
-        </ul>
-        <p class="text-base-content ml-5 font-bold">Contributors:</p>
-        <ul>
-            {#each word.contributors as contributor}
-                <li><p>{contributor}</p></li>
-            {/each}
-        </ul>
-        <p class="text-base-content ml-5 font-bold">Related:</p>
-        <ul>
-            {#each word.related as rel}
-                {#await apiWord(String(rel), fetch) then wd}
-                    {#if 'word' in wd}
-                        <li><a href={`/search/${rel}`}>{wd.word.word}</a></li>
-                    {/if}
-                {/await}
-            {/each}
-        </ul>
+
+        <div class="space-y-6 p-4">
+            {#if word.examples.length > 0}
+                <div>
+                    <p class="text-base-content mb-2 font-bold">Examples:</p>
+                    <ul class="bg-base-200 rounded-box w-full p-1">
+                        {#each word.examples as example}
+                            <li>
+                                <p class="rounded-lg p-2 text-base">
+                                    {example}
+                                </p>
+                            </li>
+                        {/each}
+                    </ul>
+                </div>
+            {/if}
+
+            {#if word.contributors.length > 0}
+                <div>
+                    <p class="text-base-content mb-2 font-bold">Contributors:</p>
+                    <ul class="bg-base-200 rounded-box w-full p-1">
+                        {#each word.contributors as contributor}
+                            {#await supabase
+                                .from('user_profiles')
+                                .select('username')
+                                .eq('id', contributor.profile_id)}
+                                <div class="flex items-center">
+                                    <span class="loading-dots loading loading-md"></span>
+                                </div>
+                            {:then result}
+                                {#if !result.error && result.data[0]}
+                                    <li class="mb-1">
+                                        <div
+                                            class="flex items-center gap-2 rounded-lg p-2 transition-colors"
+                                        >
+                                            <span class="font-medium"
+                                                >{result.data[0].username}</span
+                                            >
+                                            <span class="text-base-content/70 text-sm"
+                                                >{formatISODate(contributor.time_contributed)}</span
+                                            >
+                                        </div>
+                                    </li>
+                                {/if}
+                            {/await}
+                        {/each}
+                    </ul>
+                </div>
+            {/if}
+
+            <div>
+                {#if word.related.length > 0}
+                    <p class="text-base-content mb-2 font-bold">Related:</p>
+                    <ul class="bg-base-200 rounded-box w-full p-1">
+                        {#each word.related as rel}
+                            {#await apiWord(String(rel), fetch) then wd}
+                                {#if 'word' in wd}
+                                    <li>
+                                        <a
+                                            href={`/search/${rel}`}
+                                            class="text-primary rounded-lg p-2 transition-colors"
+                                        >
+                                            {wd.word.word}
+                                        </a>
+                                    </li>
+                                {/if}
+                            {/await}
+                        {/each}
+                    </ul>
+                {/if}
+            </div>
+        </div>
     </div>
 </div>
