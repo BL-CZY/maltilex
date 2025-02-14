@@ -9,7 +9,8 @@
             .from('add_requests')
             .insert({
                 user_id: user?.id,
-                profile_id: profileID ?? 0
+                profile_id: profileID ?? 0,
+                w: value
             })
             .select();
 
@@ -27,5 +28,6 @@
     let value = $state('');
 </script>
 
+<p>Input your word</p>
 <input type="text" bind:value />
 <button onclick={callback}>Add</button>

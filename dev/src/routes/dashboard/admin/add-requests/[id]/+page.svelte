@@ -1,7 +1,12 @@
 <script lang="ts">
     import WordEditor from '$lib/components/word-editor.svelte';
     import { goto } from '$app/navigation';
-    import type { FormFieldsMap, Word } from '$lib/req-types.js';
+    import type {
+        FormFieldsMap,
+        Word,
+        WordFull,
+        WordFullNoID
+    } from '$lib/req-types.js';
     import StrEditor from '$lib/components/str-editor.svelte';
     import { saveRequest } from '$lib/req.js';
     import { genTokens, track } from '$lib/utils.js';
@@ -47,7 +52,16 @@
 
     const approve = async () => {
         genTokens(word);
-        const { error } = await supabase.from('words').insert(word);
+        let content: WordFullNoID = {
+            ...word,
+            c: [
+                {
+                    profile_id: req.profile_id,
+                    time_contributed: new Date().toISOString()
+                }
+            ]
+        };
+        const { error } = await supabase.from('words').insert(content);
 
         if (!error) {
             await transferTo('add_requests_arch', false);

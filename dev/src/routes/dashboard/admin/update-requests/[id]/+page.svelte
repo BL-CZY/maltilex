@@ -64,7 +64,7 @@
 
         contributors.push({
             profile_id: req.profile_id,
-            time_contributed: req.time_created
+            time_contributed: new Date().toISOString()
         });
 
         const { error } = await supabase

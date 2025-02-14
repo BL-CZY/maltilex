@@ -11,7 +11,7 @@
     >
         <p>Your add requests</p>
         <ReqDisplay reqs={addReqs} path="add" />
-        <a href="/dashboard/add/new" class="btn btn-primary"> Add Word </a>
+        <a href="/dashboard/add" class="btn btn-primary"> Add Word </a>
     </div>
     <div
         class="bg-base-100 flex flex-1 flex-col items-center space-y-4 rounded-md p-5 text-center shadow-lg"
