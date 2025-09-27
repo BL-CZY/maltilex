@@ -110,6 +110,7 @@ pub async fn init() {
         .await
         .unwrap();
 
+    println!("{:?}", raw_result);
     let json: Value = serde_json::from_str(&raw_result).unwrap();
     let mut result = vec![];
 

@@ -19,7 +19,7 @@
     const isLoading = getLoadingState();
 
     $effect(() => {
-        query.skip = 0;
+        query.skip = 10;
         query.limit = 10;
         entries = result;
         isLoading.value = false;
